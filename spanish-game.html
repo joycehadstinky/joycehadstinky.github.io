@@ -184,4 +184,274 @@
     position: absolute;
     top: 6px; left: 6px;
     width: 8px; height: 8px;
-    border-top: 2
+    border-top: 2px solid var(--cobalt);
+    border-left: 2px solid var(--cobalt);
+    opacity: 0.35;
+  }
+  .tile::after {
+    content: "";
+    position: absolute;
+    bottom: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-bottom: 2px solid var(--cobalt);
+    border-right: 2px solid var(--cobalt);
+    opacity: 0.35;
+  }
+
+  .tile:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--cobalt);
+  }
+
+  .tile:disabled { cursor: default; }
+
+  .tile.correct {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: #fff;
+    animation: glow 0.5s ease;
+  }
+
+  .tile.wrong {
+    background: var(--clay);
+    border-color: var(--clay);
+    color: #fff;
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 0 0 rgba(223,165,38,0.6); }
+    100% { box-shadow: 0 0 0 14px rgba(223,165,38,0); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .feedback {
+    min-height: 22px;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .feedback.ok { color: var(--ok); }
+  .feedback.no { color: var(--clay); }
+
+  .next-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    background: var(--cobalt-deep);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .next-btn.show { opacity: 1; pointer-events: auto; }
+  .next-btn:hover { background: var(--cobalt); }
+
+  footer {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8a8375;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 380px) {
+    h1 { font-size: 32px; }
+    .prompt { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header>
+    <div class="eyebrow">Vocabulario · Nivel intermedio</div>
+    <h1>Charlemos</h1>
+    <p>A tile-quiz for building Spanish vocabulary, word by word.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat">Score <b id="score">0</b></div>
+    <div class="stat streak">Streak <b id="streak">0</b></div>
+    <div class="stat">Best <b id="best">0</b></div>
+  </div>
+
+  <div class="card">
+    <div class="category" id="category">Category</div>
+    <div class="prompt" id="prompt">—</div>
+    <div class="prompt-sub" id="promptSub"></div>
+    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear it in Spanish</button>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn" type="button">Next word →</button>
+  </div>
+
+  <footer id="progress">Word 1 of —</footer>
+</div>
+
+<script>
+  const WORDS = [
+    { es: "el paraguas", en: "the umbrella", cat: "Objetos" },
+    { es: "la manzana", en: "the apple", cat: "Comida" },
+    { es: "aunque", en: "although", cat: "Conectores" },
+    { es: "el vecino", en: "the neighbor", cat: "Personas" },
+    { es: "la cita", en: "the appointment", cat: "Vida diaria" },
+    { es: "cocinar", en: "to cook", cat: "Verbos" },
+    { es: "el ayuntamiento", en: "the city hall", cat: "Lugares" },
+    { es: "sin embargo", en: "however", cat: "Conectores" },
+    { es: "la almohada", en: "the pillow", cat: "Casa" },
+    { es: "extrañar", en: "to miss (someone)", cat: "Verbos" },
+    { es: "el semáforo", en: "the traffic light", cat: "Lugares" },
+    { es: "la propina", en: "the tip (gratuity)", cat: "Vida diaria" },
+    { es: "el equipaje", en: "the luggage", cat: "Viajes" },
+    { es: "atrasado", en: "late / behind schedule", cat: "Tiempo" },
+    { es: "la fábrica", en: "the factory", cat: "Lugares" },
+    { es: "el bosque", en: "the forest", cat: "Naturaleza" },
+    { es: "envolver", en: "to wrap", cat: "Verbos" },
+    { es: "el anillo", en: "the ring", cat: "Objetos" },
+    { es: "la orilla", en: "the shore / riverbank", cat: "Naturaleza" },
+    { es: "el sueldo", en: "the salary", cat: "Trabajo" },
+    { es: "acostumbrarse", en: "to get used to", cat: "Verbos" },
+    { es: "la mudanza", en: "the move (relocation)", cat: "Vida diaria" },
+    { es: "el rincón", en: "the corner (of a room)", cat: "Casa" },
+    { es: "la multa", en: "the fine (penalty)", cat: "Vida diaria" },
+    { es: "de repente", en: "suddenly", cat: "Conectores" },
+    { es: "el techo", en: "the roof / ceiling", cat: "Casa" },
+    { es: "el desafío", en: "the challenge", cat: "Ideas" },
+    { es: "reunirse", en: "to meet up", cat: "Verbos" },
+    { es: "la niñez", en: "childhood", cat: "Vida" },
+    { es: "el peatón", en: "the pedestrian", cat: "Lugares" }
+  ];
+
+  const scoreEl = document.getElementById("score");
+  const streakEl = document.getElementById("streak");
+  const bestEl = document.getElementById("best");
+  const categoryEl = document.getElementById("category");
+  const promptEl = document.getElementById("prompt");
+  const promptSubEl = document.getElementById("promptSub");
+  const optionsEl = document.getElementById("options");
+  const feedbackEl = document.getElementById("feedback");
+  const nextBtn = document.getElementById("nextBtn");
+  const speakBtn = document.getElementById("speakBtn");
+  const progressEl = document.getElementById("progress");
+
+  let order = [];
+  let idx = 0;
+  let score = 0;
+  let streak = 0;
+  let best = Number(localStorage.getItem("charlemos_best") || 0);
+  let current = null;
+  let answered = false;
+
+  bestEl.textContent = best;
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function pickChoices(correct) {
+    const pool = WORDS.filter(w => w.en !== correct.en);
+    const distractors = shuffle(pool).slice(0, 3).map(w => w.en);
+    return shuffle([correct.en, ...distractors]);
+  }
+
+  function loadWord() {
+    answered = false;
+    feedbackEl.textContent = "";
+    feedbackEl.className = "feedback";
+    nextBtn.classList.remove("show");
+
+    if (idx >= order.length) {
+      order = shuffle(WORDS);
+      idx = 0;
+    }
+
+    current = order[idx];
+    categoryEl.textContent = current.cat;
+    promptEl.textContent = current.es;
+    promptSubEl.textContent = "What does this mean in English?";
+    progressEl.textContent = `Word ${idx + 1} of ${WORDS.length} · looping`;
+
+    const choices = pickChoices(current);
+    optionsEl.innerHTML = "";
+    choices.forEach(choice => {
+      const btn = document.createElement("button");
+      btn.className = "tile";
+      btn.type = "button";
+      btn.textContent = choice;
+      btn.addEventListener("click", () => handleAnswer(btn, choice));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(btn, choice) {
+    if (answered) return;
+    answered = true;
+    const isCorrect = choice === current.en;
+
+    [...optionsEl.children].forEach(tile => {
+      tile.disabled = true;
+      if (tile.textContent === current.en) tile.classList.add("correct");
+    });
+
+    if (isCorrect) {
+      btn.classList.add("correct");
+      score += 10;
+      streak += 1;
+      feedbackEl.textContent = "¡Correcto! Nicely done.";
+      feedbackEl.classList.add("ok");
+    } else {
+      btn.classList.add("wrong");
+      streak = 0;
+      feedbackEl.textContent = `Not quite — "${current.es}" means "${current.en}".`;
+      feedbackEl.classList.add("no");
+    }
+
+    if (score > best) {
+      best = score;
+      localStorage.setItem("charlemos_best", String(best));
+    }
+
+    scoreEl.textContent = score;
+    streakEl.textContent = streak;
+    bestEl.textContent = best;
+    nextBtn.classList.add("show");
+  }
+
+  function speakCurrent() {
+    if (!current) return;
+    if (!("speechSynthesis" in window)) return;
+    const utter = new SpeechSynthesisUtterance(current.es);
+    utter.lang = "es-ES";
+    utter.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  }
+
+  nextBtn.addEventListener("click", () => { idx += 1; loadWord(); });
+  speakBtn.addEventListener("click", speakCurrent);
+
+  order = shuffle(WORDS);
+  loadWord();
+</script>
+
+</body>
+</html>
