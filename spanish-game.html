@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charlemos — Spanish Vocabulary Tiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ceramic: #EFE6D5;
+    --ceramic-dark: #E2D6BE;
+    --cobalt: #1B3B6F;
+    --cobalt-deep: #142C54;
+    --clay: #B54A2A;
+    --gold: #DFA526;
+    --ink: #17233A;
+    --ok: #3E7A4F;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--ceramic);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  body {
+    background-image:
+      repeating-linear-gradient(45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(-45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .board {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 700;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 42px;
+    margin: 4px 0 2px;
+    color: var(--cobalt-deep);
+  }
+
+  header p {
+    margin: 0;
+    font-size: 14px;
+    color: #4a5568;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat {
+    background: var(--cobalt);
+    color: var(--ceramic);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .stat b {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .stat.streak b { color: #ff9d6b; }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px 26px 26px;
+    box-shadow: 0 18px 40px -18px rgba(20,44,84,0.45);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before, .card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border: 3px solid var(--cobalt);
+    opacity: 0.08;
+  }
+  .card::before { top: -30px; left: -30px; border-radius: 0 0 100% 0; }
+  .card::after { bottom: -30px; right: -30px; border-radius: 100% 0 0 0; }
+
+  .category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .prompt {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--cobalt-deep);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .prompt-sub {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--cobalt);
+    color: var(--cobalt);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+    margin-bottom: 18px;
+  }
+  .speak-btn:hover { background: var(--cobalt); color: #fff; }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .tile {
+    position: relative;
+    background: var(--ceramic);
+    border: 2px solid var(--ceramic-dark);
+    border-radius: var(--radius);
+    padding: 16px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  .tile::before {
+    content: "";
+    position: absolute;
+    top: 6px; left: 6px;
+    width: 8px; height: 8px;
+    border-top: 2
