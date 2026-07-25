@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,13 +32,24 @@
 
   body {
     background-image:
-      repeating-linear-gradient(45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px),
-      repeating-linear-gradient(-45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px);
+      repeating-linear-gradient(45deg, var(--pattern, var(--ceramic-dark)) 0, var(--pattern, var(--ceramic-dark)) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(-45deg, var(--pattern, var(--ceramic-dark)) 0, var(--pattern, var(--ceramic-dark)) 1px, transparent 1px, transparent 42px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px 16px;
+    transition: background-color 0.35s ease;
   }
+
+  /* Page background tint by question category — the card itself stays white
+     and stays in front; only the ceramic backdrop behind it shifts color. */
+  body[data-bucket="verbos"]        { background-color: #DCE6F7; --pattern: #B7CBEF; }
+  body[data-bucket="pronombres"]    { background-color: #F7E9C4; --pattern: #EACD82; }
+  body[data-bucket="conjunciones"]  { background-color: #F0D6C6; --pattern: #DDB398; }
+  body[data-bucket="preposiciones"] { background-color: #CFE9DB; --pattern: #A3D5BB; }
+  body[data-bucket="comparativos"]  { background-color: #F3DADE; --pattern: #E3AFB8; }
+  body[data-bucket="vocabulario"]   { background-color: #F6DCB8; --pattern: #EBBB7C; }
+  body[data-bucket="todos"]         { background-color: var(--ceramic); --pattern: var(--ceramic-dark); }
 
   .board {
     width: 100%;
@@ -110,6 +122,7 @@
     box-shadow: 0 18px 40px -18px rgba(20,44,84,0.45);
     position: relative;
     overflow: hidden;
+    transition: background 0.35s ease;
   }
 
   .category {
@@ -364,92 +377,59 @@
   }
   .filter-btn.active { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
 
-  .mode-toggle {
+  .filter-dropdown-wrap {
     display: flex;
-    gap: 8px;
     justify-content: center;
     margin-bottom: 18px;
   }
-  .mode-btn {
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .filter-dropdown-btn {
     background: #fff;
     border: 1.5px solid var(--ceramic-dark);
     color: var(--ink);
-    border-radius: 999px;
-    padding: 8px 16px;
+    border-radius: 10px;
+    padding: 10px 18px;
     font-size: 13px;
-    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 200px;
+    text-align: left;
+  }
+  .filter-dropdown-btn:hover { border-color: var(--cobalt); }
+  .filter-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1.5px solid var(--ceramic-dark);
+    border-radius: 10px;
+    box-shadow: 0 14px 34px -14px rgba(20,44,84,0.4);
+    overflow: hidden;
+    z-index: 30;
+  }
+  .filter-dropdown-menu.open { display: block; }
+  .filter-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--ceramic);
+    font-size: 13px;
     font-family: 'Work Sans', sans-serif;
+    color: var(--ink);
     cursor: pointer;
   }
-  .mode-btn.active { background: var(--cobalt-deep); border-color: var(--cobalt-deep); color: #fff; }
-
-  .speak-controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 0 0 18px 40px;
-  }
-
-  .record-btn {
-    border-color: var(--clay);
-    color: var(--clay);
-  }
-  .record-btn:hover { background: var(--clay); color: #fff; }
-  .record-btn.listening {
-    background: var(--clay);
-    color: #fff;
-    animation: pulse 1s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-
-  .speak-result { margin: 0 0 6px 40px; }
-  .speak-result .transcript {
-    background: var(--ceramic);
-    border: 1.5px solid var(--ceramic-dark);
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
-  .speak-result .transcript .say-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #9b9384;
-    display: block;
-    margin-bottom: 4px;
-  }
-  .speak-score {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .speak-score.great { color: var(--ok); }
-  .speak-score.close { color: var(--gold); }
-  .speak-score.retry { color: var(--clay); }
-  .word-diff span {
-    display: inline-block;
-    padding: 2px 7px;
-    margin: 2px 3px 2px 0;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-  .word-diff span.match { background: rgba(62,122,79,0.15); color: var(--ok); }
-  .word-diff span.miss { background: rgba(181,74,42,0.12); color: var(--clay); text-decoration: line-through; }
-  .speak-unsupported {
-    margin: 0 0 18px 40px;
-    font-size: 13px;
-    color: #6b7280;
-    background: var(--ceramic);
-    border: 1.5px dashed var(--ceramic-dark);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
+  .filter-option:last-child { border-bottom: none; }
+  .filter-option:hover { background: var(--ceramic); }
+  .filter-option.active { background: var(--cobalt); color: #fff; font-weight: 600; }
 
   footer {
     text-align: center;
@@ -481,63 +461,36 @@
     <div class="stat">Best <b id="best">0</b></div>
   </div>
 
-  <div class="mode-toggle">
-    <button class="mode-btn active" id="modeQuizBtn" type="button">📝 Quiz</button>
-    <button class="mode-btn" id="modeSpeakBtn" type="button">🎤 Speaking Practice</button>
+  <div class="filter-dropdown-wrap">
+    <div class="filter-dropdown">
+      <button class="filter-dropdown-btn" id="filterDropdownBtn" type="button">Todos ▾</button>
+      <div class="filter-dropdown-menu" id="filterDropdownMenu"></div>
+    </div>
   </div>
 
-  <div id="quizSection">
-    <div class="filters" id="filters"></div>
+  <div class="card" id="quizCard">
+    <div class="category" id="category">Category</div>
 
-    <div class="card">
-      <div class="category" id="category">Category</div>
+    <div class="chat-row">
+      <div class="chat-avatar">🔊</div>
+      <div class="bubble" id="prompt">—</div>
+    </div>
+    <div class="prompt-sub" id="promptSub"></div>
+    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
 
-      <div class="chat-row">
-        <div class="chat-avatar">🔊</div>
-        <div class="bubble" id="prompt">—</div>
-      </div>
-      <div class="prompt-sub" id="promptSub"></div>
-      <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
 
-      <div class="options" id="options"></div>
-      <div class="feedback" id="feedback"></div>
-
-      <div class="answer-wrap" id="answerWrap">
-        <div class="answer-label">Your answer — tap any part</div>
-        <div class="answer-bubble" id="answerBubble"></div>
-        <div class="explain-card" id="explainCard"></div>
-      </div>
-
-      <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
+    <div class="answer-wrap" id="answerWrap">
+      <div class="answer-label">Your answer — tap any part</div>
+      <div class="answer-bubble" id="answerBubble"></div>
+      <div class="explain-card" id="explainCard"></div>
     </div>
 
-    <footer id="progress">Question 1 of —</footer>
+    <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
   </div>
 
-  <div id="speakingSection" style="display:none;">
-    <div class="filters" id="speakFilters"></div>
-
-    <div class="card">
-      <div class="category" id="speakCategory">Category</div>
-
-      <div class="chat-row">
-        <div class="chat-avatar">🎤</div>
-        <div class="bubble" id="speakTarget">—</div>
-      </div>
-      <div class="prompt-sub" id="speakTranslation"></div>
-
-      <div class="speak-controls">
-        <button class="speak-btn" id="speakHearBtn" type="button">🔊 Hear it first</button>
-        <button class="speak-btn record-btn" id="speakRecordBtn" type="button">🎤 Start speaking</button>
-      </div>
-
-      <div class="speak-result" id="speakResult"></div>
-
-      <button class="next-btn show" id="speakNextBtn" type="button">Next sentence →</button>
-    </div>
-
-    <footer id="speakProgress">Sentence 1 of —</footer>
-  </div>
+  <footer id="progress">Question 1 of —</footer>
 </div>
 
 <script>
@@ -999,7 +952,7 @@ const GENERAL_NOTES = {
         "__blank__": "\"Parece\" is the present tense of parecer (\"to seem\"), agreeing with \"este plan,\" the grammatical subject.",
         "excelente": "The quality it seems to have." } },
     { topic: "Parecer · subjuntivo", sentence: "No pienso que les ___ buena idea.", answer: "parezca", options: ["parezca", "parece", "parecerá", "pareciera"],
-      translation: "I don't think it will seem like a good idea to them.",
+      translation: "I don't think it seems like a good idea to them.",
       compare: [ { word: "parece", note: "The indicative — a plain statement, not a doubted opinion." },
                  { word: "parecerá", note: "The future indicative — a confident prediction rather than a doubt." } ],
       notes: { "no": "Negating \"pienso\" turns opinion into doubt, triggering the subjunctive.",
@@ -1494,12 +1447,13 @@ const GENERAL_NOTES = {
                  { word: "Ya que", note: "Also works at the start of a sentence with a very similar meaning, but is a bit more formal/emphatic than \"como.\"" } ],
       notes: { "__blank__": "\"Como\" here means \"since/as,\" a causal connector that specifically opens the sentence, with the result following. Common mistake: English speakers default to \"porque\" for every \"because/since,\" but \"porque\" sounds off at the very start of a sentence in this construction — \"como\" (or \"ya que\") is what a native speaker reaches for instead.",
         "llovía": "Imperfect of llover — describes the ongoing background condition (rain) that caused the decision." } },
-    { topic: "Conjunciones · ya que", sentence: "___ ya sabes la respuesta, dímela.", answer: "Ya que", options: ["Ya que", "Porque", "Sino", "Aunque"],
-      translation: "Since you already know the answer, tell me.",
+    { topic: "Conjunciones · ya que", sentence: "___ tú sabes la respuesta, dímela.", answer: "Ya que", options: ["Ya que", "Porque", "Sino", "Aunque"],
+      translation: "Since you know the answer, tell me.",
       compare: [ { word: "Porque", note: "Also \"because,\" but typically follows the result rather than opening the sentence like this." },
                  { word: "Aunque", note: "\"Although\" — would introduce a concession, not a reason." } ],
-      notes: { "__blank__": "\"Ya que\" means \"since/given that\" — a slightly more formal causal connector than \"como,\" and, unlike \"como,\" it can be used either at the start of the sentence or in the middle." } },
-    { topic: "Conjunciones · aunque + indicativo", sentence: "Aunque llovió, fuimos al partido.", answer: "llovió", options: ["llovió", "llueva", "llovería", "lloviera"],
+      notes: { "tú": "Second-person subject — clarifies who already knows the answer.",
+        "__blank__": "\"Ya que\" means \"since/given that\" — a slightly more formal causal connector than \"como,\" and, unlike \"como,\" it can be used either at the start of the sentence or in the middle." } },
+    { topic: "Conjunciones · aunque + indicativo", sentence: "Aunque ___, fuimos al partido.", answer: "llovió", options: ["llovió", "llueva", "llovería", "lloviera"],
       translation: "Although it rained, we went to the game.",
       compare: [ { word: "llueva", note: "The subjunctive — would be used instead if the rain were still uncertain/hypothetical, not a known fact." },
                  { word: "lloviera", note: "The imperfect subjunctive — used for a past hypothetical, not a real, known past event." } ],
@@ -1614,53 +1568,6 @@ const GENERAL_NOTES = {
                  { word: "presentir", note: "Means \"to have a premonition/sense something in advance,\" an unrelated look-alike." } ],
       notes: { "__blank__": "\"Presentar\" is the correct verb for introducing one person to another. Common mistake: English speakers often reach for \"introducir\" by direct translation, but that word is reserved for physically inserting or bringing in an object, not making social introductions." } },
 
-    // ---------------- VOCABULARIO AVANZADO: MODISMOS (IDIOMS) ----------------
-    { topic: "Vocabulario · modismos", sentence: "Metí la ___ cuando le dije la verdad sobre la fiesta sorpresa.", answer: "pata", options: ["pata", "mano", "pie", "cabeza"],
-      translation: "I put my foot in it when I told him the truth about the surprise party.",
-      compare: [ { word: "mano", note: "\"Hand\" — not part of this fixed idiom; substituting it doesn't make sense to a native speaker." },
-                 { word: "pie", note: "\"Foot\" (human) — close in meaning to the English idiom, but the actual Spanish expression fixes on \"pata\" (an animal's paw/leg), not \"pie.\"" } ],
-      notes: { "__blank__": "\"Meter la pata\" is a fixed idiom meaning \"to mess up / say the wrong thing,\" literally \"to put in the paw.\" Common mistake: idioms like this can't be built word-by-word from English — swapping in the literal word for \"foot\" (pie) instead of the idiom's actual word (pata) doesn't work; the whole phrase has to be memorized as a unit." } },
-    { topic: "Vocabulario · modismos", sentence: "Juan siempre ___ en el clavo con sus comentarios.", answer: "da", options: ["da", "pone", "toca", "mete"],
-      translation: "Juan always hits the nail on the head with his comments.",
-      compare: [ { word: "pone", note: "\"Puts\" — not the verb this fixed idiom uses." },
-                 { word: "toca", note: "\"Touches\" — closer to the English idiom's literal imagery, but the correct fixed Spanish verb here is \"dar,\" not \"tocar.\"" } ],
-      notes: { "__blank__": "\"Dar en el clavo\" is a fixed idiom meaning \"to be exactly right,\" literally \"to hit the nail.\" Its English equivalent, \"hit the nail on the head,\" uses a completely different verb (\"hit\"), which is why translating word-for-word doesn't work." } },
-    { topic: "Vocabulario · modismos", sentence: "No tiene ___ en la lengua; siempre dice lo que piensa.", answer: "pelos", options: ["pelos", "dientes", "manos", "ojos"],
-      translation: "He doesn't hold back; he always says what he thinks.",
-      compare: [ { word: "dientes", note: "\"Teeth\" — not part of this fixed idiom." },
-                 { word: "manos", note: "\"Hands\" — unrelated to this expression." } ],
-      notes: { "__blank__": "\"No tener pelos en la lengua\" is a fixed idiom meaning \"to speak bluntly/not hold back,\" literally \"to not have hairs on one's tongue.\" There's no equivalent literal image in English, so this one has to be learned as a whole unit rather than translated." } },
-    { topic: "Vocabulario · modismos", sentence: "Este restaurante cuesta un ___ de la cara.", answer: "ojo", options: ["ojo", "brazo", "pie", "diente"],
-      translation: "This restaurant costs an arm and a leg.",
-      compare: [ { word: "brazo", note: "\"Arm\" — the word English's equivalent idiom uses (\"cost an arm and a leg\"), but Spanish's fixed version uses \"ojo\" (eye) instead." },
-                 { word: "pie", note: "\"Foot\" — not part of this fixed idiom." } ],
-      notes: { "__blank__": "\"Costar un ojo de la cara\" is a fixed idiom meaning \"to be very expensive,\" literally \"an eye from the face.\" Common mistake: English speakers who know the English idiom \"cost an arm and a leg\" often translate it literally (\"costar un brazo\"), which isn't how the Spanish idiom is actually built." } },
-    { topic: "Vocabulario · modismos", sentence: "Deja de tomarme el ___; sé que estás bromeando.", answer: "pelo", options: ["pelo", "tiempo", "brazo", "ojo"],
-      translation: "Stop pulling my leg; I know you're joking.",
-      compare: [ { word: "tiempo", note: "\"Time\" — not part of this fixed idiom." },
-                 { word: "brazo", note: "\"Arm\" — closer to the English idiom (\"pull someone's leg\"), but the fixed Spanish version uses \"pelo\" (hair), not a limb at all." } ],
-      notes: { "__blank__": "\"Tomar el pelo\" is a fixed idiom meaning \"to tease/pull someone's leg,\" literally \"to take the hair.\" A direct translation of the English idiom (\"pull the leg\") wouldn't be understood the same way." } },
-    { topic: "Vocabulario · modismos", sentence: "Estás en las ___; no me estás escuchando.", answer: "nubes", options: ["nubes", "estrellas", "montañas", "olas"],
-      translation: "You're daydreaming; you're not listening to me.",
-      compare: [ { word: "estrellas", note: "\"Stars\" — not part of this fixed idiom, though it sounds like it could be." },
-                 { word: "montañas", note: "\"Mountains\" — unrelated to this expression." } ],
-      notes: { "__blank__": "\"Estar en las nubes\" is a fixed idiom meaning \"to daydream/not pay attention,\" literally \"to be in the clouds\" — one of the few idioms here that does translate fairly directly into a recognizable English image." } },
-    { topic: "Vocabulario · modismos", sentence: "Ella siempre pone el ___ antes que los bueyes.", answer: "carro", options: ["carro", "caballo", "tren", "barco"],
-      translation: "She always puts the cart before the horse.",
-      compare: [ { word: "caballo", note: "\"Horse\" — this word does appear in the idiom, but later (as \"los bueyes,\" oxen, in this version) — not in this blank." },
-                 { word: "tren", note: "\"Train\" — not part of this fixed idiom." } ],
-      notes: { "__blank__": "\"Poner el carro antes que los bueyes\" is Spanish's version of \"to put the cart before the horse\" — note it says \"oxen\" (bueyes) rather than \"horse,\" a small but fixed difference from the English idiom's imagery." } },
-    { topic: "Vocabulario · modismos", sentence: "Mi hermano menor siempre me está dando la ___.", answer: "lata", options: ["lata", "mano", "vuelta", "cara"],
-      translation: "My little brother is always bugging me.",
-      compare: [ { word: "mano", note: "\"Hand\" — not part of this fixed idiom." },
-                 { word: "vuelta", note: "\"Turn/return\" — appears in other idioms (dar la vuelta), but not this one." } ],
-      notes: { "__blank__": "\"Dar la lata\" is a fixed idiom meaning \"to annoy/bother someone repeatedly,\" literally \"to give the can\" — an expression with no literal English parallel at all." } },
-    { topic: "Vocabulario · modismos", sentence: "Tienes que ponerte las ___ si quieres aprobar el examen.", answer: "pilas", options: ["pilas", "botas", "medias", "manos"],
-      translation: "You need to get your act together if you want to pass the exam.",
-      compare: [ { word: "botas", note: "\"Boots\" — not part of this fixed idiom." },
-                 { word: "medias", note: "\"Socks/stockings\" — unrelated to this expression." } ],
-      notes: { "__blank__": "\"Ponerse las pilas\" is a fixed idiom meaning \"to get energized/get one's act together,\" literally \"to put in the batteries\" — a modern, very common expression in everyday Spanish with no direct English equivalent phrase." } },
-
     // ---------------- VOCABULARIO AVANZADO: VARIACIÓN REGIONAL ----------------
     { topic: "Vocabulario · variación regional", sentence: "En España la gente dice \"coche\", pero en México dicen \"___\".", answer: "carro", options: ["carro", "camión", "tren", "avión"],
       translation: "In Spain people say \"coche,\" but in Mexico they say \"carro.\"",
@@ -1672,6 +1579,312 @@ const GENERAL_NOTES = {
       compare: [ { word: "calculadora", note: "Means \"calculator,\" a different device entirely, just a close-sounding word." },
                  { word: "televisor", note: "Means \"television set,\" unrelated." } ],
       notes: { "__blank__": "\"Computadora\" is the standard word for \"computer\" throughout most of Latin America, while Spain uses \"ordenador\" almost exclusively. Neither is more \"correct\" — this is simply regional vocabulary variation, similar to \"soda\" vs. \"pop\" vs. \"coke\" across different parts of the English-speaking world." } },
+
+    // ---------------- PREPOSICIONES ----------------
+    { topic: "Preposiciones · a personal", sentence: "Vi ___ mi hermano en el parque.", answer: "a", options: ["a", "en", "de", "con"],
+      translation: "I saw my brother in the park.",
+      compare: [ { word: "en", note: "Would mark location, not the personal object of \"vi.\"" },
+                 { word: "de", note: "Would suggest possession/origin, not who was seen." } ],
+      notes: { "__blank__": "The \"personal a\" is required before a specific person as a direct object. Common mistake: this word has no English equivalent at all (\"I saw my brother\" needs nothing extra), so it's one of the most frequently dropped words for English speakers.",
+        "vi": "\"I saw\" — preterite of ver.",
+        "hermano": "The specific person being seen — this is exactly why the personal \"a\" is triggered." } },
+    { topic: "Preposiciones · a personal", sentence: "Busco ___ mi perro; se perdió esta mañana.", answer: "a", options: ["a", "en", "de", "por"],
+      translation: "I'm looking for my dog; he got lost this morning.",
+      compare: [ { word: "de", note: "Doesn't fit here — not a possession or origin structure." },
+                 { word: "por", note: "Would suggest searching \"through\" something, not searching for a specific individual." } ],
+      notes: { "__blank__": "The personal \"a\" extends to pets treated as individuals (especially loved ones), which is why \"busco a mi perro\" feels natural, while \"busco un trabajo\" (a job, not a person) takes no \"a.\"",
+        "busco": "\"I look for/I'm looking for\" — present tense of buscar." } },
+    { topic: "Preposiciones · a destino/hora", sentence: "Vamos ___ la playa este fin de semana.", answer: "a", options: ["a", "en", "de", "por"],
+      translation: "We're going to the beach this weekend.",
+      compare: [ { word: "en", note: "Would mark being located at the beach, not heading there." },
+                 { word: "por", note: "Would suggest moving through/around the beach, not toward it as a destination." } ],
+      notes: { "__blank__": "\"A\" marks a destination with verbs of motion like ir, llegar, and venir. Common mistake: English \"go to\" already has \"to\" built in, so this maps fairly directly — the harder part is remembering \"a\" disappears with some other motion-adjacent expressions." } },
+    { topic: "Preposiciones · a destino/hora", sentence: "La clase empieza ___ las nueve en punto.", answer: "a", options: ["a", "en", "de", "por"],
+      translation: "Class starts at nine o'clock sharp.",
+      compare: [ { word: "en", note: "Used instead for months/years (en enero, en 2024), not clock times." },
+                 { word: "de", note: "Doesn't mark time in this way." } ],
+      notes: { "__blank__": "\"A\" marks a specific clock time (a las nueve). Common mistake: English \"at nine\" also uses a different preposition than for dates (\"in January\"), so the pattern is similar — the trap is that Spanish's \"a\" vs. \"en\" split doesn't line up word-for-word with English \"at\" vs. \"in.\"" } },
+    { topic: "Preposiciones · de posesión/origen", sentence: "Este es el coche ___ mi padre.", answer: "de", options: ["de", "a", "en", "con"],
+      translation: "This is my father's car.",
+      compare: [ { word: "a", note: "Doesn't mark possession in Spanish." },
+                 { word: "con", note: "Would mean \"with,\" not \"belonging to.\"" } ],
+      notes: { "__blank__": "\"De\" shows possession. Common mistake: English shows possession by reordering words and adding \'s (\"my father's car\"), but Spanish always keeps normal word order and uses \"de\" instead — English speakers sometimes try to invert the noun order out of habit.",
+        "coche": "The thing possessed.",
+        "padre": "The possessor — comes after \"de,\" not before the noun like in English." } },
+    { topic: "Preposiciones · de posesión/origen", sentence: "Soy ___ Argentina, pero vivo en España.", answer: "de", options: ["de", "en", "a", "desde"],
+      translation: "I'm from Argentina, but I live in Spain.",
+      compare: [ { word: "en", note: "Would mark current location (which is correctly used later in the sentence for \"vivo en España\"), not origin." },
+                 { word: "desde", note: "Would suggest a starting point in time or space more literally, less natural for stating nationality/origin." } ],
+      notes: { "__blank__": "\"Ser de\" states origin or nationality — \"de\" here means \"from.\"",
+        "argentina": "The place of origin." } },
+    { topic: "Preposiciones · de posesión/origen", sentence: "La mesa es ___ madera.", answer: "de", options: ["de", "en", "con", "por"],
+      translation: "The table is made of wood.",
+      compare: [ { word: "con", note: "Would suggest the table comes \"with\" wood as an accessory, not that it's made of it." },
+                 { word: "por", note: "Doesn't fit this material-description pattern." } ],
+      notes: { "__blank__": "\"De\" states what something is made of. Common mistake: English \"made OF wood\" and Spanish \"de madera\" line up loosely, but English speakers sometimes still reach for \"con\" (with) by analogy with other \"with\" phrases." } },
+    { topic: "Preposiciones · de + infinitivo", sentence: "Este examen es muy difícil ___ aprobar.", answer: "de", options: ["de", "a", "en", "por"],
+      translation: "This exam is very hard to pass.",
+      compare: [ { word: "a", note: "Doesn't fit this adjective + infinitive pattern." },
+                 { word: "por", note: "Doesn't fit here either — this isn't a cause/reason structure." } ],
+      notes: { "__blank__": "\"De\" links an adjective describing an inherent quality (difícil, fácil, imposible) to the infinitive that explains it. Common mistake: English just stacks the adjective and infinitive directly (\"hard TO pass\"), so English speakers often skip the \"de\" entirely." } },
+    { topic: "Preposiciones · en lugar/modo/tiempo", sentence: "Los niños están jugando ___ el jardín.", answer: "en", options: ["en", "a", "de", "por"],
+      translation: "The kids are playing in the garden.",
+      compare: [ { word: "a", note: "Would suggest movement toward the garden, not being located inside it." },
+                 { word: "por", note: "Would suggest moving around/through the garden rather than a fixed location." } ],
+      notes: { "__blank__": "\"En\" marks a static location — \"in/at.\"" } },
+    { topic: "Preposiciones · en lugar/modo/tiempo", sentence: "Prefiero viajar ___ tren en vez de en avión.", answer: "en", options: ["en", "a", "de", "por"],
+      translation: "I prefer to travel by train instead of by plane.",
+      compare: [ { word: "a", note: "Used instead specifically for \"a pie\" (on foot) and \"a caballo\" (on horseback) — the odd exceptions to this pattern." },
+                 { word: "de", note: "Doesn't mark mode of transportation this way." } ],
+      notes: { "__blank__": "\"En\" marks mode of transportation (en coche, en tren, en avión). Common mistake: English \"by train\" uses \"by,\" which usually maps to \"por,\" so English speakers often guess \"por tren\" instead of the correct \"en tren.\"" } },
+    { topic: "Preposiciones · en lugar/modo/tiempo", sentence: "Mi cumpleaños es ___ marzo.", answer: "en", options: ["en", "a", "de", "por"],
+      translation: "My birthday is in March.",
+      compare: [ { word: "a", note: "Used instead for specific clock times (a las nueve), not months." },
+                 { word: "por", note: "Doesn't mark calendar months this way." } ],
+      notes: { "__blank__": "\"En\" marks months and years (en marzo, en 2024). Common mistake: since \"a\" is used for clock times and \"en\" for months/years, English speakers sometimes cross the two, since English \"in\" and \"at\" don't split the same way." } },
+    { topic: "Preposiciones · con", sentence: "Voy al cine ___ mis amigos esta noche.", answer: "con", options: ["con", "a", "de", "sin"],
+      translation: "I'm going to the movies with my friends tonight.",
+      compare: [ { word: "sin", note: "The opposite — \"without,\" not accompaniment." },
+                 { word: "de", note: "Doesn't mark accompaniment here." } ],
+      notes: { "__blank__": "\"Con\" means \"with,\" marking accompaniment." } },
+    { topic: "Preposiciones · con", sentence: "Ella habló ___ mucho cuidado sobre el tema.", answer: "con", options: ["con", "de", "por", "en"],
+      translation: "She spoke very carefully about the topic.",
+      compare: [ { word: "de", note: "Doesn't build this manner expression." },
+                 { word: "por", note: "Doesn't fit this fixed phrase." } ],
+      notes: { "__blank__": "\"Con cuidado\" (\"with care\") is a fixed manner expression meaning \"carefully.\" Common mistake: English often turns this kind of phrase into a single adverb (\"carefully\"), so English speakers sometimes search for a one-word Spanish equivalent instead of the natural \"con + noun\" construction.",
+        "cuidado": "\"Care\" — combines with \"con\" to describe how she spoke." } },
+    { topic: "Preposiciones · sin", sentence: "No puedo vivir ___ café por la mañana.", answer: "sin", options: ["sin", "con", "de", "por"],
+      translation: "I can't live without coffee in the morning.",
+      compare: [ { word: "con", note: "The opposite — \"with,\" not \"without.\"" },
+                 { word: "de", note: "Doesn't fit here." } ],
+      notes: { "__blank__": "\"Sin\" means \"without.\"" } },
+    { topic: "Preposiciones · sin", sentence: "Salió de casa ___ decir adiós.", answer: "sin", options: ["sin", "con", "por", "para"],
+      translation: "He left the house without saying goodbye.",
+      compare: [ { word: "con", note: "The opposite — would mean he did say goodbye." },
+                 { word: "para", note: "Would introduce a purpose, not describe an omitted action." } ],
+      notes: { "__blank__": "\"Sin + infinitive\" mirrors English \"without + -ing\" (sin decir = \"without saying\").",
+        "decir": "The infinitive naming the action that didn't happen — \"to say.\"" } },
+    { topic: "Preposiciones · sobre", sentence: "El libro está ___ la mesa.", answer: "sobre", options: ["sobre", "en", "entre", "bajo"],
+      translation: "The book is on the table.",
+      compare: [ { word: "en", note: "Also usable here (\"en la mesa\") and very common — \"sobre\" and \"en\" often overlap for \"on top of.\"" },
+                 { word: "bajo", note: "The opposite — \"under,\" not \"on.\"" } ],
+      notes: { "__blank__": "\"Sobre\" means \"on top of,\" and can be used almost interchangeably with \"en\" here. Its other, distinct meaning is \"about\" (a topic) — see the next card." } },
+    { topic: "Preposiciones · sobre", sentence: "Vamos a hablar ___ el cambio climático.", answer: "sobre", options: ["sobre", "en", "de", "a"],
+      translation: "We're going to talk about climate change.",
+      compare: [ { word: "de", note: "Also correct here (\"hablar de\") and very common — \"sobre\" is just slightly more formal for \"about.\"" },
+                 { word: "en", note: "Doesn't mean \"about\" a topic." } ],
+      notes: { "__blank__": "\"Sobre\" here means \"about\" (a topic) — a completely different meaning from its \"on top of\" sense in the previous card, even though it's the same word." } },
+    { topic: "Preposiciones · entre", sentence: "El banco está ___ la farmacia y el supermercado.", answer: "entre", options: ["entre", "sobre", "bajo", "contra"],
+      translation: "The bank is between the pharmacy and the supermarket.",
+      compare: [ { word: "sobre", note: "Would mean \"on top of,\" not \"between.\"" },
+                 { word: "contra", note: "Would mean \"against,\" not \"between.\"" } ],
+      notes: { "__blank__": "\"Entre\" means \"between/among.\"" } },
+    { topic: "Preposiciones · entre", sentence: "___ nosotros, no le digas nada a Pedro.", answer: "Entre", options: ["Entre", "Sobre", "Contra", "Bajo"],
+      translation: "Between us, don't say anything to Pedro.",
+      compare: [ { word: "Sobre", note: "Doesn't fit this fixed phrase." },
+                 { word: "Contra", note: "Would mean \"against us,\" changing the meaning entirely." } ],
+      notes: { "__blank__": "\"Entre nosotros\" is a fixed idiomatic phrase meaning \"just between us/confidentially.\"" } },
+    { topic: "Preposiciones · hasta", sentence: "Caminamos ___ el final de la calle.", answer: "hasta", options: ["hasta", "desde", "hacia", "sobre"],
+      translation: "We walked to the end of the street.",
+      compare: [ { word: "desde", note: "The opposite — marks a starting point, not an endpoint." },
+                 { word: "hacia", note: "Marks direction without necessarily reaching the destination, unlike \"hasta.\"" } ],
+      notes: { "__blank__": "\"Hasta\" means \"until/up to,\" marking a definite endpoint in time or space." } },
+    { topic: "Preposiciones · hasta", sentence: "No llegó ___ las diez de la noche.", answer: "hasta", options: ["hasta", "desde", "hacia", "en"],
+      translation: "He didn't arrive until ten at night.",
+      compare: [ { word: "desde", note: "Would mark a starting point instead of the point something finally happened." },
+                 { word: "hacia", note: "Would suggest \"around ten,\" an approximation, not \"not until ten.\"" } ],
+      notes: { "no": "Pairs with \"hasta\" here to build the \"not until\" construction.",
+        "__blank__": "\"Hasta\" paired with \"no\" earlier in the sentence means \"not until.\" Common mistake: this double structure (no + verb ... hasta) doesn't map directly onto English word order, so English speakers sometimes build the sentence around \"hasta\" alone without the earlier \"no.\"" } },
+    { topic: "Preposiciones · desde", sentence: "Vivo en esta ciudad ___ 2015.", answer: "desde", options: ["desde", "hasta", "hacia", "en"],
+      translation: "I've lived in this city since 2015.",
+      compare: [ { word: "hasta", note: "The opposite — marks an endpoint, not a starting point." },
+                 { word: "en", note: "Would mark a specific year as a point in time, not a duration \"since.\"" } ],
+      notes: { "__blank__": "\"Desde\" means \"since,\" marking a starting point in time. Common mistake: English pairs \"since\" with the present perfect (\"I have lived\"), but Spanish uses the plain present tense (\"vivo\") with \"desde\" for an action still ongoing — using the Spanish equivalent of \"have lived\" here would sound off." } },
+    { topic: "Preposiciones · desde", sentence: "___ mi ventana, se ve el mar.", answer: "Desde", options: ["Desde", "Hasta", "Hacia", "Entre"],
+      translation: "From my window, you can see the sea.",
+      compare: [ { word: "Hasta", note: "Would mark an endpoint, not a vantage point." },
+                 { word: "Hacia", note: "Would mark direction, not point of origin." } ],
+      notes: { "__blank__": "\"Desde\" also means \"from,\" marking a spatial point of origin, not just a time." } },
+    { topic: "Preposiciones · hacia", sentence: "El barco navega ___ el norte.", answer: "hacia", options: ["hacia", "hasta", "desde", "contra"],
+      translation: "The ship is sailing toward the north.",
+      compare: [ { word: "hasta", note: "Would imply reaching the north as a definite endpoint, not just heading that direction." },
+                 { word: "contra", note: "Would mean \"against the north,\" changing the meaning entirely." } ],
+      notes: { "__blank__": "\"Hacia\" means \"toward,\" indicating direction without necessarily implying arrival — softer than \"hasta.\"" } },
+    { topic: "Preposiciones · hacia", sentence: "Ella corrió ___ la puerta cuando escuchó el timbre.", answer: "hacia", options: ["hacia", "hasta", "desde", "entre"],
+      translation: "She ran toward the door when she heard the bell.",
+      compare: [ { word: "hasta", note: "Would emphasize that she actually reached the door, a slightly stronger claim than \"hacia.\"" },
+                 { word: "desde", note: "Would mark a starting point, not the destination she ran toward." } ],
+      notes: { "__blank__": "\"Hacia\" indicates the direction of movement." } },
+    { topic: "Preposiciones · contra", sentence: "El equipo jugó ___ el mejor equipo de la liga.", answer: "contra", options: ["contra", "hacia", "entre", "sobre"],
+      translation: "The team played against the best team in the league.",
+      compare: [ { word: "hacia", note: "Would mean \"toward,\" not \"against.\"" },
+                 { word: "sobre", note: "Would mean \"about/on top of,\" unrelated to competition." } ],
+      notes: { "__blank__": "\"Contra\" means \"against.\"" } },
+    { topic: "Preposiciones · durante", sentence: "Estudié mucho ___ el fin de semana.", answer: "durante", options: ["durante", "por", "desde", "hasta"],
+      translation: "I studied a lot during the weekend.",
+      compare: [ { word: "por", note: "Would measure the length/duration of an action (e.g., \"por dos horas\"), rather than naming the period it happened within." },
+                 { word: "desde", note: "Would mark a starting point, not a contained period." } ],
+      notes: { "__blank__": "\"Durante\" means \"during,\" marking the period within which something happens — distinct from \"por,\" which measures how long an action lasts." } },
+    { topic: "Preposiciones · tras", sentence: "___ una larga espera, por fin llegó el tren.", answer: "Tras", options: ["Tras", "Ante", "Bajo", "Contra"],
+      translation: "After a long wait, the train finally arrived.",
+      compare: [ { word: "Ante", note: "Means \"faced with/before,\" not \"after.\"" },
+                 { word: "Bajo", note: "Means \"under,\" unrelated here." } ],
+      notes: { "__blank__": "\"Tras\" is a more literary/formal synonym for \"después de\" (after). It's common in writing and news headlines, less so in casual speech." } },
+    { topic: "Preposiciones · ante", sentence: "___ tantas dificultades, decidió pedir ayuda.", answer: "Ante", options: ["Ante", "Tras", "Bajo", "Contra"],
+      translation: "Faced with so many difficulties, he decided to ask for help.",
+      compare: [ { word: "Tras", note: "Means \"after,\" a sequence in time rather than \"faced with.\"" },
+                 { word: "Contra", note: "Means \"against,\" implying opposition rather than confronting a situation." } ],
+      notes: { "__blank__": "\"Ante\" means \"faced with/in the presence of\" — more formal than \"frente a\" or \"delante de.\"" } },
+    { topic: "Preposiciones · bajo", sentence: "El gato está durmiendo ___ la mesa.", answer: "bajo", options: ["bajo", "sobre", "entre", "tras"],
+      translation: "The cat is sleeping under the table.",
+      compare: [ { word: "sobre", note: "The opposite — \"on top of,\" not \"under.\"" },
+                 { word: "tras", note: "Means \"after/behind,\" not \"under.\"" } ],
+      notes: { "__blank__": "\"Bajo\" is a more formal/literary synonym for \"debajo de\" (under). Both are correct, but \"debajo de\" is more common in everyday speech." } },
+    { topic: "Preposiciones · al/del", sentence: "Vamos ___ cine esta tarde.", answer: "al", options: ["al", "del", "a el", "de el"],
+      translation: "We're going to the movies this afternoon.",
+      compare: [ { word: "del", note: "The contraction of \"de + el,\" the wrong preposition family here." },
+                 { word: "a el", note: "Never correct — \"a\" plus \"el\" always contracts to \"al\" in writing." } ],
+      notes: { "__blank__": "\"A\" + \"el\" always contracts to \"al.\" Common mistake: Spanish never writes \"a el\" as two separate words — the only exception is \"a él,\" referring to a person (\"him\"), which keeps the accent and stays separate." } },
+    { topic: "Preposiciones · al/del", sentence: "Los libros ___ profesor están en la mesa.", answer: "del", options: ["del", "al", "de el", "a el"],
+      translation: "The teacher's books are on the table.",
+      compare: [ { word: "al", note: "The contraction of \"a + el,\" the wrong preposition family here." },
+                 { word: "de el", note: "Never correct as two separate words — always contracts to \"del,\" except for \"de él\" (accented, referring to a person)." } ],
+      notes: { "__blank__": "\"De\" + \"el\" always contracts to \"del.\" The only exception is \"de él,\" referring to a person (\"of/from him\"), which keeps the accent and stays as two words." } },
+    { topic: "Preposiciones · pronombres preposicionales", sentence: "Este regalo es para ___, no para tu hermano.", answer: "ti", options: ["ti", "tú", "mí", "yo"],
+      translation: "This gift is for you, not for your brother.",
+      compare: [ { word: "tú", note: "The subject form — wrong here, since a pronoun following a preposition needs the special prepositional form \"ti,\" not \"tú.\"" },
+                 { word: "mí", note: "Would mean \"me,\" the wrong person for this sentence." } ],
+      notes: { "__blank__": "After most prepositions, \"tú\" changes to \"ti.\" Common mistake: English's single word \"you\" doesn't change after prepositions, so English speakers often keep \"tú\" here by habit instead of switching to \"ti.\"" } },
+    { topic: "Preposiciones · pronombres preposicionales", sentence: "No puedo vivir sin ___; te necesito.", answer: "ti", options: ["ti", "tú", "él", "sí"],
+      translation: "I can't live without you; I need you.",
+      compare: [ { word: "tú", note: "The subject form — incorrect after the preposition \"sin.\"" },
+                 { word: "él", note: "Would mean \"him,\" the wrong person here." } ],
+      notes: { "__blank__": "Another example of \"tú\" becoming \"ti\" after a preposition (here, \"sin\")." } },
+    { topic: "Preposiciones · pronombres preposicionales", sentence: "Compró un regalo para ___ misma.", answer: "sí", options: ["sí", "ella", "ti", "mí"],
+      translation: "She bought a gift for herself.",
+      compare: [ { word: "ella", note: "Would work grammatically, but sounds like buying a gift for a different woman rather than for herself — \"sí\" specifically signals the subject and object are the same person." },
+                 { word: "ti", note: "Would mean \"for you,\" the wrong person." } ],
+      notes: { "__blank__": "\"Sí\" is the reflexive prepositional pronoun (himself/herself/themselves/yourself-formal), used when the subject and the object of the preposition refer to the same person — distinct from \"él/ella,\" which would refer to someone else.",
+        "misma": "\"Herself\" — reinforces \"sí,\" agreeing in gender with the subject." } },
+    { topic: "Preposiciones · pronombres preposicionales", sentence: "¿Quieres venir ___ a la fiesta?", answer: "conmigo", options: ["conmigo", "con mí", "con yo", "con migo"],
+      translation: "Do you want to come with me to the party?",
+      compare: [ { word: "con mí", note: "Never correct — \"con\" + \"mí\" doesn't stay as two words; it fuses into the single irregular word \"conmigo.\"" },
+                 { word: "con yo", note: "Never correct — \"yo\" is a subject pronoun and can't follow a preposition at all." } ],
+      notes: { "__blank__": "\"Con\" + \"mí\" fuses into the single irregular word \"conmigo\" (never \"con mí\"). The same happens for \"tú\": \"con\" + \"ti\" becomes \"contigo.\" Common mistake: English keeps \"with me\" as two separate words, so English speakers often try to do the same in Spanish instead of using the fused form." } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "Pienso mucho ___ ti últimamente.", answer: "en", options: ["en", "de", "con", "a"],
+      translation: "I think about you a lot lately.",
+      compare: [ { word: "de", note: "The direct-translation trap — English \"think about\" nudges toward this, but it's not the fixed pairing Spanish uses." },
+                 { word: "con", note: "Not the fixed preposition for \"pensar.\"" } ],
+      notes: { "__blank__": "\"Pensar en\" means \"to think about.\" Common mistake: English speakers often say \"pensar de\" or \"pensar sobre\" by direct translation, but the fixed verb+preposition pairing in Spanish is \"pensar en.\"" } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "Siempre sueño ___ viajar por el mundo.", answer: "con", options: ["con", "de", "en", "a"],
+      translation: "I always dream about traveling the world.",
+      compare: [ { word: "de", note: "Not the fixed pairing for \"soñar.\"" },
+                 { word: "en", note: "Also not correct here — the fixed pairing is specifically \"con.\"" } ],
+      notes: { "__blank__": "\"Soñar con\" means \"to dream about/of.\" Common mistake: English \"dream about\" nudges learners toward \"soñar de\" or \"soñar sobre,\" but the fixed Spanish pairing is \"con.\"" } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "El éxito del proyecto depende ___ todos nosotros.", answer: "de", options: ["de", "en", "con", "por"],
+      translation: "The project's success depends on all of us.",
+      compare: [ { word: "en", note: "The direct-translation trap — English \"depend ON\" nudges toward this, but it's not the fixed pairing." },
+                 { word: "con", note: "Not correct for \"depender.\"" } ],
+      notes: { "__blank__": "\"Depender de\" means \"to depend on.\" Common mistake: English \"depend ON\" strongly nudges English speakers toward \"depender en,\" but Spanish fixes this verb with \"de,\" not \"en.\"" } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "El examen consiste ___ cincuenta preguntas.", answer: "en", options: ["en", "de", "con", "por"],
+      translation: "The exam consists of fifty questions.",
+      compare: [ { word: "de", note: "The direct-translation trap — English \"consist OF\" nudges toward this, but it's not the fixed pairing." },
+                 { word: "con", note: "Not correct for \"consistir.\"" } ],
+      notes: { "__blank__": "\"Consistir en\" means \"to consist of.\" Common mistake: English \"consist OF\" leads learners to say \"consistir de,\" but Spanish fixes this verb with \"en.\"" } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "Mi hermana se casó ___ un médico el año pasado.", answer: "con", options: ["con", "a", "de", "por"],
+      translation: "My sister got married to a doctor last year.",
+      compare: [ { word: "a", note: "The direct-translation trap — English \"married TO\" nudges toward this, but it's not the fixed pairing." },
+                 { word: "de", note: "Not correct for \"casarse.\"" } ],
+      notes: { "__blank__": "\"Casarse con\" means \"to marry/get married to.\" Common mistake: English \"married TO\" nudges learners toward \"casarse a,\" but Spanish always uses \"con\" here." } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "Me enamoré ___ ella la primera vez que la vi.", answer: "de", options: ["de", "con", "en", "por"],
+      translation: "I fell in love with her the first time I saw her.",
+      compare: [ { word: "con", note: "The direct-translation trap — English \"in love WITH\" nudges toward this, but it's not the fixed pairing." },
+                 { word: "en", note: "Not correct for \"enamorarse.\"" } ],
+      notes: { "__blank__": "\"Enamorarse de\" means \"to fall in love with.\" Common mistake: English \"in love WITH\" strongly nudges learners toward \"enamorarse con,\" but the fixed Spanish pairing is \"de.\"" } },
+    { topic: "Preposiciones · verbo + preposición", sentence: "Voy a tardar una hora ___ terminar esto.", answer: "en", options: ["en", "de", "por", "a"],
+      translation: "I'm going to take an hour to finish this.",
+      compare: [ { word: "por", note: "Not the fixed pairing for \"tardar.\"" },
+                 { word: "a", note: "Also not correct here." } ],
+      notes: { "__blank__": "\"Tardar en\" means \"to take time to (do something)\" — a fixed pairing worth memorizing as a unit." } },
+    { topic: "Preposiciones · ubicación espacial", sentence: "El supermercado está cerca ___ mi casa.", answer: "de", options: ["de", "a", "en", "con"],
+      translation: "The supermarket is close to my house.",
+      compare: [ { word: "a", note: "The direct-translation trap — English \"close TO\" nudges toward this, but the fixed Spanish pairing ends in \"de.\"" },
+                 { word: "en", note: "Not correct for this compound preposition." } ],
+      notes: { "__blank__": "\"Cerca de\" means \"close/near to.\" Common mistake: these compound location prepositions always end in \"de\" before the noun, unlike English, which sometimes uses \"to\" (close TO) instead." } },
+    { topic: "Preposiciones · ubicación espacial", sentence: "La farmacia está lejos ___ aquí.", answer: "de", options: ["de", "a", "en", "por"],
+      translation: "The pharmacy is far from here.",
+      compare: [ { word: "a", note: "Not correct for this compound preposition." },
+                 { word: "en", note: "Not correct here either." } ],
+      notes: { "__blank__": "\"Lejos de\" means \"far from\" — again fixed with \"de,\" where English uses \"from.\"" } },
+    { topic: "Preposiciones · ubicación espacial", sentence: "Puse el libro encima ___ la mesa.", answer: "de", options: ["de", "en", "a", "sobre"],
+      translation: "I put the book on top of the table.",
+      compare: [ { word: "sobre", note: "\"Sobre\" alone already means \"on top of\" and could replace the whole phrase — but paired with \"encima,\" the connector is specifically \"de.\"" },
+                 { word: "en", note: "Not the fixed connector for \"encima.\"" } ],
+      notes: { "__blank__": "\"Encima de\" means \"on top of.\" It's part of a whole family of Spanish compound location prepositions (debajo de, delante de, detrás de, dentro de, fuera de, al lado de) that all end in \"de\" regardless of what preposition English uses." } },
+    { topic: "Preposiciones · ubicación espacial", sentence: "El coche está delante ___ la casa.", answer: "de", options: ["de", "a", "en", "con"],
+      translation: "The car is in front of the house.",
+      compare: [ { word: "a", note: "Not the fixed connector for \"delante.\"" },
+                 { word: "en", note: "Not correct here." } ],
+      notes: { "__blank__": "\"Delante de\" means \"in front of\" — same \"de\"-ending pattern as the rest of this family of location expressions." } },
+    { topic: "Preposiciones · ubicación espacial", sentence: "El parque está al lado ___ la escuela.", answer: "de", options: ["de", "a", "en", "con"],
+      translation: "The park is next to the school.",
+      compare: [ { word: "a", note: "Not the fixed connector here, even though \"al\" (a + el) appears earlier in the phrase." },
+                 { word: "en", note: "Not correct for this compound preposition." } ],
+      notes: { "__blank__": "\"Al lado de\" means \"next to/beside\" — another member of the same compound-preposition family, all fixed with \"de\" regardless of what English uses." } },
+    { topic: "Preposiciones · por (agente/intercambio)", sentence: "Este cuadro fue pintado ___ Picasso.", answer: "por", options: ["por", "para", "de", "a"],
+      translation: "This painting was painted by Picasso.",
+      compare: [ { word: "para", note: "Would wrongly suggest the painting was intended for Picasso, not created by him." },
+                 { word: "de", note: "Would suggest possession/origin rather than who performed the action." } ],
+      notes: { "__blank__": "\"Por\" marks the agent of a passive action — \"by whom\" something was done. This is a specific, memorizable use of \"por\" distinct from its cause/reason meaning." } },
+    { topic: "Preposiciones · por (agente/intercambio)", sentence: "Cambié mi coche viejo ___ uno nuevo.", answer: "por", options: ["por", "para", "de", "a"],
+      translation: "I traded my old car for a new one.",
+      compare: [ { word: "para", note: "Would suggest the old car was intended for the new one, not exchanged for it — the classic por/para trap." },
+                 { word: "de", note: "Doesn't mark exchange." } ],
+      notes: { "__blank__": "\"Por\" marks exchange (\"in exchange for\"). Common mistake: English \"for\" covers both purpose (para) and exchange (por), which is exactly why por/para confusion is so persistent — this is a textbook \"por\" case, not \"para.\"" } },
+
+    // ---------------- DESDE / DESDE HACE / DESDE QUE ----------------
+    { topic: "Preposiciones · desde (punto específico)", sentence: "Trabajo aquí ___ 2018.", answer: "desde", options: ["desde", "desde hace", "hace", "desde que"],
+      translation: "I've worked here since 2018.",
+      compare: [ { word: "desde hace", note: "Used instead for a duration/quantity of time (\"desde hace tres años\"), not a specific point like a year." },
+                 { word: "desde que", note: "Used instead when what follows is a full clause with its own verb (\"desde que empecé\"), not just a date." } ],
+      notes: { "__blank__": "\"Desde\" alone pairs with a specific point in time — a year, date, or named event. Common mistake: English \"since 2018\" and \"for three years\" both sound like \"since/for\" to an English speaker, so it's easy to reach for plain \"desde\" even when the sentence actually needs \"desde hace\" (see the next cards) because it's stating a duration, not a fixed point." } },
+    { topic: "Preposiciones · desde (punto específico)", sentence: "No hablamos ___ la discusión de la semana pasada.", answer: "desde", options: ["desde", "desde que", "desde hace", "hace"],
+      translation: "We haven't spoken since last week's argument.",
+      compare: [ { word: "desde que", note: "Would be needed instead if a full conjugated clause followed (\"desde que discutimos\"), rather than just a noun phrase." },
+                 { word: "desde hace", note: "Would be used instead to state how long the silence has lasted (\"desde hace una semana\"), not to name the event that started it." } ],
+      notes: { "__blank__": "Plain \"desde\" (not \"desde que\") is correct here because what follows is a noun phrase (\"la discusión\"), not a full clause with its own conjugated verb." } },
+    { topic: "Preposiciones · desde hace", sentence: "Vivo en esta casa ___ diez años.", answer: "desde hace", options: ["desde hace", "hace", "desde", "hace que"],
+      translation: "I've lived in this house for ten years.",
+      compare: [ { word: "desde", note: "Would need a specific point in time here (a year, a date), not a raw duration like \"diez años.\"" },
+                 { word: "hace", note: "Alone, \"hace\" would need to come first in the sentence, paired with \"que\" (see \"hace...que,\" a later card) — it can't just replace \"desde hace\" in this position." } ],
+      notes: { "__blank__": "\"Desde hace + [duration]\" states how long an ongoing action has been happening, paired with the present tense (\"vivo\"). Common mistake: English marks this with the present perfect (\"I have lived\"), but Spanish keeps the simple present and puts all the \"duration\" information into \"desde hace\" instead — mixing tenses here (using a Spanish perfect tense) is a common English-speaker slip." } },
+    { topic: "Preposiciones · desde hace", sentence: "Cuando lo conocí, él trabajaba allí ___ tres años.", answer: "desde hacía", options: ["desde hacía", "desde hace", "hace", "desde"],
+      translation: "When I met him, he had been working there for three years.",
+      compare: [ { word: "desde hace", note: "The present-tense version — would incorrectly mix a present-tense duration marker into a past-tense sentence." },
+                 { word: "desde", note: "Would need a specific point in time, not a raw duration." } ],
+      notes: { "conocí": "\"I met\" — preterite of conocer, the single completed action that interrupts the ongoing background state.",
+        "__blank__": "\"Desde hacía\" (imperfect of hacer) pairs with the imperfect tense (\"trabajaba\") to describe a duration that was still ongoing up to a point in the past. Common mistake: English marks this with the past perfect continuous (\"had been working\"), a completely different structure — English speakers often keep \"desde hace\" (present) instead of shifting it to match the past-tense sentence around it." } },
+    { topic: "Preposiciones · desde que", sentence: "No lo he visto ___ se mudó a otra ciudad.", answer: "desde que", options: ["desde que", "desde", "desde hace", "hace que"],
+      translation: "I haven't seen him since he moved to another city.",
+      compare: [ { word: "desde", note: "Would need just a noun or point in time afterward, not a full conjugated clause like \"se mudó.\"" },
+                 { word: "desde hace", note: "Would state a raw duration (\"desde hace un año\"), not name the event that started the gap." } ],
+      notes: { "__blank__": "\"Desde que\" is a conjunction (not a simple preposition) — it introduces a full clause with its own verb. Common mistake: English speakers often drop the \"que,\" trying to use plain \"desde\" directly before a conjugated verb, which doesn't work in Spanish the way it might feel like it should from English \"since he moved.\"" } },
+    { topic: "Preposiciones · desde que", sentence: "Estoy mucho más feliz ___ empecé este trabajo.", answer: "desde que", options: ["desde que", "desde", "desde hace", "ya que"],
+      translation: "I've been much happier since I started this job.",
+      compare: [ { word: "ya que", note: "Means \"since/given that\" in a causal sense (a reason), not \"since\" as in a starting point in time." },
+                 { word: "desde", note: "Would need a noun or date afterward, not the conjugated verb \"empecé.\"" } ],
+      notes: { "__blank__": "\"Desde que\" introduces a clause marking the starting point of an ongoing state — here, the new job is when the increased happiness began." } },
+    { topic: "Preposiciones · hace...que", sentence: "___ cinco años que estudio español.", answer: "Hace", options: ["Hace", "Desde hace", "Desde", "Desde que"],
+      translation: "I've been studying Spanish for five years.",
+      compare: [ { word: "Desde hace", note: "Would fit inside the sentence after the verb (\"Estudio español desde hace cinco años\") — the same meaning, different word order, not interchangeable with sentence-initial \"Hace.\"" },
+                 { word: "Desde", note: "Doesn't build this construction at all without \"hace.\"" } ],
+      notes: { "__blank__": "\"Hace + [duration] + que + [present tense]\" is a common alternate way to express the same idea as \"[present tense] + desde hace + [duration]\" — both mean exactly the same thing, just with the duration phrase moved to the front of the sentence instead of the end." } },
+    { topic: "Preposiciones · hace...que", sentence: "¿Cuánto tiempo ___ que esperas aquí?", answer: "hace", options: ["hace", "desde hace", "desde", "desde que"],
+      translation: "How long have you been waiting here?",
+      compare: [ { word: "desde hace", note: "Doesn't fit this question pattern — \"desde hace\" states a duration, it doesn't ask for one." },
+                 { word: "desde que", note: "Would need a full clause, not \"tiempo,\" and doesn't build a question this way." } ],
+      notes: { "cuánto": "\"How much,\" combined with \"tiempo\" to ask \"how long.\"",
+        "__blank__": "\"¿Cuánto tiempo hace que...?\" is the standard question form for asking about an ongoing duration, paired with the present tense verb (\"esperas\") — the answer would naturally use either \"hace...que\" or \"desde hace\" in response." } },
   ];
 
   
@@ -1686,12 +1899,39 @@ const GENERAL_NOTES = {
   const nextBtn = document.getElementById("nextBtn");
   const speakBtn = document.getElementById("speakBtn");
   const progressEl = document.getElementById("progress");
-  const filtersEl = document.getElementById("filters");
+  const filterDropdownBtn = document.getElementById("filterDropdownBtn");
+  const filterDropdownMenu = document.getElementById("filterDropdownMenu");
   const answerWrapEl = document.getElementById("answerWrap");
   const answerBubbleEl = document.getElementById("answerBubble");
   const explainCardEl = document.getElementById("explainCard");
+  const quizCardEl = document.getElementById("quizCard");
 
-  const GROUPS = ["Todos", ...Array.from(new Set(ITEMS.map(i => i.topic.split(" · ")[0])))];
+  // Consolidated top-level categories. The detailed topic (e.g. "Ser · presente")
+  // still shows on each question card — this mapping only simplifies the filter menu.
+  // "slug" also drives the page background tint (see body[data-bucket] CSS).
+  const BUCKETS = [
+    { name: "Verbos", slug: "verbos", roots: ["Ser", "Estar", "Tener", "Hacer", "Haber", "Dejar", "Poder", "Parecer",
+        "Ir", "Saber/Conocer", "Verbos como gustar", "Querer", "Decir", "Condicional", "Deber", "Mandatos"] },
+    { name: "Pronombres", slug: "pronombres", roots: ["Pronombres"] },
+    { name: "Conjunciones", slug: "conjunciones", roots: ["Conjunciones"] },
+    { name: "Preposiciones", slug: "preposiciones", roots: ["Por vs Para", "Preposiciones"] },
+    { name: "Comparativos y adjetivos", slug: "comparativos", roots: ["Comparativos", "Adjetivos"] },
+    { name: "Vocabulario", slug: "vocabulario", roots: ["Vocabulario"] },
+  ];
+
+  function getBucket(topic) {
+    const root = topic.split(" · ")[0];
+    const found = BUCKETS.find(b => b.roots.includes(root));
+    return found ? found.name : root;
+  }
+
+  function getBucketSlug(topic) {
+    const root = topic.split(" · ")[0];
+    const found = BUCKETS.find(b => b.roots.includes(root));
+    return found ? found.slug : "todos";
+  }
+
+  const GROUPS = ["Todos", ...BUCKETS.map(b => b.name)];
   let activeGroup = "Todos";
 
   // ============== ADAPTIVE MASTERY TRACKING ==============
@@ -1710,44 +1950,98 @@ const GENERAL_NOTES = {
 
   function getStat(item) {
     const k = itemKey(item);
-    if (!itemStats[k]) itemStats[k] = { correctStreak: 0, timesSeen: 0 };
+    if (!itemStats[k]) itemStats[k] = { correctStreak: 0, timesSeen: 0, nextDueAt: 0, intervalHours: 0 };
     return itemStats[k];
   }
+
+  const MASTERY_THRESHOLD = 3; // correct answers in a row before spacing kicks in
 
   function recordResult(item, wasCorrect) {
     const stat = getStat(item);
     stat.timesSeen += 1;
-    stat.correctStreak = wasCorrect ? stat.correctStreak + 1 : 0;
+
+    if (wasCorrect) {
+      stat.correctStreak += 1;
+      if (stat.correctStreak >= MASTERY_THRESHOLD) {
+        // First time crossing the threshold: schedule it "a day or so" out.
+        // Each time it comes back around and is answered correctly again,
+        // the wait roughly doubles-to-triples, so it fades further and further.
+        const hours = stat.intervalHours > 0
+          ? stat.intervalHours * (2 + Math.random())       // grows each successful review
+          : (20 + Math.random() * 12);                      // first spacing: ~20–32 hours
+        stat.intervalHours = hours;
+        stat.nextDueAt = Date.now() + hours * 60 * 60 * 1000;
+      } else {
+        // Correct, but hasn't hit 3-in-a-row yet — keep it in normal rotation.
+        stat.nextDueAt = 0;
+        stat.intervalHours = 0;
+      }
+    } else {
+      // Any miss resets everything — back into frequent rotation immediately.
+      stat.correctStreak = 0;
+      stat.nextDueAt = 0;
+      stat.intervalHours = 0;
+    }
+
     saveItemStats();
+  }
+
+  function isDue(item) {
+    const stat = getStat(item);
+    return !stat.nextDueAt || stat.nextDueAt <= Date.now();
+  }
+
+  function formatWait(ms) {
+    const hours = ms / 3600000;
+    if (hours < 1) return "less than an hour";
+    if (hours < 36) return Math.round(hours) + "h";
+    return Math.round(hours / 24) + "d";
   }
 
   function masteryLabel(item) {
     const stat = getStat(item);
     if (stat.timesSeen === 0) return { icon: "🆕", text: "New" };
-    if (stat.correctStreak >= 3) return { icon: "✅", text: `Mastered · ${stat.correctStreak} in a row` };
+    if (stat.nextDueAt && stat.nextDueAt > Date.now()) {
+      return { icon: "😴", text: `Resting · back in ~${formatWait(stat.nextDueAt - Date.now())}` };
+    }
+    if (stat.correctStreak >= MASTERY_THRESHOLD) return { icon: "✅", text: `Due for review · ${stat.correctStreak} streak` };
     if (stat.correctStreak >= 1) return { icon: "🔄", text: `Learning · ${stat.correctStreak} in a row` };
     return { icon: "🔁", text: "Needs review" };
   }
 
-  // Weighted random pick: unseen questions and low-streak questions are much
-  // more likely to be chosen; the immediately-previous question is heavily
-  // suppressed so it doesn't repeat back-to-back.
+  // Weighted random pick, restricted to items that are actually "due" —
+  // mastered items resting on their spaced-repetition schedule are excluded
+  // entirely until their time is up. If a filtered topic is small enough
+  // that everything in it is currently resting, we fall back to the full
+  // pool so the game never gets stuck with nothing to show.
+  //
+  // Brand-new (never-seen) questions get first priority, full stop: as long
+  // as any unseen question exists in the current pool, the next question is
+  // always pulled from that unseen set. Only once everything in the pool has
+  // been seen at least once does it fall back to weighted spaced review.
   function pickWeighted(itemPool, avoidItem) {
     if (!itemPool.length) return null;
-    const weights = itemPool.map(item => {
+    let candidates = itemPool.filter(isDue);
+    if (!candidates.length) candidates = itemPool;
+
+    const unseen = candidates.filter(item => getStat(item).timesSeen === 0);
+    if (unseen.length > 0) {
+      return unseen[Math.floor(Math.random() * unseen.length)];
+    }
+
+    const weights = candidates.map(item => {
       const stat = getStat(item);
       let w = 1 / (1 + Math.min(stat.correctStreak, 6));
-      if (stat.timesSeen === 0) w *= 5;
       if (avoidItem && item === avoidItem) w *= 0.05;
       return w;
     });
     const total = weights.reduce((a, b) => a + b, 0);
     let r = Math.random() * total;
-    for (let i = 0; i < itemPool.length; i++) {
+    for (let i = 0; i < candidates.length; i++) {
       r -= weights[i];
-      if (r <= 0) return itemPool[i];
+      if (r <= 0) return candidates[i];
     }
-    return itemPool[itemPool.length - 1];
+    return candidates[candidates.length - 1];
   }
 
   let pool = [];
@@ -1773,25 +2067,41 @@ const GENERAL_NOTES = {
     return w.toLowerCase().replace(/^[¿¡"'(\u00bf\u00a1]+|[?!.,;:"')]+$/g, "");
   }
 
-  function renderFilters() {
-    filtersEl.innerHTML = "";
-    GROUPS.forEach(g => {
-      const btn = document.createElement("button");
-      btn.className = "filter-btn" + (g === activeGroup ? " active" : "");
-      btn.type = "button";
-      btn.textContent = g;
-      btn.addEventListener("click", () => {
-        activeGroup = g;
-        renderFilters();
-        resetPool();
-        loadItem();
+  function setupFilterDropdown(btnEl, menuEl, getActive, setActive) {
+    function renderMenu() {
+      menuEl.innerHTML = "";
+      GROUPS.forEach(g => {
+        const opt = document.createElement("button");
+        opt.type = "button";
+        opt.className = "filter-option" + (g === getActive() ? " active" : "");
+        opt.textContent = g;
+        opt.addEventListener("click", () => {
+          setActive(g);
+          btnEl.textContent = g + " ▾";
+          menuEl.classList.remove("open");
+          renderMenu();
+        });
+        menuEl.appendChild(opt);
       });
-      filtersEl.appendChild(btn);
+    }
+    btnEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".filter-dropdown-menu.open").forEach(m => { if (m !== menuEl) m.classList.remove("open"); });
+      menuEl.classList.toggle("open");
     });
+    document.addEventListener("click", () => menuEl.classList.remove("open"));
+    btnEl.textContent = getActive() + " ▾";
+    renderMenu();
   }
 
+  setupFilterDropdown(filterDropdownBtn, filterDropdownMenu, () => activeGroup, (g) => {
+    activeGroup = g;
+    resetPool();
+    loadItem();
+  });
+
   function resetPool() {
-    pool = activeGroup === "Todos" ? ITEMS : ITEMS.filter(i => i.topic.startsWith(activeGroup));
+    pool = activeGroup === "Todos" ? ITEMS : ITEMS.filter(i => getBucket(i.topic) === activeGroup);
     sessionCount = 0;
   }
 
@@ -1807,6 +2117,7 @@ const GENERAL_NOTES = {
 
     current = pickWeighted(pool, current);
     sessionCount += 1;
+    document.body.setAttribute("data-bucket", getBucketSlug(current.topic));
     const tag = masteryLabel(current);
     categoryEl.innerHTML = current.topic + '  <span style="font-family:\'Work Sans\',sans-serif;text-transform:none;letter-spacing:0;color:#9b9384;font-weight:500;">' + tag.icon + ' ' + tag.text + '</span>';
 
@@ -2004,204 +2315,9 @@ const GENERAL_NOTES = {
   nextBtn.addEventListener("click", () => { loadItem(); });
   speakBtn.addEventListener("click", speakCurrent);
 
-  renderFilters();
   resetPool();
   loadItem();
 
-  // ============== MODE TOGGLE ==============
-  const modeQuizBtn = document.getElementById("modeQuizBtn");
-  const modeSpeakBtn = document.getElementById("modeSpeakBtn");
-  const quizSection = document.getElementById("quizSection");
-  const speakingSection = document.getElementById("speakingSection");
-
-  modeQuizBtn.addEventListener("click", () => {
-    modeQuizBtn.classList.add("active");
-    modeSpeakBtn.classList.remove("active");
-    quizSection.style.display = "";
-    speakingSection.style.display = "none";
-  });
-  modeSpeakBtn.addEventListener("click", () => {
-    modeSpeakBtn.classList.add("active");
-    modeQuizBtn.classList.remove("active");
-    speakingSection.style.display = "";
-    quizSection.style.display = "none";
-    if (!speakInitialized) initSpeaking();
-  });
-
-  // ============== SPEAKING PRACTICE ==============
-  const speakFiltersEl = document.getElementById("speakFilters");
-  const speakCategoryEl = document.getElementById("speakCategory");
-  const speakTargetEl = document.getElementById("speakTarget");
-  const speakTranslationEl = document.getElementById("speakTranslation");
-  const speakHearBtn = document.getElementById("speakHearBtn");
-  const speakRecordBtn = document.getElementById("speakRecordBtn");
-  const speakResultEl = document.getElementById("speakResult");
-  const speakNextBtn = document.getElementById("speakNextBtn");
-  const speakProgressEl = document.getElementById("speakProgress");
-
-  let speakInitialized = false;
-  let speakActiveGroup = "Todos";
-  let speakPool = [];
-  let speakSessionCount = 0;
-  let speakCurrentItem = null;
-  let recognition = null;
-  let isListening = false;
-
-  const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  function initSpeaking() {
-    speakInitialized = true;
-    renderSpeakFilters();
-    resetSpeakPool();
-
-    if (!SpeechRecognitionClass) {
-      speakRecordBtn.style.display = "none";
-      const warn = document.createElement("div");
-      warn.className = "speak-unsupported";
-      warn.textContent = "Your browser doesn't support speech recognition (this needs Chrome, Edge, or Safari on iOS 14.5+ with microphone access). You can still use \"Hear it first\" to practice listening and reading aloud on your own.";
-      speakResultEl.parentElement.insertBefore(warn, speakResultEl);
-    }
-
-    loadSpeakItem();
-  }
-
-  function renderSpeakFilters() {
-    speakFiltersEl.innerHTML = "";
-    GROUPS.forEach(g => {
-      const btn = document.createElement("button");
-      btn.className = "filter-btn" + (g === speakActiveGroup ? " active" : "");
-      btn.type = "button";
-      btn.textContent = g;
-      btn.addEventListener("click", () => {
-        speakActiveGroup = g;
-        renderSpeakFilters();
-        resetSpeakPool();
-        loadSpeakItem();
-      });
-      speakFiltersEl.appendChild(btn);
-    });
-  }
-
-  function resetSpeakPool() {
-    speakPool = speakActiveGroup === "Todos" ? ITEMS : ITEMS.filter(i => i.topic.startsWith(speakActiveGroup));
-    speakSessionCount = 0;
-  }
-
-  function loadSpeakItem() {
-    speakCurrentItem = pickWeighted(speakPool, speakCurrentItem);
-    speakSessionCount += 1;
-    const tag = masteryLabel(speakCurrentItem);
-    speakCategoryEl.innerHTML = speakCurrentItem.topic + '  <span style="font-family:\'Work Sans\',sans-serif;text-transform:none;letter-spacing:0;color:#9b9384;font-weight:500;">' + tag.icon + ' ' + tag.text + '</span>';
-    const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
-    speakTargetEl.textContent = fullEs;
-    speakTranslationEl.textContent = speakCurrentItem.translation;
-    speakProgressEl.textContent = `Sentence ${speakSessionCount} · ${speakPool.length} in "${speakActiveGroup}" pool · repeats fade as you master them`;
-    speakResultEl.innerHTML = "";
-  }
-
-  function speakHearTarget() {
-    if (!speakCurrentItem) return;
-    if (!("speechSynthesis" in window)) return;
-    const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
-    const utter = new SpeechSynthesisUtterance(fullEs);
-    utter.lang = "es-ES";
-    utter.rate = 0.85;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
-  }
-
-  function stripAccents(s) {
-    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-
-  function normalizeForSpeech(s) {
-    return stripAccents(s.toLowerCase())
-      .replace(/[¿¡?!.,;:"'()]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  function scoreTranscript(target, transcript) {
-    const targetWords = normalizeForSpeech(target).split(" ").filter(Boolean);
-    const saidWords = normalizeForSpeech(transcript).split(" ").filter(Boolean);
-    const saidCounts = {};
-    saidWords.forEach(w => { saidCounts[w] = (saidCounts[w] || 0) + 1; });
-
-    const wordResults = targetWords.map(w => {
-      if (saidCounts[w] > 0) {
-        saidCounts[w] -= 1;
-        return { word: w, ok: true };
-      }
-      return { word: w, ok: false };
-    });
-
-    const matched = wordResults.filter(w => w.ok).length;
-    const pct = targetWords.length ? Math.round((matched / targetWords.length) * 100) : 0;
-    return { pct, wordResults };
-  }
-
-  function renderSpeakResult(transcript, pct, wordResults) {
-    let scoreClass = "retry";
-    let scoreLabel = "Keep practicing — try again";
-    if (pct >= 90) { scoreClass = "great"; scoreLabel = "Excellent match!"; }
-    else if (pct >= 70) { scoreClass = "close"; scoreLabel = "Close — check the words below"; }
-
-    let html = '<div class="transcript"><span class="say-label">What we heard</span>' + (transcript || "(nothing captured)") + '</div>';
-    html += '<div class="speak-score ' + scoreClass + '">' + scoreLabel + ' — ' + pct + '% word match</div>';
-    html += '<div class="word-diff">';
-    wordResults.forEach(w => {
-      html += '<span class="' + (w.ok ? "match" : "miss") + '">' + w.word + '</span>';
-    });
-    html += '</div>';
-    speakResultEl.innerHTML = html;
-  }
-
-  function startListening() {
-    if (!SpeechRecognitionClass || !speakCurrentItem) return;
-    if (isListening) {
-      recognition && recognition.stop();
-      return;
-    }
-
-    recognition = new SpeechRecognitionClass();
-    recognition.lang = "es-ES";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    isListening = true;
-    speakRecordBtn.classList.add("listening");
-    speakRecordBtn.textContent = "🔴 Listening...";
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
-      const { pct, wordResults } = scoreTranscript(fullEs, transcript);
-      renderSpeakResult(transcript, pct, wordResults);
-      recordResult(speakCurrentItem, pct >= 85);
-    };
-
-    recognition.onerror = (event) => {
-      speakResultEl.innerHTML = '<div class="speak-score retry">Couldn\'t capture audio (' + event.error + '). Check microphone permissions and try again.</div>';
-    };
-
-    recognition.onend = () => {
-      isListening = false;
-      speakRecordBtn.classList.remove("listening");
-      speakRecordBtn.textContent = "🎤 Start speaking";
-    };
-
-    try {
-      recognition.start();
-    } catch (e) {
-      isListening = false;
-      speakRecordBtn.classList.remove("listening");
-      speakRecordBtn.textContent = "🎤 Start speaking";
-    }
-  }
-
-  speakHearBtn.addEventListener("click", speakHearTarget);
-  speakRecordBtn.addEventListener("click", startListening);
-  speakNextBtn.addEventListener("click", () => { loadSpeakItem(); });
 </script>
 
 </body>
