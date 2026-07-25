@@ -364,6 +364,93 @@
   }
   .filter-btn.active { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
 
+  .mode-toggle {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .mode-btn {
+    background: #fff;
+    border: 1.5px solid var(--ceramic-dark);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Work Sans', sans-serif;
+    cursor: pointer;
+  }
+  .mode-btn.active { background: var(--cobalt-deep); border-color: var(--cobalt-deep); color: #fff; }
+
+  .speak-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0 0 18px 40px;
+  }
+
+  .record-btn {
+    border-color: var(--clay);
+    color: var(--clay);
+  }
+  .record-btn:hover { background: var(--clay); color: #fff; }
+  .record-btn.listening {
+    background: var(--clay);
+    color: #fff;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .speak-result { margin: 0 0 6px 40px; }
+  .speak-result .transcript {
+    background: var(--ceramic);
+    border: 1.5px solid var(--ceramic-dark);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .speak-result .transcript .say-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9b9384;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .speak-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .speak-score.great { color: var(--ok); }
+  .speak-score.close { color: var(--gold); }
+  .speak-score.retry { color: var(--clay); }
+  .word-diff span {
+    display: inline-block;
+    padding: 2px 7px;
+    margin: 2px 3px 2px 0;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .word-diff span.match { background: rgba(62,122,79,0.15); color: var(--ok); }
+  .word-diff span.miss { background: rgba(181,74,42,0.12); color: var(--clay); text-decoration: line-through; }
+  .speak-unsupported {
+    margin: 0 0 18px 40px;
+    font-size: 13px;
+    color: #6b7280;
+    background: var(--ceramic);
+    border: 1.5px dashed var(--ceramic-dark);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
   footer {
     text-align: center;
     margin-top: 18px;
@@ -394,31 +481,63 @@
     <div class="stat">Best <b id="best">0</b></div>
   </div>
 
-  <div class="filters" id="filters"></div>
-
-  <div class="card">
-    <div class="category" id="category">Category</div>
-
-    <div class="chat-row">
-      <div class="chat-avatar">🔊</div>
-      <div class="bubble" id="prompt">—</div>
-    </div>
-    <div class="prompt-sub" id="promptSub"></div>
-    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
-
-    <div class="options" id="options"></div>
-    <div class="feedback" id="feedback"></div>
-
-    <div class="answer-wrap" id="answerWrap">
-      <div class="answer-label">Your answer — tap any part</div>
-      <div class="answer-bubble" id="answerBubble"></div>
-      <div class="explain-card" id="explainCard"></div>
-    </div>
-
-    <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="modeQuizBtn" type="button">📝 Quiz</button>
+    <button class="mode-btn" id="modeSpeakBtn" type="button">🎤 Speaking Practice</button>
   </div>
 
-  <footer id="progress">Question 1 of —</footer>
+  <div id="quizSection">
+    <div class="filters" id="filters"></div>
+
+    <div class="card">
+      <div class="category" id="category">Category</div>
+
+      <div class="chat-row">
+        <div class="chat-avatar">🔊</div>
+        <div class="bubble" id="prompt">—</div>
+      </div>
+      <div class="prompt-sub" id="promptSub"></div>
+      <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
+
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+
+      <div class="answer-wrap" id="answerWrap">
+        <div class="answer-label">Your answer — tap any part</div>
+        <div class="answer-bubble" id="answerBubble"></div>
+        <div class="explain-card" id="explainCard"></div>
+      </div>
+
+      <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
+    </div>
+
+    <footer id="progress">Question 1 of —</footer>
+  </div>
+
+  <div id="speakingSection" style="display:none;">
+    <div class="filters" id="speakFilters"></div>
+
+    <div class="card">
+      <div class="category" id="speakCategory">Category</div>
+
+      <div class="chat-row">
+        <div class="chat-avatar">🎤</div>
+        <div class="bubble" id="speakTarget">—</div>
+      </div>
+      <div class="prompt-sub" id="speakTranslation"></div>
+
+      <div class="speak-controls">
+        <button class="speak-btn" id="speakHearBtn" type="button">🔊 Hear it first</button>
+        <button class="speak-btn record-btn" id="speakRecordBtn" type="button">🎤 Start speaking</button>
+      </div>
+
+      <div class="speak-result" id="speakResult"></div>
+
+      <button class="next-btn show" id="speakNextBtn" type="button">Next sentence →</button>
+    </div>
+
+    <footer id="speakProgress">Sentence 1 of —</footer>
+  </div>
 </div>
 
 <script>
@@ -1325,6 +1444,234 @@ const GENERAL_NOTES = {
                  { word: "buena", note: "The feminine form — wrong here, since \"libro\" is masculine." } ],
       notes: { "__blank__": "\"Buen\" is the shortened form of \"bueno,\" used right before a masculine singular noun. Common mistake: this is a genuine exception to \"adjectives go after the noun\" — a handful of adjectives (bueno, malo, grande, primero, tercero, alguno, ninguno) both move before the noun and shorten in this position, which trips up learners who just memorized the general placement rule.",
         "libro": "The noun being described — masculine singular, which is why \"bueno\" shortens to \"buen\" in front of it." } },
+
+    // ---------------- CONJUNCIONES ----------------
+    { topic: "Conjunciones · y", sentence: "Compré manzanas ___ naranjas.", answer: "y", options: ["y", "e", "o", "u"],
+      translation: "I bought apples and oranges.",
+      compare: [ { word: "e", note: "The swapped form of \"y,\" used only right before a word starting with an i/hi sound — not needed here." },
+                 { word: "o", note: "\"Or\" — a different coordinator entirely." } ],
+      notes: { "__blank__": "\"Y\" is the basic word for \"and.\" It's one of the few Spanish conjunctions that changes shape depending on the sound that follows — see \"e\" for the swapped version." } },
+    { topic: "Conjunciones · e", sentence: "Estudio historia ___ inglés.", answer: "e", options: ["e", "y", "o", "u"],
+      translation: "I study history and English.",
+      compare: [ { word: "y", note: "The normal \"and\" — correct everywhere except right before a word starting with the sound \"i\" or \"hi.\"" },
+                 { word: "o", note: "\"Or\" — a different coordinator entirely." } ],
+      notes: { "__blank__": "\"E\" replaces \"y\" whenever the next word starts with an \"i\" or \"hi\" sound (like \"inglés\"), purely to avoid an awkward \"y i\" sound. Common mistake: English \"and\" never changes shape, so English speakers almost always default to \"y\" here without realizing Spanish has this built-in swap rule." } },
+    { topic: "Conjunciones · o", sentence: "¿Quieres té ___ café?", answer: "o", options: ["o", "u", "y", "e"],
+      translation: "Do you want tea or coffee?",
+      compare: [ { word: "u", note: "The swapped form of \"o,\" used only right before a word starting with an o/ho sound — not needed here." },
+                 { word: "y", note: "\"And\" — a different coordinator entirely." } ],
+      notes: { "__blank__": "\"O\" is the basic word for \"or.\" Like \"y,\" it has a swapped version (\"u\") used before certain sounds." } },
+    { topic: "Conjunciones · u", sentence: "No sé si son siete ___ ocho.", answer: "u", options: ["u", "o", "y", "e"],
+      translation: "I don't know if it's seven or eight.",
+      compare: [ { word: "o", note: "The normal \"or\" — correct everywhere except right before a word starting with the sound \"o\" or \"ho.\"" },
+                 { word: "y", note: "\"And\" — a different coordinator entirely." } ],
+      notes: { "__blank__": "\"U\" replaces \"o\" whenever the next word starts with an \"o\" or \"ho\" sound (like \"ocho\"), for the same reason \"y\" becomes \"e.\" Common mistake: English speakers rarely expect a conjunction to change spelling based on the following word's sound at all, so this rule is easy to forget in both directions." } },
+    { topic: "Conjunciones · pero", sentence: "Quiero ir a la playa, ___ no tengo tiempo.", answer: "pero", options: ["pero", "sino", "sino que", "aunque"],
+      translation: "I want to go to the beach, but I don't have time.",
+      compare: [ { word: "sino", note: "Only usable after a negative statement, to directly replace/correct it — not a simple contrast like this one." },
+                 { word: "aunque", note: "\"Although\" — reframes the whole sentence as a concession rather than a straightforward contrast." } ],
+      notes: { "__blank__": "\"Pero\" is the general-purpose \"but,\" used for a simple contrast. Common mistake: English has just one word, \"but,\" so English speakers use \"pero\" everywhere, missing that Spanish has a second, more specific word — \"sino\" — for a different kind of contrast (see the next two cards)." } },
+    { topic: "Conjunciones · sino", sentence: "No es rojo, ___ azul.", answer: "sino", options: ["sino", "pero", "sino que", "porque"],
+      translation: "It's not red, but rather blue.",
+      compare: [ { word: "pero", note: "Would work for a general contrast, but here the second idea directly replaces/corrects the first — that specific pattern calls for \"sino.\"" },
+                 { word: "sino que", note: "Used instead of \"sino\" when what follows has its own conjugated verb, not just a word or phrase." } ],
+      notes: { "no": "The negative that makes \"sino\" possible — sino can only follow a negated first statement.",
+        "__blank__": "\"Sino\" means \"but rather,\" used after a negative statement when the second part directly replaces or corrects the first (not X, but Y). Common mistake: English speakers use \"pero\" for this too since English \"but\" covers both jobs — Spanish specifically reserves \"sino\" for this correcting pattern." } },
+    { topic: "Conjunciones · sino que", sentence: "No fue a la fiesta, ___ se quedó en casa.", answer: "sino que", options: ["sino que", "sino", "pero", "porque"],
+      translation: "He didn't go to the party, but rather stayed home.",
+      compare: [ { word: "sino", note: "Would be correct if what followed were just a word or phrase, not a fully conjugated verb like \"se quedó.\"" },
+                 { word: "pero", note: "Would work for a general contrast, but misses the \"correcting\" nuance sino/sino que carry." } ],
+      notes: { "no": "The negative that sets up the sino/sino que pattern.",
+        "__blank__": "\"Sino que\" is used instead of plain \"sino\" specifically because what follows (\"se quedó en casa\") has its own conjugated verb. Common mistake: English speakers who've learned \"sino\" often forget to add \"que\" once a full clause with a verb follows." } },
+    { topic: "Conjunciones · porque", sentence: "No fui a la fiesta ___ estaba enfermo.", answer: "porque", options: ["porque", "ya que", "como", "sino"],
+      translation: "I didn't go to the party because I was sick.",
+      compare: [ { word: "ya que", note: "Also means \"since/because,\" but is more common at the start of a sentence or in more formal contexts." },
+                 { word: "como", note: "Also causal (\"since\"), but almost always placed at the very start of a sentence, unlike \"porque.\"" } ],
+      notes: { "__blank__": "\"Porque\" is the default, all-purpose word for \"because,\" giving a straightforward reason. Common mistake: English speakers often reach for \"porque\" for every kind of \"because/since,\" not realizing Spanish has several causal connectors with different positioning rules (see \"como\" and \"ya que\")." } },
+    { topic: "Conjunciones · como (causal)", sentence: "___ llovía, decidimos quedarnos en casa.", answer: "Como", options: ["Como", "Porque", "Ya que", "Aunque"],
+      translation: "Since it was raining, we decided to stay home.",
+      compare: [ { word: "Porque", note: "Also means \"because,\" but normally follows the result rather than opening the sentence this way." },
+                 { word: "Ya que", note: "Also works at the start of a sentence with a very similar meaning, but is a bit more formal/emphatic than \"como.\"" } ],
+      notes: { "__blank__": "\"Como\" here means \"since/as,\" a causal connector that specifically opens the sentence, with the result following. Common mistake: English speakers default to \"porque\" for every \"because/since,\" but \"porque\" sounds off at the very start of a sentence in this construction — \"como\" (or \"ya que\") is what a native speaker reaches for instead.",
+        "llovía": "Imperfect of llover — describes the ongoing background condition (rain) that caused the decision." } },
+    { topic: "Conjunciones · ya que", sentence: "___ ya sabes la respuesta, dímela.", answer: "Ya que", options: ["Ya que", "Porque", "Sino", "Aunque"],
+      translation: "Since you already know the answer, tell me.",
+      compare: [ { word: "Porque", note: "Also \"because,\" but typically follows the result rather than opening the sentence like this." },
+                 { word: "Aunque", note: "\"Although\" — would introduce a concession, not a reason." } ],
+      notes: { "__blank__": "\"Ya que\" means \"since/given that\" — a slightly more formal causal connector than \"como,\" and, unlike \"como,\" it can be used either at the start of the sentence or in the middle." } },
+    { topic: "Conjunciones · aunque + indicativo", sentence: "Aunque llovió, fuimos al partido.", answer: "llovió", options: ["llovió", "llueva", "llovería", "lloviera"],
+      translation: "Although it rained, we went to the game.",
+      compare: [ { word: "llueva", note: "The subjunctive — would be used instead if the rain were still uncertain/hypothetical, not a known fact." },
+                 { word: "lloviera", note: "The imperfect subjunctive — used for a past hypothetical, not a real, known past event." } ],
+      notes: { "__blank__": "\"Llovió\" (indicative preterite) is used because the rain is a known, real fact — it already happened. Common mistake: English \"although\" doesn't change the verb form based on certainty, so English speakers often can't tell when aunque needs the indicative (known fact) versus the subjunctive (uncertain/hypothetical, see the next card)." } },
+    { topic: "Conjunciones · aunque + subjuntivo", sentence: "Aunque ___ mañana, iremos al partido.", answer: "llueva", options: ["llueva", "llovió", "llovía", "lloverá"],
+      translation: "Even if it rains tomorrow, we'll go to the game.",
+      compare: [ { word: "llovió", note: "The indicative preterite — would treat the rain as an already-known fact, not a possible future one." },
+                 { word: "lloverá", note: "The future indicative — states the rain as a confident prediction, removing the \"even if\" uncertainty aunque + subjunctive carries." } ],
+      notes: { "__blank__": "\"Llueva\" (present subjunctive) is used because whether it rains tomorrow is still unknown/hypothetical. Common mistake: this indicative-vs-subjunctive switch after \"aunque\" has zero equivalent in English — \"even if it rains\" looks the same in English whether the rain is likely or not, but Spanish marks that uncertainty directly on the verb." } },
+    { topic: "Conjunciones · cuando + subjuntivo", sentence: "Te llamaré cuando ___ a casa.", answer: "llegue", options: ["llegue", "llego", "llegué", "llegaba"],
+      translation: "I'll call you when I get home.",
+      compare: [ { word: "llego", note: "The present indicative — would describe a habitual action (\"when I [always] get home\"), not one specific future moment." },
+                 { word: "llegué", note: "The preterite — would describe a completed past arrival, not a future one." } ],
+      notes: { "__blank__": "\"Llegue\" (present subjunctive) is required because the arrival is a pending future action that hasn't happened yet. Common mistake: English says \"when I get home\" using the plain present tense, which strongly misleads English speakers into using the Spanish present indicative (llego) instead of the subjunctive here." } },
+    { topic: "Conjunciones · cuando + indicativo", sentence: "Cuando ___ a casa, siempre ceno con mi familia.", answer: "llego", options: ["llego", "llegue", "llegué", "llegaría"],
+      translation: "When I get home, I always have dinner with my family.",
+      compare: [ { word: "llegue", note: "The subjunctive — would be used instead for a single pending future arrival, not a repeated habit." },
+                 { word: "llegué", note: "The preterite — would describe one specific completed arrival in the past." } ],
+      notes: { "siempre": "\"Always\" — signals a repeated habit, which is exactly why the indicative (not subjunctive) is used here.",
+        "__blank__": "\"Llego\" (present indicative) is correct here because the sentence describes a repeated habit, not one pending future event. Common mistake: since the previous card and this one look almost identical in English (\"when I get home...\"), English speakers often can't tell that Spanish requires different moods depending on whether it's a one-time future event (subjunctive) or a routine (indicative)." } },
+    { topic: "Conjunciones · mientras", sentence: "___ tú cocinas, yo pongo la mesa.", answer: "Mientras", options: ["Mientras", "Cuando", "Aunque", "Como"],
+      translation: "While you cook, I'll set the table.",
+      compare: [ { word: "Cuando", note: "\"When\" — implies one action follows or triggers another, not two things happening at the same time." },
+                 { word: "Aunque", note: "\"Although\" — would introduce a concession, not simultaneous actions." } ],
+      notes: { "__blank__": "\"Mientras\" means \"while,\" used for two actions happening at the same time." } },
+    { topic: "Conjunciones · en cuanto", sentence: "En cuanto ___ el trabajo, saldremos.", answer: "termine", options: ["termine", "terminé", "terminaba", "terminaría"],
+      translation: "As soon as we finish the work, we'll go out.",
+      compare: [ { word: "terminé", note: "The preterite — would describe a completed past action, not a pending future one." },
+                 { word: "terminaría", note: "The conditional — would express a hypothetical \"would finish,\" not a real pending event." } ],
+      notes: { "__blank__": "\"Termine\" (present subjunctive) is required because \"en cuanto\" (as soon as) introduces a pending future action, in the same family as cuando + subjunctive. Common mistake: English \"as soon as we finish\" uses a plain present-looking verb, nudging English speakers toward the indicative instead of the required subjunctive." } },
+    { topic: "Conjunciones · para que", sentence: "Te doy la llave para que ___ entrar.", answer: "puedas", options: ["puedas", "puedes", "podrás", "pudieras"],
+      translation: "I'm giving you the key so that you can get in.",
+      compare: [ { word: "puedes", note: "The indicative — would treat this as a plain statement rather than a purpose clause." },
+                 { word: "podrás", note: "The future — would predict a future ability rather than express the purpose of giving the key." } ],
+      notes: { "__blank__": "\"Puedas\" (present subjunctive) is required because \"para que\" always introduces a purpose clause with a different subject than the main clause (I give, so that YOU can). Common mistake: English speakers often confuse this with plain \"para + infinitive\" (used when the subject stays the same, like \"para entrar\" — \"in order to enter\"), forgetting that a subject change forces \"para que\" + subjunctive instead." } },
+    { topic: "Conjunciones · antes de que", sentence: "Llama antes de que ___ de la oficina.", answer: "salga", options: ["salga", "sale", "salió", "saldrá"],
+      translation: "Call before I leave the office.",
+      compare: [ { word: "sale", note: "The indicative — \"antes de que\" never takes the indicative, regardless of certainty." },
+                 { word: "salió", note: "The preterite — also indicative, and also incorrect after \"antes de que.\"" } ],
+      notes: { "__blank__": "\"Salga\" (present subjunctive) is required because \"antes de que\" always takes the subjunctive, no matter how certain the event is. Common mistake: unlike \"cuando,\" which can be indicative or subjunctive depending on context, \"antes de que\" has no indicative option at all — a fixed rule English speakers sometimes over-apply the cuando pattern to." } },
+    { topic: "Conjunciones · después de que", sentence: "Llamé después de que ___ la reunión.", answer: "terminó", options: ["terminó", "termine", "terminara", "terminaría"],
+      translation: "I called after the meeting ended.",
+      compare: [ { word: "termine", note: "The present subjunctive — would only be used for a pending future event, not a completed past one." },
+                 { word: "terminara", note: "The imperfect subjunctive — used for past hypotheticals, not a real, known past event like this one." } ],
+      notes: { "__blank__": "\"Terminó\" (indicative preterite) is correct because the meeting's ending is a completed, known past event. Common mistake: \"después de que\" behaves differently from \"antes de que\" — it takes the indicative for real past/habitual events, and only switches to subjunctive for pending future ones, a distinction English speakers often flatten since \"before/after\" don't change form in English." } },
+    { topic: "Conjunciones · a menos que", sentence: "No iremos a menos que ___ el clima.", answer: "mejore", options: ["mejore", "mejora", "mejoró", "mejoraría"],
+      translation: "We won't go unless the weather improves.",
+      compare: [ { word: "mejora", note: "The indicative — \"a menos que\" always requires the subjunctive, regardless of likelihood." },
+                 { word: "mejoraría", note: "The conditional — expresses a hypothetical \"would improve,\" not the required subjunctive form." } ],
+      notes: { "__blank__": "\"Mejore\" (present subjunctive) is required because \"a menos que\" (unless) always introduces a hypothetical condition. Common mistake: like several other subordinating conjunctions here, \"a menos que\" has no indicative option — English speakers who default to the indicative after \"unless\" (since English doesn't change form) miss this every time." } },
+    { topic: "Conjunciones · sin que", sentence: "Salió sin que nadie lo ___.", answer: "viera", options: ["viera", "vio", "ve", "verá"],
+      translation: "He left without anyone seeing him.",
+      compare: [ { word: "vio", note: "The indicative preterite — \"sin que\" always requires the subjunctive, not a plain factual past tense." },
+                 { word: "ve", note: "The present indicative — also incorrect; \"sin que\" never takes the indicative." } ],
+      notes: { "nadie": "\"Nobody\" — the subject of the subordinate clause; note that \"sin que\" plus a different subject is what forces this structure, versus plain \"sin + infinitive\" when the subject stays the same.",
+        "__blank__": "\"Viera\" (imperfect subjunctive, matching the past-tense main verb \"salió\") is required because \"sin que\" always takes the subjunctive. Common mistake: English \"without anyone seeing him\" uses a plain -ing form with no mood distinction, so English speakers often don't expect Spanish to require a fully conjugated subjunctive verb here." } },
+
+    // ---------------- VOCABULARIO AVANZADO: FALSOS AMIGOS ----------------
+    { topic: "Vocabulario · falsos amigos", sentence: "Después de tropezar en público, me sentí muy ___.", answer: "avergonzado", options: ["avergonzado", "embarazado", "emocionado", "exitoso"],
+      translation: "After tripping in public, I felt very embarrassed.",
+      compare: [ { word: "embarazado", note: "A classic false friend — this looks like \"embarrassed\" but actually means \"pregnant.\" Saying this instead is a famous learner mistake." },
+                 { word: "emocionado", note: "Means \"excited/moved,\" a different emotion entirely." } ],
+      notes: { "__blank__": "\"Avergonzado\" means \"embarrassed/ashamed.\" Common mistake: English speakers very often reach for \"embarazado/a\" by sound-alike instinct — it means \"pregnant,\" not \"embarrassed,\" and mixing the two up is one of the most famous false-friend errors in Spanish." } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Por fin voy a ___ mi sueño de viajar por el mundo.", answer: "realizar", options: ["realizar", "darme cuenta de", "recordar", "soportar"],
+      translation: "I'm finally going to fulfill my dream of traveling the world.",
+      compare: [ { word: "darme cuenta de", note: "This is the actual Spanish phrase for \"to realize\" (become aware) — the meaning English speakers usually assume \"realizar\" has." },
+                 { word: "soportar", note: "Means \"to bear/put up with,\" unrelated here." } ],
+      notes: { "__blank__": "\"Realizar\" means \"to carry out/achieve/fulfill,\" not \"to realize\" in the sense of becoming aware of something. Common mistake: English speakers assume \"realizar\" = \"to realize,\" when the real translation for that meaning is \"darse cuenta de.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "___ vivo en Madrid, pero antes vivía en Lima.", answer: "Actualmente", options: ["Actualmente", "En realidad", "Finalmente", "Realmente"],
+      translation: "I currently live in Madrid, but I used to live in Lima.",
+      compare: [ { word: "En realidad", note: "Means \"actually/in fact\" — the real translation of the English word \"actually.\"" },
+                 { word: "Finalmente", note: "Means \"finally,\" unrelated to either \"currently\" or \"actually.\"" } ],
+      notes: { "__blank__": "\"Actualmente\" means \"currently/nowadays,\" not \"actually.\" Common mistake: this is one of the most common false-friend slips — \"actually\" in English should be translated as \"en realidad\" or \"de hecho,\" not \"actualmente.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Ella es una persona muy ___; llora fácilmente.", answer: "sensible", options: ["sensible", "sensata", "inteligente", "sensacional"],
+      translation: "She's a very sensitive person; she cries easily.",
+      compare: [ { word: "sensata", note: "This is the Spanish word for \"sensible\" (level-headed/practical) — the meaning English speakers usually expect from \"sensible.\"" },
+                 { word: "sensacional", note: "Means \"sensational,\" unrelated here." } ],
+      notes: { "__blank__": "\"Sensible\" in Spanish means \"sensitive\" (easily affected emotionally), not \"sensible\" (practical/reasonable) — the two languages' words are flipped from what they look like. Common mistake: English speakers assume \"sensible\" means the same in both languages, when it's actually a false-friend swap with \"sensato/a.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "La película tuvo mucho ___ en el cine.", answer: "éxito", options: ["éxito", "salida", "suceso", "logro"],
+      translation: "The movie had a lot of success at the box office.",
+      compare: [ { word: "salida", note: "This is the Spanish word for \"exit\" — the false-friend meaning English speakers often assume \"éxito\" has." },
+                 { word: "suceso", note: "Means \"event/incident,\" a different false friend of English \"success.\"" } ],
+      notes: { "__blank__": "\"Éxito\" means \"success,\" not \"exit.\" Common mistake: the visual similarity to English \"exit\" trips up beginners constantly — the actual word for \"exit\" is \"salida.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Perdón, ¿te ___ si abro la ventana?", answer: "molesta", options: ["molesta", "molesto", "importa", "preocupa"],
+      translation: "Sorry, does it bother you if I open the window?",
+      compare: [ { word: "importa", note: "Also usable (\"does it matter to you\"), but \"molesta\" specifically means \"does it bother/annoy you.\"" },
+                 { word: "preocupa", note: "Means \"does it worry you,\" a stronger, different concern than mild annoyance." } ],
+      notes: { "__blank__": "\"Molesta\" (from molestar, \"to bother/annoy\") is completely ordinary and polite in this context. Common mistake: English speakers sometimes avoid \"molestar\" thinking it carries the same weight as the English word \"molest\" — in Spanish it's a mild, everyday verb for being a minor bother." } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Siempre ___ mi primer día de trabajo.", answer: "recuerdo", options: ["recuerdo", "grabo", "anoto", "memorizo"],
+      translation: "I always remember my first day of work.",
+      compare: [ { word: "grabo", note: "This is the Spanish word for \"to record\" (audio/video) — the false-friend meaning English speakers often assume \"recordar\" has." },
+                 { word: "anoto", note: "Means \"I write down/note,\" a different action entirely." } ],
+      notes: { "__blank__": "\"Recuerdo\" (from recordar) means \"I remember,\" not \"I record.\" Common mistake: the resemblance to English \"record\" leads learners to use \"recordar\" for recording audio or video, when the real word for that is \"grabar.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Tengo la nariz tapada, estoy ___.", answer: "resfriado", options: ["resfriado", "estreñido", "embarazado", "avergonzado"],
+      translation: "My nose is stuffed up, I have a cold.",
+      compare: [ { word: "estreñido", note: "This is the actual Spanish word for \"constipated\" (the English bodily-function meaning) — a common mix-up with \"constipado.\"" },
+                 { word: "embarazado", note: "Means \"pregnant,\" an unrelated false friend covered elsewhere." } ],
+      notes: { "__blank__": "\"Resfriado\" means \"having a cold.\" Common mistake: the related word \"constipado\" in Spanish also means \"congested/having a cold,\" not \"constipated\" in the English bodily sense — that meaning is \"estreñido,\" a completely different word." } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Guardé los documentos en una ___.", answer: "carpeta", options: ["carpeta", "alfombra", "mochila", "cartera"],
+      translation: "I put the documents in a folder.",
+      compare: [ { word: "alfombra", note: "This is the Spanish word for \"carpet\" (the floor covering) — the false-friend meaning English speakers often assume \"carpeta\" has." },
+                 { word: "cartera", note: "Means \"wallet/purse,\" a different object." } ],
+      notes: { "__blank__": "\"Carpeta\" means \"folder,\" not \"carpet.\" Common mistake: the sound-alike trap here runs the opposite direction from most false friends — English speakers expect \"carpeta\" to mean the floor covering, when that word is actually \"alfombra.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Voy a ___ a la conferencia mañana.", answer: "asistir", options: ["asistir", "ayudar", "atender", "asustar"],
+      translation: "I'm going to attend the conference tomorrow.",
+      compare: [ { word: "ayudar", note: "This is the real Spanish word for \"to assist/help\" — the false-friend meaning English speakers often assume \"asistir\" has." },
+                 { word: "asustar", note: "Means \"to scare/frighten,\" an unrelated sound-alike trap." } ],
+      notes: { "__blank__": "\"Asistir\" means \"to attend\" (be present at), not \"to assist.\" Common mistake: because it looks so close to English \"assist,\" learners often use it to mean \"help,\" when the correct word for that is \"ayudar.\"" } },
+    { topic: "Vocabulario · falsos amigos", sentence: "Quiero ___ a mi amiga Laura.", answer: "presentar", options: ["presentar", "introducir", "presentir", "mostrar"],
+      translation: "I want to introduce my friend Laura.",
+      compare: [ { word: "introducir", note: "This is a false friend of \"introduce\" — in Spanish it means \"to insert/bring in (an object),\" not to introduce a person." },
+                 { word: "presentir", note: "Means \"to have a premonition/sense something in advance,\" an unrelated look-alike." } ],
+      notes: { "__blank__": "\"Presentar\" is the correct verb for introducing one person to another. Common mistake: English speakers often reach for \"introducir\" by direct translation, but that word is reserved for physically inserting or bringing in an object, not making social introductions." } },
+
+    // ---------------- VOCABULARIO AVANZADO: MODISMOS (IDIOMS) ----------------
+    { topic: "Vocabulario · modismos", sentence: "Metí la ___ cuando le dije la verdad sobre la fiesta sorpresa.", answer: "pata", options: ["pata", "mano", "pie", "cabeza"],
+      translation: "I put my foot in it when I told him the truth about the surprise party.",
+      compare: [ { word: "mano", note: "\"Hand\" — not part of this fixed idiom; substituting it doesn't make sense to a native speaker." },
+                 { word: "pie", note: "\"Foot\" (human) — close in meaning to the English idiom, but the actual Spanish expression fixes on \"pata\" (an animal's paw/leg), not \"pie.\"" } ],
+      notes: { "__blank__": "\"Meter la pata\" is a fixed idiom meaning \"to mess up / say the wrong thing,\" literally \"to put in the paw.\" Common mistake: idioms like this can't be built word-by-word from English — swapping in the literal word for \"foot\" (pie) instead of the idiom's actual word (pata) doesn't work; the whole phrase has to be memorized as a unit." } },
+    { topic: "Vocabulario · modismos", sentence: "Juan siempre ___ en el clavo con sus comentarios.", answer: "da", options: ["da", "pone", "toca", "mete"],
+      translation: "Juan always hits the nail on the head with his comments.",
+      compare: [ { word: "pone", note: "\"Puts\" — not the verb this fixed idiom uses." },
+                 { word: "toca", note: "\"Touches\" — closer to the English idiom's literal imagery, but the correct fixed Spanish verb here is \"dar,\" not \"tocar.\"" } ],
+      notes: { "__blank__": "\"Dar en el clavo\" is a fixed idiom meaning \"to be exactly right,\" literally \"to hit the nail.\" Its English equivalent, \"hit the nail on the head,\" uses a completely different verb (\"hit\"), which is why translating word-for-word doesn't work." } },
+    { topic: "Vocabulario · modismos", sentence: "No tiene ___ en la lengua; siempre dice lo que piensa.", answer: "pelos", options: ["pelos", "dientes", "manos", "ojos"],
+      translation: "He doesn't hold back; he always says what he thinks.",
+      compare: [ { word: "dientes", note: "\"Teeth\" — not part of this fixed idiom." },
+                 { word: "manos", note: "\"Hands\" — unrelated to this expression." } ],
+      notes: { "__blank__": "\"No tener pelos en la lengua\" is a fixed idiom meaning \"to speak bluntly/not hold back,\" literally \"to not have hairs on one's tongue.\" There's no equivalent literal image in English, so this one has to be learned as a whole unit rather than translated." } },
+    { topic: "Vocabulario · modismos", sentence: "Este restaurante cuesta un ___ de la cara.", answer: "ojo", options: ["ojo", "brazo", "pie", "diente"],
+      translation: "This restaurant costs an arm and a leg.",
+      compare: [ { word: "brazo", note: "\"Arm\" — the word English's equivalent idiom uses (\"cost an arm and a leg\"), but Spanish's fixed version uses \"ojo\" (eye) instead." },
+                 { word: "pie", note: "\"Foot\" — not part of this fixed idiom." } ],
+      notes: { "__blank__": "\"Costar un ojo de la cara\" is a fixed idiom meaning \"to be very expensive,\" literally \"an eye from the face.\" Common mistake: English speakers who know the English idiom \"cost an arm and a leg\" often translate it literally (\"costar un brazo\"), which isn't how the Spanish idiom is actually built." } },
+    { topic: "Vocabulario · modismos", sentence: "Deja de tomarme el ___; sé que estás bromeando.", answer: "pelo", options: ["pelo", "tiempo", "brazo", "ojo"],
+      translation: "Stop pulling my leg; I know you're joking.",
+      compare: [ { word: "tiempo", note: "\"Time\" — not part of this fixed idiom." },
+                 { word: "brazo", note: "\"Arm\" — closer to the English idiom (\"pull someone's leg\"), but the fixed Spanish version uses \"pelo\" (hair), not a limb at all." } ],
+      notes: { "__blank__": "\"Tomar el pelo\" is a fixed idiom meaning \"to tease/pull someone's leg,\" literally \"to take the hair.\" A direct translation of the English idiom (\"pull the leg\") wouldn't be understood the same way." } },
+    { topic: "Vocabulario · modismos", sentence: "Estás en las ___; no me estás escuchando.", answer: "nubes", options: ["nubes", "estrellas", "montañas", "olas"],
+      translation: "You're daydreaming; you're not listening to me.",
+      compare: [ { word: "estrellas", note: "\"Stars\" — not part of this fixed idiom, though it sounds like it could be." },
+                 { word: "montañas", note: "\"Mountains\" — unrelated to this expression." } ],
+      notes: { "__blank__": "\"Estar en las nubes\" is a fixed idiom meaning \"to daydream/not pay attention,\" literally \"to be in the clouds\" — one of the few idioms here that does translate fairly directly into a recognizable English image." } },
+    { topic: "Vocabulario · modismos", sentence: "Ella siempre pone el ___ antes que los bueyes.", answer: "carro", options: ["carro", "caballo", "tren", "barco"],
+      translation: "She always puts the cart before the horse.",
+      compare: [ { word: "caballo", note: "\"Horse\" — this word does appear in the idiom, but later (as \"los bueyes,\" oxen, in this version) — not in this blank." },
+                 { word: "tren", note: "\"Train\" — not part of this fixed idiom." } ],
+      notes: { "__blank__": "\"Poner el carro antes que los bueyes\" is Spanish's version of \"to put the cart before the horse\" — note it says \"oxen\" (bueyes) rather than \"horse,\" a small but fixed difference from the English idiom's imagery." } },
+    { topic: "Vocabulario · modismos", sentence: "Mi hermano menor siempre me está dando la ___.", answer: "lata", options: ["lata", "mano", "vuelta", "cara"],
+      translation: "My little brother is always bugging me.",
+      compare: [ { word: "mano", note: "\"Hand\" — not part of this fixed idiom." },
+                 { word: "vuelta", note: "\"Turn/return\" — appears in other idioms (dar la vuelta), but not this one." } ],
+      notes: { "__blank__": "\"Dar la lata\" is a fixed idiom meaning \"to annoy/bother someone repeatedly,\" literally \"to give the can\" — an expression with no literal English parallel at all." } },
+    { topic: "Vocabulario · modismos", sentence: "Tienes que ponerte las ___ si quieres aprobar el examen.", answer: "pilas", options: ["pilas", "botas", "medias", "manos"],
+      translation: "You need to get your act together if you want to pass the exam.",
+      compare: [ { word: "botas", note: "\"Boots\" — not part of this fixed idiom." },
+                 { word: "medias", note: "\"Socks/stockings\" — unrelated to this expression." } ],
+      notes: { "__blank__": "\"Ponerse las pilas\" is a fixed idiom meaning \"to get energized/get one's act together,\" literally \"to put in the batteries\" — a modern, very common expression in everyday Spanish with no direct English equivalent phrase." } },
+
+    // ---------------- VOCABULARIO AVANZADO: VARIACIÓN REGIONAL ----------------
+    { topic: "Vocabulario · variación regional", sentence: "En España la gente dice \"coche\", pero en México dicen \"___\".", answer: "carro", options: ["carro", "camión", "tren", "avión"],
+      translation: "In Spain people say \"coche,\" but in Mexico they say \"carro.\"",
+      compare: [ { word: "camión", note: "Means \"truck\" (or \"bus\" in some countries, confusingly) — a different vehicle, not a regional synonym for \"car.\"" },
+                 { word: "tren", note: "\"Train\" — an unrelated vehicle." } ],
+      notes: { "__blank__": "\"Carro\" is the word for \"car\" used across much of Latin America, while \"coche\" is standard in Spain (and \"auto\"/\"automóvil\" is common in places like Argentina). Common mistake: textbooks often teach only one region's vocabulary, so learners are thrown off hearing a perfectly correct but unfamiliar word for something as basic as \"car.\"" } },
+    { topic: "Vocabulario · variación regional", sentence: "En España se dice \"ordenador\"; en Latinoamérica, \"___\".", answer: "computadora", options: ["computadora", "calculadora", "televisor", "aparato"],
+      translation: "In Spain they say \"ordenador\"; in Latin America, \"computadora.\"",
+      compare: [ { word: "calculadora", note: "Means \"calculator,\" a different device entirely, just a close-sounding word." },
+                 { word: "televisor", note: "Means \"television set,\" unrelated." } ],
+      notes: { "__blank__": "\"Computadora\" is the standard word for \"computer\" throughout most of Latin America, while Spain uses \"ordenador\" almost exclusively. Neither is more \"correct\" — this is simply regional vocabulary variation, similar to \"soda\" vs. \"pop\" vs. \"coke\" across different parts of the English-speaking world." } },
   ];
 
   
@@ -1347,9 +1694,64 @@ const GENERAL_NOTES = {
   const GROUPS = ["Todos", ...Array.from(new Set(ITEMS.map(i => i.topic.split(" · ")[0])))];
   let activeGroup = "Todos";
 
+  // ============== ADAPTIVE MASTERY TRACKING ==============
+  // Each question gets a stable key. We track how many times in a row you've
+  // gotten it right (correctStreak) and how many times you've seen it at all.
+  // Questions with a high streak get picked much less often; brand-new
+  // questions (timesSeen === 0) get boosted so they surface sooner.
+  function itemKey(item) { return item.topic + "||" + item.sentence; }
+
+  let itemStats = {};
+  try { itemStats = JSON.parse(localStorage.getItem("charlemos_item_stats") || "{}"); } catch (e) { itemStats = {}; }
+
+  function saveItemStats() {
+    try { localStorage.setItem("charlemos_item_stats", JSON.stringify(itemStats)); } catch (e) { /* ignore quota errors */ }
+  }
+
+  function getStat(item) {
+    const k = itemKey(item);
+    if (!itemStats[k]) itemStats[k] = { correctStreak: 0, timesSeen: 0 };
+    return itemStats[k];
+  }
+
+  function recordResult(item, wasCorrect) {
+    const stat = getStat(item);
+    stat.timesSeen += 1;
+    stat.correctStreak = wasCorrect ? stat.correctStreak + 1 : 0;
+    saveItemStats();
+  }
+
+  function masteryLabel(item) {
+    const stat = getStat(item);
+    if (stat.timesSeen === 0) return { icon: "🆕", text: "New" };
+    if (stat.correctStreak >= 3) return { icon: "✅", text: `Mastered · ${stat.correctStreak} in a row` };
+    if (stat.correctStreak >= 1) return { icon: "🔄", text: `Learning · ${stat.correctStreak} in a row` };
+    return { icon: "🔁", text: "Needs review" };
+  }
+
+  // Weighted random pick: unseen questions and low-streak questions are much
+  // more likely to be chosen; the immediately-previous question is heavily
+  // suppressed so it doesn't repeat back-to-back.
+  function pickWeighted(itemPool, avoidItem) {
+    if (!itemPool.length) return null;
+    const weights = itemPool.map(item => {
+      const stat = getStat(item);
+      let w = 1 / (1 + Math.min(stat.correctStreak, 6));
+      if (stat.timesSeen === 0) w *= 5;
+      if (avoidItem && item === avoidItem) w *= 0.05;
+      return w;
+    });
+    const total = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < itemPool.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return itemPool[i];
+    }
+    return itemPool[itemPool.length - 1];
+  }
+
   let pool = [];
-  let order = [];
-  let idx = 0;
+  let sessionCount = 0;
   let score = 0;
   let streak = 0;
   let best = Number(localStorage.getItem("charlemos_grammar_best") || 0);
@@ -1390,8 +1792,7 @@ const GENERAL_NOTES = {
 
   function resetPool() {
     pool = activeGroup === "Todos" ? ITEMS : ITEMS.filter(i => i.topic.startsWith(activeGroup));
-    order = shuffle(pool);
-    idx = 0;
+    sessionCount = 0;
   }
 
   function loadItem() {
@@ -1404,18 +1805,15 @@ const GENERAL_NOTES = {
     explainCardEl.classList.remove("show");
     explainCardEl.innerHTML = "";
 
-    if (idx >= order.length) {
-      order = shuffle(pool);
-      idx = 0;
-    }
-
-    current = order[idx];
-    categoryEl.textContent = current.topic;
+    current = pickWeighted(pool, current);
+    sessionCount += 1;
+    const tag = masteryLabel(current);
+    categoryEl.innerHTML = current.topic + '  <span style="font-family:\'Work Sans\',sans-serif;text-transform:none;letter-spacing:0;color:#9b9384;font-weight:500;">' + tag.icon + ' ' + tag.text + '</span>';
 
     const parts = current.sentence.split("___");
     promptEl.innerHTML = parts[0] + '<span class="blank-static">___</span>' + (parts[1] || "");
     promptSubEl.textContent = "Choose the word that correctly completes the sentence.";
-    progressEl.textContent = `Question ${idx + 1} of ${order.length} · ${activeGroup}`;
+    progressEl.textContent = `Question ${sessionCount} · ${pool.length} in "${activeGroup}" pool · repeats fade as you master them`;
 
     const choices = shuffle(current.options);
     optionsEl.innerHTML = "";
@@ -1558,6 +1956,8 @@ const GENERAL_NOTES = {
     answered = true;
     const isCorrect = choice === current.answer;
 
+    recordResult(current, isCorrect);
+
     [...optionsEl.children].forEach(tile => {
       tile.disabled = true;
       if (tile.textContent === current.answer) tile.classList.add("correct");
@@ -1601,12 +2001,207 @@ const GENERAL_NOTES = {
     window.speechSynthesis.speak(utter);
   }
 
-  nextBtn.addEventListener("click", () => { idx += 1; loadItem(); });
+  nextBtn.addEventListener("click", () => { loadItem(); });
   speakBtn.addEventListener("click", speakCurrent);
 
   renderFilters();
   resetPool();
   loadItem();
+
+  // ============== MODE TOGGLE ==============
+  const modeQuizBtn = document.getElementById("modeQuizBtn");
+  const modeSpeakBtn = document.getElementById("modeSpeakBtn");
+  const quizSection = document.getElementById("quizSection");
+  const speakingSection = document.getElementById("speakingSection");
+
+  modeQuizBtn.addEventListener("click", () => {
+    modeQuizBtn.classList.add("active");
+    modeSpeakBtn.classList.remove("active");
+    quizSection.style.display = "";
+    speakingSection.style.display = "none";
+  });
+  modeSpeakBtn.addEventListener("click", () => {
+    modeSpeakBtn.classList.add("active");
+    modeQuizBtn.classList.remove("active");
+    speakingSection.style.display = "";
+    quizSection.style.display = "none";
+    if (!speakInitialized) initSpeaking();
+  });
+
+  // ============== SPEAKING PRACTICE ==============
+  const speakFiltersEl = document.getElementById("speakFilters");
+  const speakCategoryEl = document.getElementById("speakCategory");
+  const speakTargetEl = document.getElementById("speakTarget");
+  const speakTranslationEl = document.getElementById("speakTranslation");
+  const speakHearBtn = document.getElementById("speakHearBtn");
+  const speakRecordBtn = document.getElementById("speakRecordBtn");
+  const speakResultEl = document.getElementById("speakResult");
+  const speakNextBtn = document.getElementById("speakNextBtn");
+  const speakProgressEl = document.getElementById("speakProgress");
+
+  let speakInitialized = false;
+  let speakActiveGroup = "Todos";
+  let speakPool = [];
+  let speakSessionCount = 0;
+  let speakCurrentItem = null;
+  let recognition = null;
+  let isListening = false;
+
+  const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function initSpeaking() {
+    speakInitialized = true;
+    renderSpeakFilters();
+    resetSpeakPool();
+
+    if (!SpeechRecognitionClass) {
+      speakRecordBtn.style.display = "none";
+      const warn = document.createElement("div");
+      warn.className = "speak-unsupported";
+      warn.textContent = "Your browser doesn't support speech recognition (this needs Chrome, Edge, or Safari on iOS 14.5+ with microphone access). You can still use \"Hear it first\" to practice listening and reading aloud on your own.";
+      speakResultEl.parentElement.insertBefore(warn, speakResultEl);
+    }
+
+    loadSpeakItem();
+  }
+
+  function renderSpeakFilters() {
+    speakFiltersEl.innerHTML = "";
+    GROUPS.forEach(g => {
+      const btn = document.createElement("button");
+      btn.className = "filter-btn" + (g === speakActiveGroup ? " active" : "");
+      btn.type = "button";
+      btn.textContent = g;
+      btn.addEventListener("click", () => {
+        speakActiveGroup = g;
+        renderSpeakFilters();
+        resetSpeakPool();
+        loadSpeakItem();
+      });
+      speakFiltersEl.appendChild(btn);
+    });
+  }
+
+  function resetSpeakPool() {
+    speakPool = speakActiveGroup === "Todos" ? ITEMS : ITEMS.filter(i => i.topic.startsWith(speakActiveGroup));
+    speakSessionCount = 0;
+  }
+
+  function loadSpeakItem() {
+    speakCurrentItem = pickWeighted(speakPool, speakCurrentItem);
+    speakSessionCount += 1;
+    const tag = masteryLabel(speakCurrentItem);
+    speakCategoryEl.innerHTML = speakCurrentItem.topic + '  <span style="font-family:\'Work Sans\',sans-serif;text-transform:none;letter-spacing:0;color:#9b9384;font-weight:500;">' + tag.icon + ' ' + tag.text + '</span>';
+    const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
+    speakTargetEl.textContent = fullEs;
+    speakTranslationEl.textContent = speakCurrentItem.translation;
+    speakProgressEl.textContent = `Sentence ${speakSessionCount} · ${speakPool.length} in "${speakActiveGroup}" pool · repeats fade as you master them`;
+    speakResultEl.innerHTML = "";
+  }
+
+  function speakHearTarget() {
+    if (!speakCurrentItem) return;
+    if (!("speechSynthesis" in window)) return;
+    const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
+    const utter = new SpeechSynthesisUtterance(fullEs);
+    utter.lang = "es-ES";
+    utter.rate = 0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  }
+
+  function stripAccents(s) {
+    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function normalizeForSpeech(s) {
+    return stripAccents(s.toLowerCase())
+      .replace(/[¿¡?!.,;:"'()]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function scoreTranscript(target, transcript) {
+    const targetWords = normalizeForSpeech(target).split(" ").filter(Boolean);
+    const saidWords = normalizeForSpeech(transcript).split(" ").filter(Boolean);
+    const saidCounts = {};
+    saidWords.forEach(w => { saidCounts[w] = (saidCounts[w] || 0) + 1; });
+
+    const wordResults = targetWords.map(w => {
+      if (saidCounts[w] > 0) {
+        saidCounts[w] -= 1;
+        return { word: w, ok: true };
+      }
+      return { word: w, ok: false };
+    });
+
+    const matched = wordResults.filter(w => w.ok).length;
+    const pct = targetWords.length ? Math.round((matched / targetWords.length) * 100) : 0;
+    return { pct, wordResults };
+  }
+
+  function renderSpeakResult(transcript, pct, wordResults) {
+    let scoreClass = "retry";
+    let scoreLabel = "Keep practicing — try again";
+    if (pct >= 90) { scoreClass = "great"; scoreLabel = "Excellent match!"; }
+    else if (pct >= 70) { scoreClass = "close"; scoreLabel = "Close — check the words below"; }
+
+    let html = '<div class="transcript"><span class="say-label">What we heard</span>' + (transcript || "(nothing captured)") + '</div>';
+    html += '<div class="speak-score ' + scoreClass + '">' + scoreLabel + ' — ' + pct + '% word match</div>';
+    html += '<div class="word-diff">';
+    wordResults.forEach(w => {
+      html += '<span class="' + (w.ok ? "match" : "miss") + '">' + w.word + '</span>';
+    });
+    html += '</div>';
+    speakResultEl.innerHTML = html;
+  }
+
+  function startListening() {
+    if (!SpeechRecognitionClass || !speakCurrentItem) return;
+    if (isListening) {
+      recognition && recognition.stop();
+      return;
+    }
+
+    recognition = new SpeechRecognitionClass();
+    recognition.lang = "es-ES";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    isListening = true;
+    speakRecordBtn.classList.add("listening");
+    speakRecordBtn.textContent = "🔴 Listening...";
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      const fullEs = speakCurrentItem.sentence.replace("___", speakCurrentItem.answer);
+      const { pct, wordResults } = scoreTranscript(fullEs, transcript);
+      renderSpeakResult(transcript, pct, wordResults);
+      recordResult(speakCurrentItem, pct >= 85);
+    };
+
+    recognition.onerror = (event) => {
+      speakResultEl.innerHTML = '<div class="speak-score retry">Couldn\'t capture audio (' + event.error + '). Check microphone permissions and try again.</div>';
+    };
+
+    recognition.onend = () => {
+      isListening = false;
+      speakRecordBtn.classList.remove("listening");
+      speakRecordBtn.textContent = "🎤 Start speaking";
+    };
+
+    try {
+      recognition.start();
+    } catch (e) {
+      isListening = false;
+      speakRecordBtn.classList.remove("listening");
+      speakRecordBtn.textContent = "🎤 Start speaking";
+    }
+  }
+
+  speakHearBtn.addEventListener("click", speakHearTarget);
+  speakRecordBtn.addEventListener("click", startListening);
+  speakNextBtn.addEventListener("click", () => { loadSpeakItem(); });
 </script>
 
 </body>
