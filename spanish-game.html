@@ -301,6 +301,30 @@
     color: var(--cobalt);
   }
 
+  .copy-ai-btn {
+    display: block;
+    margin-top: 12px;
+    background: #fff;
+    border: 1.5px solid var(--cobalt);
+    color: var(--cobalt);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .copy-ai-btn:hover { background: var(--cobalt); color: #fff; }
+
+  .copy-status {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--ok);
+    font-style: italic;
+    min-height: 16px;
+  }
+
   .next-btn {
     display: block;
     width: 100%;
@@ -512,6 +536,18 @@ const GENERAL_NOTES = {
     "aquí": { note: "\"Here\" — marks the location of the object being discussed.",
       compare: [ { word: "allí", note: "\"There\" — marks a location farther from the speaker." },
                  { word: "ahora", note: "\"Now\" — marks time instead of place." } ] },
+    "más": { note: "\"More\" — used in comparatives (más...que) and superlatives (el/la más...). Common mistake: English speakers sometimes reach for \"más\" even in equal comparisons (\"as tall as\"), where Spanish actually needs \"tan...como\" instead.",
+      compare: [ { word: "menos", note: "Used instead for \"less\" comparisons." },
+                 { word: "tan", note: "Used instead for equal comparisons (\"as...as\"), not \"more than.\"" } ] },
+    "menos": { note: "\"Less\" — the opposite comparative to más, used in \"menos...que\" (less...than).",
+      compare: [ { word: "más", note: "Used instead for \"more...than\" comparisons." },
+                 { word: "tan", note: "Used instead for equal comparisons, not a lesser/greater one." } ] },
+    "tan": { note: "\"As\" — used in equal comparisons (tan + adjective + como). Common mistake: English speakers often default to the más...que pattern out of habit and try \"tan...que\" instead of the correct \"tan...como\" for equality.",
+      compare: [ { word: "más", note: "Used instead for unequal, \"more than\" comparisons, paired with que." },
+                 { word: "como", note: "The word that must pair with tan to complete an equal comparison." } ] },
+    "como": { note: "\"As/like\" — completes the tan...como equal-comparison structure, or introduces a general comparison.",
+      compare: [ { word: "que", note: "Used instead after más/menos for unequal comparisons (más...que), not tan...como." },
+                 { word: "tan", note: "Pairs with como to build an equal comparison." } ] },
 };
 
   const ITEMS = [
@@ -1022,6 +1058,273 @@ const GENERAL_NOTES = {
         "__blank__": "\"Te\" is the second-person reflexive pronoun — you put yourself to bed. Common mistake: English \"go to bed\" has no reflexive pronoun at all, so this is one of the most commonly dropped pronouns for English speakers learning everyday routine verbs.",
         "tú": "Second-person subject, matching the reflexive pronoun \"te.\"",
         "normalmente": "\"Usually\" — signals a habitual action, fitting the present tense." } },
+
+    // ---------------- IR ----------------
+    { topic: "Ir · presente", sentence: "Yo ___ al gimnasio todos los días.", answer: "voy", options: ["voy", "vas", "va", "iba"],
+      translation: "I go to the gym every day.",
+      compare: [ { word: "va", note: "The él/ella-form — used for a third person's habit, not your own." },
+                 { word: "iba", note: "The imperfect — would describe a past habit instead of a current one." } ],
+      notes: { "__blank__": "\"Voy\" is the irregular yo-form of ir in the present. Common mistake: ir is completely irregular (voy, vas, va...) and doesn't follow the normal -ir verb pattern, so English speakers often try to regularize it (\"io\") the way they would with a predictable verb.",
+        "gimnasio": "Where the going happens.",
+        "todos": "\"Every,\" part of the repeated-time phrase.",
+        "días": "\"Days\" — completes \"todos los días,\" cueing the present tense for a habit." } },
+    { topic: "Ir · pretérito", sentence: "Ellos ___ al cine anoche.", answer: "fueron", options: ["fueron", "van", "iban", "irán"],
+      translation: "They went to the movies last night.",
+      compare: [ { word: "iban", note: "The imperfect — would describe a repeated past habit of going, not one specific outing." },
+                 { word: "irán", note: "The future — would place the trip ahead in time." } ],
+      notes: { "__blank__": "\"Fueron\" is the preterite of ir. Common mistake: ir and ser share the exact same preterite forms (fui, fuiste, fue, fuimos, fuisteis, fueron) — English speakers are often thrown off that one word can mean both \"went\" and \"was/were,\" with only context to tell them apart.",
+        "cine": "Where they went.",
+        "anoche": "\"Last night\" — a finished-time marker, cueing the preterite." } },
+    { topic: "Ir · ir a + infinitivo", sentence: "Nosotros ___ a viajar el próximo mes.", answer: "vamos", options: ["vamos", "iremos", "fuimos", "vayamos"],
+      translation: "We are going to travel next month.",
+      compare: [ { word: "iremos", note: "The simple future — grammatically correct too, but \"vamos a\" is far more common in everyday speech, just like English favors \"going to\" over \"will\" in casual talk." },
+                 { word: "fuimos", note: "The preterite — would say we already went, not that we're planning to." } ],
+      notes: { "__blank__": "\"Vamos\" here is the present tense of ir used in the \"ir a + infinitive\" construction — Spanish's version of English's \"going to.\" Common mistake: English speakers often forget the \"a\" that has to sit between the conjugated ir and the infinitive (\"vamos viajar\" is wrong; it must be \"vamos a viajar\").",
+        "viajar": "The infinitive naming the planned action.",
+        "próximo": "\"Next,\" part of the future-time marker.",
+        "mes": "\"Month\" — the future-time marker." } },
+
+    // ---------------- SABER vs CONOCER ----------------
+    { topic: "Saber/Conocer · saber + infinitivo", sentence: "Yo ___ hablar español.", answer: "sé", options: ["sé", "conozco", "sepa", "conozca"],
+      translation: "I know how to speak Spanish.",
+      compare: [ { word: "conozco", note: "Wrong verb here — conocer is for familiarity with people/places, not skills or facts." },
+                 { word: "sepa", note: "The subjunctive form — would only be correct after a doubt/wish trigger, not in a plain statement." } ],
+      notes: { "__blank__": "\"Sé\" is the irregular yo-form of saber, used with an infinitive to mean \"know how to.\" Common mistake: English \"know\" covers both saber and conocer, so English speakers often can't tell which one to reach for — saber is for facts, information, and skills (know-how); conocer is for people, places, and things you're personally familiar with.",
+        "hablar": "The skill being known — \"to speak.\"" } },
+    { topic: "Saber/Conocer · conocer + persona", sentence: "¿___ tú a mi hermana?", answer: "Conoces", options: ["Conoces", "Sabes", "conozcas", "sepas"],
+      translation: "Do you know my sister?",
+      compare: [ { word: "Sabes", note: "Wrong verb here — you don't \"saber\" a person, only facts, skills, or information." },
+                 { word: "conozcas", note: "The subjunctive form — only correct after a wish/doubt trigger, not in a direct question." } ],
+      notes: { "__blank__": "\"Conoces\" is the tú-form of conocer, used because it's asking about being acquainted with a person. Common mistake: English speakers very often say \"sabes\" here by direct translation of \"know,\" which sounds wrong to a native speaker — conocer is required whenever the object is a person.",
+        "a": "The \"personal a,\" required before a specific person as a direct object — another spot English speakers often forget entirely.",
+        "hermana": "The person being asked about." } },
+    { topic: "Saber/Conocer · saber + información", sentence: "Ella ___ dónde está el museo.", answer: "sabe", options: ["sabe", "conoce", "sepa", "conozca"],
+      translation: "She knows where the museum is.",
+      compare: [ { word: "conoce", note: "Would suggest she's personally familiar with the museum itself, not just aware of its location." },
+                 { word: "sepa", note: "The subjunctive — only correct after a doubt/wish trigger." } ],
+      notes: { "__blank__": "\"Sabe\" is the él/ella-form of saber, used for factual information (here, the museum's location). Common mistake: whenever \"know\" is followed by a question word like dónde/qué/cómo/cuándo, it's almost always saber, not conocer — a pattern worth memorizing directly.",
+        "dónde": "\"Where\" — introduces the fact being known.",
+        "museo": "The place whose location is known." } },
+    { topic: "Saber/Conocer · conocer + lugar", sentence: "Nosotros ___ ese restaurante muy bien.", answer: "conocemos", options: ["conocemos", "sabemos", "conozcamos", "sepamos"],
+      translation: "We know that restaurant very well.",
+      compare: [ { word: "sabemos", note: "Wrong verb here — you don't \"saber\" a place you've personally visited, you \"conocer\" it." },
+                 { word: "conozcamos", note: "The subjunctive form — only correct after a wish/doubt trigger." } ],
+      notes: { "__blank__": "\"Conocemos\" is the nosotros-form of conocer, used for familiarity with a place. Common mistake: English speakers translate \"we know that restaurant\" with saber by default, missing that personal familiarity with a physical place always calls for conocer.",
+        "restaurante": "The place being familiar to them.",
+        "bien": "\"Well\" — intensifies how familiar they are with it." } },
+
+    // ---------------- VERBS LIKE GUSTAR ----------------
+    { topic: "Verbos como gustar · encantar", sentence: "A mí me ___ los libros de misterio.", answer: "encantan", options: ["encantan", "encanta", "gusta", "gustan"],
+      translation: "I love mystery books.",
+      compare: [ { word: "encanta", note: "Would only be correct if the thing loved were singular — but \"los libros\" is plural, so the verb must be too." },
+                 { word: "gustan", note: "\"Gustan\" (from gustar) would work grammatically too and mean roughly \"I really like,\" but \"encantan\" is the stronger \"love.\"" } ],
+      notes: { "a": "Part of \"a mí,\" a clarifying phrase that emphasizes or confirms who is doing the loving.",
+        "mí": "\"Me\" (emphatic form after a preposition) — reinforces \"me\" right after it.",
+        "me": "Indirect object pronoun — I'm the one affected, not the grammatical subject.",
+        "__blank__": "\"Encantan\" is the present tense of encantar, agreeing with \"los libros\" (plural), the true grammatical subject. Common mistake: English speakers instinctively treat \"me\" as the subject (like English \"I love\"), so they often conjugate for \"yo\" (\"encanto\") instead of matching the verb to the thing being loved.",
+        "misterio": "\"Mystery\" — describes the kind of books." } },
+    { topic: "Verbos como gustar · faltar", sentence: "A nosotros nos ___ dos días para las vacaciones.", answer: "faltan", options: ["faltan", "falta", "falto", "faltas"],
+      translation: "We have two days left until vacation.",
+      compare: [ { word: "falta", note: "Would only be correct if just one day were left — \"dos días\" is plural, so the verb has to agree with it." },
+                 { word: "falto", note: "The yo-form — wrongly treats the speaker as the grammatical subject instead of \"dos días.\"" } ],
+      notes: { "nos": "Indirect object pronoun — \"to us,\" the ones affected by the days remaining.",
+        "__blank__": "\"Faltan\" is the present tense of faltar (\"to be lacking/missing\"), agreeing with \"dos días,\" the grammatical subject. Common mistake: just like with gustar, English speakers try to make \"nosotros\" the subject (\"we are lacking\") instead of letting the thing counted — the days — control the verb.",
+        "vacaciones": "What the two days are counting down to." } },
+    { topic: "Verbos como gustar · doler", sentence: "A ella le ___ la cabeza.", answer: "duele", options: ["duele", "duelen", "dueles", "duelo"],
+      translation: "Her head hurts.",
+      compare: [ { word: "duelen", note: "Would only be correct with a plural body part, like \"los pies\" (the feet)." },
+                 { word: "duelo", note: "The yo-form — wrongly treats the speaker as the one in pain instead of \"la cabeza.\"" } ],
+      notes: { "le": "Indirect object pronoun — \"to her,\" the person experiencing the pain.",
+        "__blank__": "\"Duele\" is the present tense of doler (\"to hurt\"), agreeing with \"la cabeza,\" the singular subject. Common mistake: English says \"she hurts\" with the person as subject, so English speakers often conjugate doler for the person (\"duelo,\" \"dueles\") instead of the body part that's actually doing the hurting grammatically.",
+        "cabeza": "The body part that hurts — the true grammatical subject of the sentence." } },
+
+    // ---------------- QUERER ----------------
+    { topic: "Querer · presente", sentence: "Yo ___ un café, por favor.", answer: "quiero", options: ["quiero", "quise", "querré", "quiera"],
+      translation: "I want a coffee, please.",
+      compare: [ { word: "quise", note: "The preterite — in this tense querer often means \"tried to,\" not a simple present want." },
+                 { word: "querré", note: "The future — would place the wanting ahead in time instead of right now." } ],
+      notes: { "__blank__": "\"Quiero\" is the irregular yo-form of querer (o→ie stem change) in the present, a simple, direct way to state a want.",
+        "café": "The thing wanted.",
+        "favor": "Part of \"por favor,\" meaning \"please.\"" } },
+    { topic: "Querer · pretérito (significado especial)", sentence: "Ayer ___ llamarte pero no pude.", answer: "quise", options: ["quise", "quiero", "quería", "querré"],
+      translation: "Yesterday I tried to call you but couldn't.",
+      compare: [ { word: "quería", note: "The imperfect — would describe an ongoing, general desire rather than one specific attempt." },
+                 { word: "quiero", note: "The present — would say I want to call you right now, not that I tried yesterday." } ],
+      notes: { "ayer": "Finished-time marker, cueing the preterite.",
+        "__blank__": "\"Quise\" is the preterite of querer. Common mistake: in the preterite, querer often shifts meaning to \"tried to\" (and \"no quise\" means \"refused to\") rather than a simple \"wanted\" — a meaning shift English speakers rarely expect, since English \"wanted\" doesn't carry that same nuance.",
+        "llamarte": "\"To call you\" — the infinitive action, with \"te\" attached to the end.",
+        "pude": "\"I could/managed to\" — preterite of poder, paired here with \"no\" to mean \"couldn't.\"" } },
+    { topic: "Querer · subjuntivo", sentence: "Quiero que ___ conmigo.", answer: "vengas", options: ["vengas", "vienes", "vendrás", "vinieras"],
+      translation: "I want you to come with me.",
+      compare: [ { word: "vienes", note: "The indicative — a plain statement, not something being wanted from someone else." },
+                 { word: "vendrás", note: "The future indicative — a prediction, not a request." } ],
+      notes: { "quiero": "\"I want\" — wanting someone else to do something triggers the subjunctive in the clause that follows.",
+        "que": "Introduces the wanted action.",
+        "__blank__": "\"Vengas\" is the tú-form present subjunctive of venir, required after \"quiero que.\" Common mistake: English uses an infinitive here (\"I want you TO come\"), so English speakers often try \"quiero que tú venir\" instead of conjugating the subjunctive.",
+        "conmigo": "\"With me\" — a special fused form (not \"con mí\")." } },
+
+    // ---------------- DECIR ----------------
+    { topic: "Decir · presente", sentence: "Yo siempre ___ la verdad.", answer: "digo", options: ["digo", "dices", "dije", "diré"],
+      translation: "I always tell the truth.",
+      compare: [ { word: "dije", note: "The preterite — would say I told the truth once, not that it's a general habit." },
+                 { word: "diré", note: "The future — would place the truth-telling ahead in time." } ],
+      notes: { "siempre": "\"Always\" — signals a habitual action, fitting the present tense.",
+        "__blank__": "\"Digo\" is the irregular yo-form of decir in the present. Common mistake: decir is irregular in a way that doesn't look like a typical -ir verb (digo, dices, dice...), so English speakers often try to regularize it as \"decio.\"",
+        "verdad": "What is told — the truth." } },
+    { topic: "Decir · pretérito", sentence: "Ella me ___ que vendría tarde.", answer: "dijo", options: ["dijo", "dice", "decía", "dirá"],
+      translation: "She told me she would come late.",
+      compare: [ { word: "decía", note: "The imperfect — would describe something she used to say repeatedly, not one specific message." },
+                 { word: "dirá", note: "The future — would place the telling ahead in time instead of in the past." } ],
+      notes: { "me": "Indirect object pronoun — I'm the one who was told.",
+        "__blank__": "\"Dijo\" is the irregular preterite of decir. Common mistake: unlike regular -er/-ir preterites, decir's preterite forms (dije, dijiste, dijo...) drop the expected accent marks and change the stem entirely — English speakers often misspell or mis-stress this form by treating it like a regular verb.",
+        "vendría": "\"Would come\" — the conditional of venir, reporting what she said inside the quote." } },
+
+    // ---------------- CONDITIONAL (would / could / should) ----------------
+    { topic: "Condicional · would (regular)", sentence: "Yo ___ un café si tuviera tiempo.", answer: "tomaría", options: ["tomaría", "tomo", "tomé", "tomaré"],
+      translation: "I would have a coffee if I had time.",
+      compare: [ { word: "tomaré", note: "The future (\"will\") — a different meaning; the conditional \"would\" needs the -ía ending, not -é." },
+                 { word: "tomo", note: "The present — would say I'm having coffee now, with no \"if\" condition attached." } ],
+      notes: { "__blank__": "\"Tomaría\" is the conditional of tomar, built by adding -ía endings to the full infinitive. Common mistake: English \"would\" is a separate helper word, but Spanish builds \"would\" directly into the verb ending — there's no standalone word for \"would\" to translate.",
+        "si": "\"If\" — sets up the hypothetical condition that pairs with the conditional tense.",
+        "tuviera": "\"Had\" — imperfect subjunctive of tener, used in the \"if\" clause of this kind of hypothetical sentence." } },
+    { topic: "Condicional · would (irregular)", sentence: "Con más dinero, nosotros ___ una casa más grande.", answer: "tendríamos", options: ["tendríamos", "tenemos", "tuvimos", "tendremos"],
+      translation: "With more money, we would have a bigger house.",
+      compare: [ { word: "tendremos", note: "The future — would state a confident plan (\"we will have\"), not a hypothetical." },
+                 { word: "tuvimos", note: "The preterite — would say we already had it, not a hypothetical \"would.\"" } ],
+      notes: { "__blank__": "\"Tendríamos\" is the conditional of tener, built on the same irregular stem (tendr-) used in the future tense, plus the -íamos ending. Common mistake: English speakers often forget that verbs with irregular future stems (tener, hacer, poder, decir...) keep that same irregular stem in the conditional too.",
+        "dinero": "\"Money\" — the hypothetical resource.",
+        "grande": "\"Big\" — describes the house." } },
+    { topic: "Condicional · cortesía (gustaría)", sentence: "Me ___ viajar a España algún día.", answer: "gustaría", options: ["gustaría", "gusta", "gustó", "gustará"],
+      translation: "I would like to travel to Spain someday.",
+      compare: [ { word: "gusta", note: "The present — \"me gusta\" means \"I like,\" a flatter, more direct statement than the softer \"I would like.\"" },
+                 { word: "gustará", note: "The future — would predict future liking rather than politely express a wish now." } ],
+      notes: { "me": "Indirect object pronoun — gustar-type verbs always put the person as the object, not the subject.",
+        "__blank__": "\"Gustaría\" is the conditional of gustar. Common mistake: \"me gustaría\" (\"I would like\") is far more common and polite in everyday Spanish than \"quiero\" (\"I want\") — English speakers who only learn \"quiero\" can come across as blunter than intended.",
+        "viajar": "The infinitive naming the wished-for action.",
+        "españa": "The destination." } },
+    { topic: "Condicional · could (poder)", sentence: "¿___ usted ayudarme, por favor?", answer: "Podría", options: ["Podría", "Puede", "Pudo", "Podrá"],
+      translation: "Could you help me, please?",
+      compare: [ { word: "Puede", note: "The present (\"can you\") — grammatically fine but more direct/blunt than the softer conditional." },
+                 { word: "Pudo", note: "The preterite — would ask about a completed past ability, not a polite request." } ],
+      notes: { "__blank__": "\"Podría\" is the conditional of poder, used here to soften a request — the Spanish equivalent of English shifting from \"can\" to \"could\" for politeness. Common mistake: English speakers often stick with \"puede\" (present) in polite requests, which isn't wrong, but misses the extra softness \"podría\" adds, the same way \"could you\" sounds gentler than \"can you\" in English.",
+        "usted": "Formal \"you\" — reinforces the polite register of the whole request.",
+        "ayudarme": "\"To help me\" — the infinitive action requested, with \"me\" attached to the end." } },
+    { topic: "Deber · should (presente)", sentence: "Tú ___ estudiar más para el examen.", answer: "debes", options: ["debes", "debo", "debiste", "deberías"],
+      translation: "You should study more for the exam.",
+      compare: [ { word: "deberías", note: "The conditional — a softer, more suggestion-like \"should,\" very common in everyday advice." },
+                 { word: "debiste", note: "The preterite — would say you should have studied (and didn't), a completed missed obligation." } ],
+      notes: { "__blank__": "\"Debes\" is the present tense of deber, which paired with an infinitive means \"should/ought to.\" Common mistake: English \"should\" is a single fixed helper word, but Spanish deber is a fully conjugated verb that changes with the subject — English speakers sometimes try to leave it unconjugated.",
+        "estudiar": "The infinitive naming the recommended action.",
+        "examen": "What the studying is for." } },
+    { topic: "Deber · should (condicional, más suave)", sentence: "Nosotros ___ llamar al médico.", answer: "deberíamos", options: ["deberíamos", "debemos", "debimos", "deberemos"],
+      translation: "We should call the doctor.",
+      compare: [ { word: "debemos", note: "The present — still means \"should/must,\" but reads a bit more like an obligation than a gentle suggestion." },
+                 { word: "debimos", note: "The preterite — would say we should have called (and didn't), a missed past obligation." } ],
+      notes: { "__blank__": "\"Deberíamos\" is the conditional of deber, the most natural, softest way to say \"should\" in everyday spoken Spanish. Common mistake: English speakers often default to the present \"debemos\" for every \"should,\" not realizing the conditional version sounds gentler — closer to \"we should, maybe\" than \"we must.\"",
+        "médico": "Who would be called — the doctor." } },
+
+    // ---------------- POR vs PARA ----------------
+    { topic: "Por vs Para · destinatario", sentence: "Este regalo es ___ ti.", answer: "para", options: ["para", "por", "a", "de"],
+      translation: "This gift is for you.",
+      compare: [ { word: "por", note: "Would suggest the gift was given because of you or in exchange for you, not intended for you as the recipient." },
+                 { word: "a", note: "Would mark a destination/indirect object rather than \"intended for.\"" } ],
+      notes: { "__blank__": "\"Para\" marks the recipient/intended destination of something. Common mistake: since English \"for\" covers both por and para, English speakers often can't predict which one fits — as a rule of thumb, para = destination/recipient/purpose; por = cause/exchange/movement-through.",
+        "regalo": "The thing being given.",
+        "ti": "\"You\" (after a preposition) — the intended recipient." } },
+    { topic: "Por vs Para · movimiento", sentence: "Caminamos ___ el parque.", answer: "por", options: ["por", "para", "a", "en"],
+      translation: "We walked through the park.",
+      compare: [ { word: "para", note: "Would suggest walking toward/for the park as a destination, not moving through it." },
+                 { word: "en", note: "Would suggest walking around within a fixed spot rather than moving through a space." } ],
+      notes: { "__blank__": "\"Por\" marks movement through or around a space. Common mistake: English speakers often reach for \"para\" here since \"through the park\" sounds destination-like in English, but \"por\" is specifically the one used for movement through/along/around.",
+        "parque": "The space being walked through." } },
+    { topic: "Por vs Para · propósito", sentence: "Trabajo ___ ganar dinero.", answer: "para", options: ["para", "por", "a", "de"],
+      translation: "I work (in order) to earn money.",
+      compare: [ { word: "por", note: "Would suggest working because of money already had, or in exchange for it, rather than working toward the goal of earning it." },
+                 { word: "a", note: "Not idiomatic here — \"a\" doesn't introduce a purpose clause this way." } ],
+      notes: { "__blank__": "\"Para\" introduces a purpose or goal (\"in order to\"). Common mistake: purpose is one of the clearest para triggers, but English speakers sometimes still reach for \"por\" since English \"for\" doesn't distinguish purpose from cause.",
+        "ganar": "The infinitive naming the goal — \"to earn.\"",
+        "dinero": "What is being earned." } },
+    { topic: "Por vs Para · causa/razón", sentence: "Gracias ___ tu ayuda.", answer: "por", options: ["por", "para", "a", "de"],
+      translation: "Thanks for your help.",
+      compare: [ { word: "para", note: "Would sound like the thanks are intended \"for\" a future use of the help, not given because of help already received." },
+                 { word: "de", note: "Not idiomatic here — \"gracias de\" isn't how this phrase is built." } ],
+      notes: { "__blank__": "\"Por\" marks the cause or reason (here, the reason for the thanks). Common mistake: English \"thanks for\" strongly nudges learners toward \"para,\" but expressions of gratitude in Spanish almost always use \"por,\" since you're thanking someone BECAUSE OF something they already did.",
+        "gracias": "\"Thanks\" — the expression being completed.",
+        "ayuda": "What the thanks are for — the help given." } },
+
+    // ---------------- MANDATOS (COMMANDS) ----------------
+    { topic: "Mandatos · tú afirmativo", sentence: "___ la puerta, por favor.", answer: "Cierra", options: ["Cierra", "Cierras", "Cierres", "Cerrar"],
+      translation: "Close the door, please.",
+      compare: [ { word: "Cierres", note: "The negative-command/subjunctive form — correct for \"don't close,\" not for a direct affirmative command." },
+                 { word: "Cerrar", note: "The plain infinitive — sometimes used informally on signs, but not a proper spoken tú command." } ],
+      notes: { "__blank__": "\"Cierra\" is the informal affirmative tú command, which for regular and stem-changing verbs is identical to the él/ella present-tense form. Common mistake: because it looks exactly like third-person \"he/she closes,\" English speakers often don't recognize it as a command directed at \"you\" at all.",
+        "puerta": "What's being closed.",
+        "favor": "Part of \"por favor,\" softening the command." } },
+    { topic: "Mandatos · tú negativo", sentence: "No ___ tarde a la reunión.", answer: "llegues", options: ["llegues", "llegas", "llega", "llegar"],
+      translation: "Don't arrive late to the meeting.",
+      compare: [ { word: "llega", note: "This is actually the correct AFFIRMATIVE tú command (\"arrive!\") — but it can't be used after \"no\"; negative commands switch to a different form entirely." },
+                 { word: "llegas", note: "The plain indicative present — not a command form at all." } ],
+      notes: { "no": "Negates the command — and is exactly why the verb form has to change.",
+        "__blank__": "\"Llegues\" is the negative tú command, which uses the present subjunctive form instead of the plain present. Common mistake: this is one of the most common command errors for English speakers — they learn the affirmative command (llega) first and then just add \"no\" in front of it (\"no llega\"), not realizing negative commands require a completely different, subjunctive-based form.",
+        "tarde": "\"Late\" — describes how the arrival shouldn't happen.",
+        "reunión": "What's being arrived at." } },
+    { topic: "Mandatos · usted", sentence: "___ conmigo, por favor.", answer: "Venga", options: ["Venga", "Viene", "Vienes", "Vengas"],
+      translation: "Come with me, please.",
+      compare: [ { word: "Viene", note: "The plain present indicative (\"he/she comes\") — not a command form." },
+                 { word: "Vengas", note: "The tú-form subjunctive — wrong person; this sentence is formal (usted), not informal (tú)." } ],
+      notes: { "__blank__": "\"Venga\" is the formal (usted) command, built from the present subjunctive. Common mistake: unlike the informal tú affirmative command (which often matches the present tense), formal usted commands always use the subjunctive form — a rule English speakers frequently mix up with the tú pattern.",
+        "conmigo": "\"With me\" — a fused pronoun form (not \"con mí\")." } },
+    { topic: "Mandatos · nosotros (let's)", sentence: "___ una fiesta este fin de semana.", answer: "Hagamos", options: ["Hagamos", "Hacemos", "Haremos", "Hicimos"],
+      translation: "Let's have a party this weekend.",
+      compare: [ { word: "Hacemos", note: "The plain present (\"we do/make\") — a statement, not a suggestion to act together." },
+                 { word: "Haremos", note: "The future (\"we will\") — a prediction, not an invitation to act now." } ],
+      notes: { "__blank__": "\"Hagamos\" is the nosotros command (built from the subjunctive), the standard way to say \"let's...\" in Spanish. Common mistake: English \"let's\" is its own separate word, so English speakers often look for a direct word-for-word equivalent instead of realizing \"let's\" is built directly into this special verb ending.",
+        "fiesta": "What they're proposing to have.",
+        "fin": "Part of \"fin de semana,\" meaning \"weekend.\"",
+        "semana": "\"Week\" — completes \"fin de semana.\"" } },
+
+    // ---------------- COMPARATIVOS ----------------
+    { topic: "Comparativos · más...que", sentence: "Este libro es ___ interesante que el otro.", answer: "más", options: ["más", "menos", "tan", "muy"],
+      translation: "This book is more interesting than the other one.",
+      compare: [ { word: "tan", note: "Would require \"como\" instead of \"que\" afterward, for an equal (not unequal) comparison." },
+                 { word: "muy", note: "\"Very\" — intensifies without comparing to anything else; it doesn't pair with \"que.\"" } ],
+      notes: { "__blank__": "\"Más\" pairs with \"que\" later in the sentence to build \"more...than.\" Common mistake: English speakers sometimes add \"-er\" style endings out of habit or reach for \"muy\" (very) when they actually mean a comparison between two things, not just intensity.",
+        "interesante": "The quality being compared.",
+        "otro": "\"The other (one)\" — what the book is being compared against." } },
+    { topic: "Comparativos · tan...como", sentence: "Ella es ___ alta como su hermano.", answer: "tan", options: ["tan", "más", "menos", "muy"],
+      translation: "She is as tall as her brother.",
+      compare: [ { word: "más", note: "Would require \"que\" instead of \"como\" afterward, and would mean \"taller than,\" not \"as tall as.\"" },
+                 { word: "muy", note: "\"Very\" — describes intensity alone, with no comparison to her brother at all." } ],
+      notes: { "__blank__": "\"Tan\" pairs with \"como\" later in the sentence to build an equal comparison, \"as...as.\" Common mistake: English speakers often mix the two comparative patterns, writing \"tan alta que\" (borrowing \"que\" from the más...que pattern) instead of the correct \"tan alta como.\"",
+        "alta": "The quality being compared — \"tall.\"",
+        "hermano": "Who she's being compared to." } },
+    { topic: "Comparativos · superlativo", sentence: "Juan es el ___ inteligente de la clase.", answer: "más", options: ["más", "tan", "menos", "muy"],
+      translation: "Juan is the most intelligent in the class.",
+      compare: [ { word: "muy", note: "\"Very intelligent\" — intensifies without ranking him against the rest of the class." },
+                 { word: "menos", note: "Would build the opposite superlative, \"the least intelligent.\"" } ],
+      notes: { "__blank__": "\"Más\" combines with \"el\" and \"de\" to build a superlative (\"the most... in/of...\"). Common mistake: English adds \"-est\" directly onto the adjective (\"smartest\"), so English speakers sometimes hunt for a similar suffix in Spanish instead of using this el/la + más + adjective + de structure.",
+        "inteligente": "The quality being ranked.",
+        "clase": "The group he's being ranked within." } },
+
+    // ---------------- ADJETIVOS: PLACEMENT & AGREEMENT ----------------
+    { topic: "Adjetivos · concordancia", sentence: "Tengo una casa ___.", answer: "blanca", options: ["blanca", "blanco", "blancas", "blancos"],
+      translation: "I have a white house.",
+      compare: [ { word: "blanco", note: "The masculine singular form — wrong here, since \"casa\" is feminine." },
+                 { word: "blancas", note: "The feminine plural form — wrong here, since \"casa\" is singular." } ],
+      notes: { "__blank__": "\"Blanca\" is the feminine singular form of \"blanco,\" agreeing with \"casa.\" Common mistake: English adjectives never change form (\"white house,\" \"white houses,\" \"white car\" — always \"white\"), so English speakers often forget Spanish adjectives have to match the noun's gender and number every time.",
+        "casa": "The noun the adjective must agree with — feminine and singular." } },
+    { topic: "Adjetivos · concordancia plural", sentence: "Compramos flores ___.", answer: "rojas", options: ["rojas", "rojo", "rojos", "roja"],
+      translation: "We bought red flowers.",
+      compare: [ { word: "rojos", note: "The masculine plural form — wrong here, since \"flores\" is feminine." },
+                 { word: "roja", note: "The feminine singular form — wrong here, since \"flores\" is plural." } ],
+      notes: { "__blank__": "\"Rojas\" is the feminine plural form of \"rojo,\" agreeing with \"flores,\" and it also sits after the noun. Common mistake: besides forgetting agreement, English speakers often put the adjective before the noun (\"red flowers\" word order), when the unmarked, default position in Spanish is after the noun.",
+        "flores": "The noun the adjective must agree with — feminine and plural, and placed before its adjective here." } },
+    { topic: "Adjetivos · posición especial", sentence: "Es un ___ libro.", answer: "buen", options: ["buen", "bueno", "buena", "buenos"],
+      translation: "It's a good book.",
+      compare: [ { word: "bueno", note: "The full form — correct AFTER a noun (\"un libro bueno\"), but shortened to \"buen\" when placed before a masculine singular noun." },
+                 { word: "buena", note: "The feminine form — wrong here, since \"libro\" is masculine." } ],
+      notes: { "__blank__": "\"Buen\" is the shortened form of \"bueno,\" used right before a masculine singular noun. Common mistake: this is a genuine exception to \"adjectives go after the noun\" — a handful of adjectives (bueno, malo, grande, primero, tercero, alguno, ninguno) both move before the noun and shorten in this position, which trips up learners who just memorized the general placement rule.",
+        "libro": "The noun being described — masculine singular, which is why \"bueno\" shortens to \"buen\" in front of it." } },
   ];
 
   
@@ -1136,7 +1439,62 @@ const GENERAL_NOTES = {
       html += '</ul>';
     }
     explainCardEl.innerHTML = html;
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-ai-btn";
+    copyBtn.type = "button";
+    copyBtn.textContent = "📋 Copy question for AI chat";
+    copyBtn.addEventListener("click", () => copyForAI(label, note, compareList));
+    explainCardEl.appendChild(copyBtn);
+
+    const status = document.createElement("span");
+    status.className = "copy-status";
+    explainCardEl.appendChild(status);
+
     explainCardEl.classList.add("show");
+  }
+
+  function copyForAI(label, note, compareList) {
+    const fullEs = current.sentence.replace("___", current.answer);
+    let compareText = "";
+    if (compareList && compareList.length) {
+      compareText = " For comparison, I was also shown these related words: " +
+        compareList.map(c => `"${c.word}" (${c.note})`).join("; ") + ".";
+    }
+    const text = `I'm learning Spanish. In the sentence "${fullEs}" (which means "${current.translation}"), can you explain in more depth why "${label}" is used here?\n\nWhat I already know: ${note}${compareText}\n\nCan you give me a deeper explanation, 2-3 more example sentences using it, and a common mistake English speakers make with this?`;
+
+    const done = () => showCopyStatus("Copied! Paste it into Claude or any AI chat.");
+    const failed = () => showCopyStatus("Couldn't copy automatically — press and hold the text above to copy it manually.");
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => legacyCopy(text, done, failed));
+    } else {
+      legacyCopy(text, done, failed);
+    }
+  }
+
+  function legacyCopy(text, done, failed) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      ok ? done() : failed();
+    } catch (e) {
+      failed();
+    }
+  }
+
+  function showCopyStatus(msg) {
+    const status = explainCardEl.querySelector(".copy-status");
+    if (!status) return;
+    status.textContent = msg;
+    setTimeout(() => { if (status) status.textContent = ""; }, 3500);
   }
 
   function onChunkClick(el, rawWord, isAnswerChunk) {
