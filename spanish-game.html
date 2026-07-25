@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -431,6 +430,30 @@
   .filter-option:hover { background: var(--ceramic); }
   .filter-option.active { background: var(--cobalt); color: #fff; font-weight: 600; }
 
+  .completion-screen {
+    display: none;
+    text-align: center;
+    padding: 24px 8px 8px;
+  }
+  .completion-screen.show { display: block; }
+  .completion-icon {
+    font-size: 48px;
+    margin-bottom: 6px;
+  }
+  .completion-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cobalt-deep);
+    margin-bottom: 8px;
+  }
+  .completion-sub {
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
   footer {
     text-align: center;
     margin-top: 18px;
@@ -456,9 +479,8 @@
   </header>
 
   <div class="stats">
-    <div class="stat">Score <b id="score">0</b></div>
+    <div class="stat">Mastered <b id="mastered">0/0</b></div>
     <div class="stat streak">Streak <b id="streak">0</b></div>
-    <div class="stat">Best <b id="best">0</b></div>
   </div>
 
   <div class="filter-dropdown-wrap">
@@ -469,25 +491,34 @@
   </div>
 
   <div class="card" id="quizCard">
-    <div class="category" id="category">Category</div>
+    <div id="quizBody">
+      <div class="category" id="category">Category</div>
 
-    <div class="chat-row">
-      <div class="chat-avatar">🔊</div>
-      <div class="bubble" id="prompt">—</div>
+      <div class="chat-row">
+        <div class="chat-avatar">🔊</div>
+        <div class="bubble" id="prompt">—</div>
+      </div>
+      <div class="prompt-sub" id="promptSub"></div>
+      <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
+
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+
+      <div class="answer-wrap" id="answerWrap">
+        <div class="answer-label">Your answer — tap any part</div>
+        <div class="answer-bubble" id="answerBubble"></div>
+        <div class="explain-card" id="explainCard"></div>
+      </div>
+
+      <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
     </div>
-    <div class="prompt-sub" id="promptSub"></div>
-    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
 
-    <div class="options" id="options"></div>
-    <div class="feedback" id="feedback"></div>
-
-    <div class="answer-wrap" id="answerWrap">
-      <div class="answer-label">Your answer — tap any part</div>
-      <div class="answer-bubble" id="answerBubble"></div>
-      <div class="explain-card" id="explainCard"></div>
+    <div class="completion-screen" id="completionScreen">
+      <div class="completion-icon">🎉</div>
+      <div class="completion-title">Test complete!</div>
+      <div class="completion-sub" id="completionSub"></div>
+      <button class="next-btn show" id="playAgainBtn" type="button">Play again</button>
     </div>
-
-    <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
   </div>
 
   <footer id="progress">Question 1 of —</footer>
@@ -1888,9 +1919,8 @@ const GENERAL_NOTES = {
   ];
 
   
-  const scoreEl = document.getElementById("score");
+  const masteredEl = document.getElementById("mastered");
   const streakEl = document.getElementById("streak");
-  const bestEl = document.getElementById("best");
   const categoryEl = document.getElementById("category");
   const promptEl = document.getElementById("prompt");
   const promptSubEl = document.getElementById("promptSub");
@@ -1905,6 +1935,10 @@ const GENERAL_NOTES = {
   const answerBubbleEl = document.getElementById("answerBubble");
   const explainCardEl = document.getElementById("explainCard");
   const quizCardEl = document.getElementById("quizCard");
+  const quizBodyEl = document.getElementById("quizBody");
+  const completionScreenEl = document.getElementById("completionScreen");
+  const completionSubEl = document.getElementById("completionSub");
+  const playAgainBtn = document.getElementById("playAgainBtn");
 
   // Consolidated top-level categories. The detailed topic (e.g. "Ser · presente")
   // still shows on each question card — this mapping only simplifies the filter menu.
@@ -1950,11 +1984,11 @@ const GENERAL_NOTES = {
 
   function getStat(item) {
     const k = itemKey(item);
-    if (!itemStats[k]) itemStats[k] = { correctStreak: 0, timesSeen: 0, nextDueAt: 0, intervalHours: 0 };
+    if (!itemStats[k]) itemStats[k] = { correctStreak: 0, timesSeen: 0, retired: false };
     return itemStats[k];
   }
 
-  const MASTERY_THRESHOLD = 3; // correct answers in a row before spacing kicks in
+  const MASTERY_THRESHOLD = 2; // correct answers in a row before a question retires for this game
 
   function recordResult(item, wasCorrect) {
     const stat = getStat(item);
@@ -1963,66 +1997,53 @@ const GENERAL_NOTES = {
     if (wasCorrect) {
       stat.correctStreak += 1;
       if (stat.correctStreak >= MASTERY_THRESHOLD) {
-        // First time crossing the threshold: schedule it "a day or so" out.
-        // Each time it comes back around and is answered correctly again,
-        // the wait roughly doubles-to-triples, so it fades further and further.
-        const hours = stat.intervalHours > 0
-          ? stat.intervalHours * (2 + Math.random())       // grows each successful review
-          : (20 + Math.random() * 12);                      // first spacing: ~20–32 hours
-        stat.intervalHours = hours;
-        stat.nextDueAt = Date.now() + hours * 60 * 60 * 1000;
-      } else {
-        // Correct, but hasn't hit 3-in-a-row yet — keep it in normal rotation.
-        stat.nextDueAt = 0;
-        stat.intervalHours = 0;
+        stat.retired = true; // done for good until the pool is reset with "Play again"
       }
     } else {
-      // Any miss resets everything — back into frequent rotation immediately.
+      // Any miss resets the streak and un-retires it if it had somehow already qualified.
       stat.correctStreak = 0;
-      stat.nextDueAt = 0;
-      stat.intervalHours = 0;
+      stat.retired = false;
     }
 
     saveItemStats();
   }
 
-  function isDue(item) {
-    const stat = getStat(item);
-    return !stat.nextDueAt || stat.nextDueAt <= Date.now();
-  }
-
-  function formatWait(ms) {
-    const hours = ms / 3600000;
-    if (hours < 1) return "less than an hour";
-    if (hours < 36) return Math.round(hours) + "h";
-    return Math.round(hours / 24) + "d";
-  }
-
   function masteryLabel(item) {
     const stat = getStat(item);
     if (stat.timesSeen === 0) return { icon: "🆕", text: "New" };
-    if (stat.nextDueAt && stat.nextDueAt > Date.now()) {
-      return { icon: "😴", text: `Resting · back in ~${formatWait(stat.nextDueAt - Date.now())}` };
-    }
-    if (stat.correctStreak >= MASTERY_THRESHOLD) return { icon: "✅", text: `Due for review · ${stat.correctStreak} streak` };
-    if (stat.correctStreak >= 1) return { icon: "🔄", text: `Learning · ${stat.correctStreak} in a row` };
+    if (stat.retired) return { icon: "✅", text: "Mastered" };
+    if (stat.correctStreak >= 1) return { icon: "🔄", text: `Learning · ${stat.correctStreak}/${MASTERY_THRESHOLD} correct in a row` };
     return { icon: "🔁", text: "Needs review" };
   }
 
-  // Weighted random pick, restricted to items that are actually "due" —
-  // mastered items resting on their spaced-repetition schedule are excluded
-  // entirely until their time is up. If a filtered topic is small enough
-  // that everything in it is currently resting, we fall back to the full
-  // pool so the game never gets stuck with nothing to show.
+  function retiredCountIn(itemPool) {
+    return itemPool.filter(item => getStat(item).retired).length;
+  }
+
+  // Resets progress (streak + retired status) for every item in the given pool,
+  // so a completed test can be played again from scratch.
+  function resetProgressFor(itemPool) {
+    itemPool.forEach(item => {
+      const k = itemKey(item);
+      itemStats[k] = { correctStreak: 0, timesSeen: 0, retired: false };
+    });
+    saveItemStats();
+  }
+
+  // Weighted random pick, restricted to items that haven't been retired yet
+  // (retired = answered correctly MASTERY_THRESHOLD times in a row). Returns
+  // null once every item in the pool is retired, which signals the caller to
+  // show the "test complete" screen instead of another question.
   //
   // Brand-new (never-seen) questions get first priority, full stop: as long
   // as any unseen question exists in the current pool, the next question is
-  // always pulled from that unseen set. Only once everything in the pool has
-  // been seen at least once does it fall back to weighted spaced review.
+  // always pulled from that unseen set. Only once everything has been seen
+  // at least once does it fall back to weighted review among the remaining
+  // not-yet-mastered questions.
   function pickWeighted(itemPool, avoidItem) {
     if (!itemPool.length) return null;
-    let candidates = itemPool.filter(isDue);
-    if (!candidates.length) candidates = itemPool;
+    const candidates = itemPool.filter(item => !getStat(item).retired);
+    if (!candidates.length) return null;
 
     const unseen = candidates.filter(item => getStat(item).timesSeen === 0);
     if (unseen.length > 0) {
@@ -2046,13 +2067,9 @@ const GENERAL_NOTES = {
 
   let pool = [];
   let sessionCount = 0;
-  let score = 0;
   let streak = 0;
-  let best = Number(localStorage.getItem("charlemos_grammar_best") || 0);
   let current = null;
   let answered = false;
-
-  bestEl.textContent = best;
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -2106,6 +2123,14 @@ const GENERAL_NOTES = {
   }
 
   function loadItem() {
+    const picked = pickWeighted(pool, current);
+
+    if (!picked) {
+      showCompletionScreen();
+      return;
+    }
+    hideCompletionScreen();
+
     answered = false;
     feedbackEl.innerHTML = "";
     feedbackEl.className = "feedback";
@@ -2115,7 +2140,7 @@ const GENERAL_NOTES = {
     explainCardEl.classList.remove("show");
     explainCardEl.innerHTML = "";
 
-    current = pickWeighted(pool, current);
+    current = picked;
     sessionCount += 1;
     document.body.setAttribute("data-bucket", getBucketSlug(current.topic));
     const tag = masteryLabel(current);
@@ -2124,7 +2149,8 @@ const GENERAL_NOTES = {
     const parts = current.sentence.split("___");
     promptEl.innerHTML = parts[0] + '<span class="blank-static">___</span>' + (parts[1] || "");
     promptSubEl.textContent = "Choose the word that correctly completes the sentence.";
-    progressEl.textContent = `Question ${sessionCount} · ${pool.length} in "${activeGroup}" pool · repeats fade as you master them`;
+    progressEl.textContent = `"${activeGroup}" · answer correctly twice in a row to retire a question`;
+    masteredEl.textContent = `${retiredCountIn(pool)}/${pool.length}`;
 
     const choices = shuffle(current.options);
     optionsEl.innerHTML = "";
@@ -2136,6 +2162,19 @@ const GENERAL_NOTES = {
       btn.addEventListener("click", () => handleAnswer(btn, choice));
       optionsEl.appendChild(btn);
     });
+  }
+
+  function showCompletionScreen() {
+    quizBodyEl.style.display = "none";
+    completionScreenEl.classList.add("show");
+    completionSubEl.textContent = `You answered all ${pool.length} questions in "${activeGroup}" correctly, two times in a row.`;
+    progressEl.textContent = `"${activeGroup}" — test complete!`;
+    masteredEl.textContent = `${pool.length}/${pool.length}`;
+  }
+
+  function hideCompletionScreen() {
+    quizBodyEl.style.display = "";
+    completionScreenEl.classList.remove("show");
   }
 
   function renderExplainCard(label, note, compareList) {
@@ -2276,7 +2315,6 @@ const GENERAL_NOTES = {
 
     if (isCorrect) {
       btn.classList.add("correct");
-      score += 10;
       streak += 1;
       feedbackEl.innerHTML = "¡Correcto!" + '<span class="translation">' + current.translation + '</span>';
       feedbackEl.classList.add("ok");
@@ -2287,14 +2325,8 @@ const GENERAL_NOTES = {
       feedbackEl.classList.add("no");
     }
 
-    if (score > best) {
-      best = score;
-      localStorage.setItem("charlemos_grammar_best", String(best));
-    }
-
-    scoreEl.textContent = score;
     streakEl.textContent = streak;
-    bestEl.textContent = best;
+    masteredEl.textContent = `${retiredCountIn(pool)}/${pool.length}`;
 
     buildAnswerBubble();
     answerWrapEl.classList.add("show");
@@ -2313,6 +2345,10 @@ const GENERAL_NOTES = {
   }
 
   nextBtn.addEventListener("click", () => { loadItem(); });
+  playAgainBtn.addEventListener("click", () => {
+    resetProgressFor(pool);
+    loadItem();
+  });
   speakBtn.addEventListener("click", speakCurrent);
 
   resetPool();
