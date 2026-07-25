@@ -3,454 +3,1252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Charlemos — Spanish Vocabulary Tiles</title>
+<title>Charlemos — Gramática Española</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ceramic: #EFE6D5;
-    --ceramic-dark: #E2D6BE;
-    --cobalt: #1B3B6F;
-    --cobalt-deep: #142C54;
-    --clay: #B54A2A;
-    --gold: #DFA526;
-    --ink: #17233A;
-    --ok: #3E7A4F;
-    --radius: 14px;
-  }
+  :root {
+    --ceramic: #EFE6D5;
+    --ceramic-dark: #E2D6BE;
+    --cobalt: #1B3B6F;
+    --cobalt-deep: #142C54;
+    --clay: #B54A2A;
+    --gold: #DFA526;
+    --ink: #17233A;
+    --ok: #3E7A4F;
+    --radius: 14px;
+  }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; }
 
-  html, body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--ceramic);
-    color: var(--ink);
-    font-family: 'Work Sans', sans-serif;
-  }
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--ceramic);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+  }
 
-  body {
-    background-image:
-      repeating-linear-gradient(45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px),
-      repeating-linear-gradient(-45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 16px;
-  }
+  body {
+    background-image:
+      repeating-linear-gradient(45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(-45deg, var(--ceramic-dark) 0, var(--ceramic-dark) 1px, transparent 1px, transparent 42px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
 
-  .board {
-    width: 100%;
-    max-width: 480px;
-  }
+  .board {
+    width: 100%;
+    max-width: 560px;
+  }
 
-  header {
-    text-align: center;
-    margin-bottom: 22px;
-  }
+  header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
 
-  header .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--clay);
-    font-weight: 700;
-  }
+  header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 700;
+  }
 
-  h1 {
-    font-family: 'Fraunces', serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-size: 42px;
-    margin: 4px 0 2px;
-    color: var(--cobalt-deep);
-  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 40px;
+    margin: 4px 0 2px;
+    color: var(--cobalt-deep);
+  }
 
-  header p {
-    margin: 0;
-    font-size: 14px;
-    color: #4a5568;
-  }
+  header p {
+    margin: 0;
+    font-size: 14px;
+    color: #4a5568;
+  }
 
-  .stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    font-family: 'JetBrains Mono', monospace;
-  }
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-  .stat {
-    background: var(--cobalt);
-    color: var(--ceramic);
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-  }
+  .stat {
+    background: var(--cobalt);
+    color: var(--ceramic);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
 
-  .stat b {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--gold);
-  }
+  .stat b {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold);
+  }
 
-  .stat.streak b { color: #ff9d6b; }
+  .stat.streak b { color: #ff9d6b; }
 
-  .card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px 26px 26px;
-    box-shadow: 0 18px 40px -18px rgba(20,44,84,0.45);
-    position: relative;
-    overflow: hidden;
-  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 26px 22px;
+    box-shadow: 0 18px 40px -18px rgba(20,44,84,0.45);
+    position: relative;
+    overflow: hidden;
+  }
 
-  .card::before, .card::after {
-    content: "";
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    border: 3px solid var(--cobalt);
-    opacity: 0.08;
-  }
-  .card::before { top: -30px; left: -30px; border-radius: 0 0 100% 0; }
-  .card::after { bottom: -30px; right: -30px; border-radius: 100% 0 0 0; }
+  .category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
 
-  .category {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--clay);
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+  /* --- Chat bubble: the question/prompt --- */
+  .chat-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .chat-avatar {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cobalt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 2px;
+  }
+  .bubble {
+    position: relative;
+    background: var(--ceramic);
+    border: 1.5px solid var(--ceramic-dark);
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cobalt-deep);
+    line-height: 1.4;
+  }
+  .bubble .blank-static {
+    color: var(--gold);
+    border-bottom: 3px solid var(--gold);
+  }
 
-  .prompt {
-    font-family: 'Fraunces', serif;
-    font-size: 30px;
-    font-weight: 600;
-    color: var(--cobalt-deep);
-    margin-bottom: 4px;
-    line-height: 1.2;
-  }
+  .prompt-sub {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 6px 0 18px 40px;
+  }
 
-  .prompt-sub {
-    font-size: 13px;
-    color: #6b7280;
-    margin-bottom: 20px;
-  }
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--cobalt);
+    color: var(--cobalt);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+    margin: 0 0 18px 40px;
+  }
+  .speak-btn:hover { background: var(--cobalt); color: #fff; }
 
-  .speak-btn {
-    background: none;
-    border: 1px solid var(--cobalt);
-    color: var(--cobalt);
-    border-radius: 8px;
-    padding: 5px 11px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'Work Sans', sans-serif;
-    margin-bottom: 18px;
-  }
-  .speak-btn:hover { background: var(--cobalt); color: #fff; }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
 
-  .options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+  .tile {
+    position: relative;
+    background: var(--ceramic);
+    border: 2px solid var(--ceramic-dark);
+    border-radius: var(--radius);
+    padding: 16px 10px;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .tile:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--cobalt);
+  }
+  .tile:disabled { cursor: default; }
+  .tile.correct { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .tile.wrong { background: var(--clay); border-color: var(--clay); color: #fff; }
 
-  .tile {
-    position: relative;
-    background: var(--ceramic);
-    border: 2px solid var(--ceramic-dark);
-    border-radius: var(--radius);
-    padding: 16px 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--ink);
-    cursor: pointer;
-    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-    font-family: 'Work Sans', sans-serif;
-  }
+  .feedback {
+    min-height: 22px;
+    margin: 14px 0 4px 40px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .feedback.ok { color: var(--ok); }
+  .feedback.no { color: var(--clay); }
+  .feedback .translation {
+    display: block;
+    margin-top: 4px;
+    font-weight: 400;
+    color: #6b7280;
+    font-style: italic;
+  }
 
-  .tile::before {
-    content: "";
-    position: absolute;
-    top: 6px; left: 6px;
-    width: 8px; height: 8px;
-    border-top: 2px solid var(--cobalt);
-    border-left: 2px solid var(--cobalt);
-    opacity: 0.35;
-  }
-  .tile::after {
-    content: "";
-    position: absolute;
-    bottom: 6px; right: 6px;
-    width: 8px; height: 8px;
-    border-bottom: 2px solid var(--cobalt);
-    border-right: 2px solid var(--cobalt);
-    opacity: 0.35;
-  }
+  /* --- Answer bubble: tappable phrase chunks, Duolingo-style --- */
+  .answer-wrap {
+    display: none;
+    margin: 10px 0 0 40px;
+  }
+  .answer-wrap.show { display: block; }
+  .answer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9b9384;
+    margin-bottom: 8px;
+  }
+  .answer-bubble {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid var(--ceramic-dark);
+    border-radius: 16px;
+    padding: 12px 14px;
+  }
+  .chunk {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--ceramic);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  }
+  .chunk:hover { border-color: var(--cobalt); }
+  .chunk.selected { background: var(--cobalt); color: #fff; }
+  .chunk.is-answer { border-color: var(--gold); }
+  .chunk.is-answer.selected { background: var(--gold); color: var(--ink); }
 
-  .tile:hover:not(:disabled) {
-    transform: translateY(-2px);
-    border-color: var(--cobalt);
-  }
+  .explain-card {
+    display: none;
+    margin-top: 12px;
+    background: var(--ceramic);
+    border: 1.5px dashed var(--ceramic-dark);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+  .explain-card.show { display: block; }
+  .explain-card .lead {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .explain-card .lead b {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cobalt-deep);
+  }
+  .explain-card .compare-title {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 700;
+  }
+  .explain-card ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+  .explain-card li {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4a5568;
+    margin-bottom: 6px;
+  }
+  .explain-card li b {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cobalt);
+  }
 
-  .tile:disabled { cursor: default; }
+  .next-btn {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    background: var(--cobalt-deep);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .next-btn.show { opacity: 1; pointer-events: auto; }
+  .next-btn:hover { background: var(--cobalt); }
 
-  .tile.correct {
-    background: var(--ok);
-    border-color: var(--ok);
-    color: #fff;
-    animation: glow 0.5s ease;
-  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .filter-btn {
+    background: #fff;
+    border: 1.5px solid var(--ceramic-dark);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+  }
+  .filter-btn.active { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
 
-  .tile.wrong {
-    background: var(--clay);
-    border-color: var(--clay);
-    color: #fff;
-    animation: shake 0.4s ease;
-  }
+  footer {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8a8375;
+    font-family: 'JetBrains Mono', monospace;
+  }
 
-  @keyframes glow {
-    0% { box-shadow: 0 0 0 0 rgba(223,165,38,0.6); }
-    100% { box-shadow: 0 0 0 14px rgba(223,165,38,0); }
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
-  }
-
-  .feedback {
-    min-height: 22px;
-    margin-top: 16px;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .feedback.ok { color: var(--ok); }
-  .feedback.no { color: var(--clay); }
-
-  .next-btn {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px;
-    background: var(--cobalt-deep);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Work Sans', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  .next-btn.show { opacity: 1; pointer-events: auto; }
-  .next-btn:hover { background: var(--cobalt); }
-
-  footer {
-    text-align: center;
-    margin-top: 18px;
-    font-size: 12px;
-    color: #8a8375;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  @media (max-width: 380px) {
-    h1 { font-size: 32px; }
-    .prompt { font-size: 24px; }
-  }
+  @media (max-width: 380px) {
+    h1 { font-size: 30px; }
+    .bubble { font-size: 17px; }
+    .prompt-sub, .speak-btn, .feedback, .answer-wrap { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
 
 <div class="board">
-  <header>
-    <div class="eyebrow">Vocabulario · Nivel intermedio</div>
-    <h1>Charlemos</h1>
-    <p>A tile-quiz for building Spanish vocabulary, word by word.</p>
-  </header>
+  <header>
+    <div class="eyebrow">Gramática · Verbos y pronombres</div>
+    <h1>Charlemos</h1>
+    <p>Answer, then tap any word or phrase in your answer to see why it's used.</p>
+  </header>
 
-  <div class="stats">
-    <div class="stat">Score <b id="score">0</b></div>
-    <div class="stat streak">Streak <b id="streak">0</b></div>
-    <div class="stat">Best <b id="best">0</b></div>
-  </div>
+  <div class="stats">
+    <div class="stat">Score <b id="score">0</b></div>
+    <div class="stat streak">Streak <b id="streak">0</b></div>
+    <div class="stat">Best <b id="best">0</b></div>
+  </div>
 
-  <div class="card">
-    <div class="category" id="category">Category</div>
-    <div class="prompt" id="prompt">—</div>
-    <div class="prompt-sub" id="promptSub"></div>
-    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear it in Spanish</button>
-    <div class="options" id="options"></div>
-    <div class="feedback" id="feedback"></div>
-    <button class="next-btn" id="nextBtn" type="button">Next word →</button>
-  </div>
+  <div class="filters" id="filters"></div>
 
-  <footer id="progress">Word 1 of —</footer>
+  <div class="card">
+    <div class="category" id="category">Category</div>
+
+    <div class="chat-row">
+      <div class="chat-avatar">🔊</div>
+      <div class="bubble" id="prompt">—</div>
+    </div>
+    <div class="prompt-sub" id="promptSub"></div>
+    <button class="speak-btn" id="speakBtn" type="button">🔊 Hear the sentence</button>
+
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="answer-wrap" id="answerWrap">
+      <div class="answer-label">Your answer — tap any part</div>
+      <div class="answer-bubble" id="answerBubble"></div>
+      <div class="explain-card" id="explainCard"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" type="button">Next sentence →</button>
+  </div>
+
+  <footer id="progress">Question 1 of —</footer>
 </div>
 
 <script>
-  const WORDS = [
-    { es: "el paraguas", en: "the umbrella", cat: "Objetos" },
-    { es: "la manzana", en: "the apple", cat: "Comida" },
-    { es: "aunque", en: "although", cat: "Conectores" },
-    { es: "el vecino", en: "the neighbor", cat: "Personas" },
-    { es: "la cita", en: "the appointment", cat: "Vida diaria" },
-    { es: "cocinar", en: "to cook", cat: "Verbos" },
-    { es: "el ayuntamiento", en: "the city hall", cat: "Lugares" },
-    { es: "sin embargo", en: "however", cat: "Conectores" },
-    { es: "la almohada", en: "the pillow", cat: "Casa" },
-    { es: "extrañar", en: "to miss (someone)", cat: "Verbos" },
-    { es: "el semáforo", en: "the traffic light", cat: "Lugares" },
-    { es: "la propina", en: "the tip (gratuity)", cat: "Vida diaria" },
-    { es: "el equipaje", en: "the luggage", cat: "Viajes" },
-    { es: "atrasado", en: "late / behind schedule", cat: "Tiempo" },
-    { es: "la fábrica", en: "the factory", cat: "Lugares" },
-    { es: "el bosque", en: "the forest", cat: "Naturaleza" },
-    { es: "envolver", en: "to wrap", cat: "Verbos" },
-    { es: "el anillo", en: "the ring", cat: "Objetos" },
-    { es: "la orilla", en: "the shore / riverbank", cat: "Naturaleza" },
-    { es: "el sueldo", en: "the salary", cat: "Trabajo" },
-    { es: "acostumbrarse", en: "to get used to", cat: "Verbos" },
-    { es: "la mudanza", en: "the move (relocation)", cat: "Vida diaria" },
-    { es: "el rincón", en: "the corner (of a room)", cat: "Casa" },
-    { es: "la multa", en: "the fine (penalty)", cat: "Vida diaria" },
-    { es: "de repente", en: "suddenly", cat: "Conectores" },
-    { es: "el techo", en: "the roof / ceiling", cat: "Casa" },
-    { es: "el desafío", en: "the challenge", cat: "Ideas" },
-    { es: "reunirse", en: "to meet up", cat: "Verbos" },
-    { es: "la niñez", en: "childhood", cat: "Vida" },
-    { es: "el peatón", en: "the pedestrian", cat: "Lugares" }
-  ];
+const GENERAL_NOTES = {
+    "yo": { note: "Subject pronoun for \"I\". Common English-speaker mistake: because English always needs a subject (\"I am\", \"I go\"), learners keep typing \"yo\" in front of every verb out of habit. In Spanish the verb ending already tells you who's acting (\"soy\" can only mean \"I am\"), so \"yo\" is normally dropped and only added for emphasis or contrast.",
+      compare: [ { word: "tú", note: "Used instead when speaking to one person informally — the verb ending changes to match." },
+                 { word: "nosotros", note: "Used instead when \"we\" (the speaker plus others) share the action — the verb takes a nosotros ending." } ] },
+    "tú": { note: "Subject pronoun for \"you\" (informal, singular). Common mistake: English has one word \"you\" for everyone, so English speakers often use \"tú\" with strangers, elders, or bosses without realizing Spanish forces a formality choice that English doesn't have.",
+      compare: [ { word: "usted", note: "The formal \"you\" — used with strangers, elders, or in professional settings; takes the same verb form as él/ella." },
+                 { word: "vosotros", note: "The informal \"you all\" used in Spain (not Latin America) — takes a different verb ending." } ] },
+    "él": { note: "Subject pronoun for \"he\". Like all Spanish subject pronouns, it's usually optional since the verb ending already signals a third-person subject — English speakers tend to include it every time out of habit.",
+      compare: [ { word: "ella", note: "Used instead for \"she\" — same verb form, different subject." },
+                 { word: "ellos", note: "Used instead for \"they\" (masculine or mixed) — the verb takes a plural ending." } ] },
+    "ella": { note: "Subject pronoun for \"she\". Often dropped in natural Spanish once the subject is clear from context — over-including it is a common tell of a direct English-to-Spanish translation.",
+      compare: [ { word: "él", note: "Used instead for \"he\" — same verb form." },
+                 { word: "ellas", note: "Used instead for \"they\" (an all-female group) — the verb takes a plural ending." } ] },
+    "ellos": { note: "Subject pronoun for \"they\" (masculine or mixed group). Common mistake: English speakers assume \"ellos\" only means \"they\" the way English does, but forget it's also the default for any mixed-gender group, even a group of 99 women and 1 man.",
+      compare: [ { word: "ellas", note: "Used instead when everyone in the group is female." },
+                 { word: "nosotros", note: "Used instead if the speaker is also part of the group (\"we\")." } ] },
+    "ellas": { note: "Subject pronoun for \"they\" (an all-female group). Unlike English \"they,\" Spanish forces you to track gender here — a single male in the group flips it to \"ellos.\"",
+      compare: [ { word: "ellos", note: "Used instead if the group includes at least one male." },
+                 { word: "ella", note: "Used instead for a single woman." } ] },
+    "nosotros": { note: "Subject pronoun for \"we.\" Also usually optional, since the -mos verb ending already marks \"we\" — English speakers tend to add it anyway because English can't drop its subject.",
+      compare: [ { word: "yo", note: "Used instead if only the speaker is involved, not a group." },
+                 { word: "ellos", note: "Used instead if the speaker is describing others, not including themselves." } ] },
+    "usted": { note: "The formal \"you\" (singular) — takes the same verb form as él/ella. Common mistake: English speakers often forget \"usted\" exists at all, since English collapses formal and informal \"you\" into one word.",
+      compare: [ { word: "tú", note: "The informal \"you\" — used with friends, family, or peers." },
+                 { word: "ustedes", note: "The plural \"you all\" (formal or, in Latin America, general)." } ] },
+    "me": { note: "Object pronoun meaning \"me/myself.\" Common mistake: English speakers place object pronouns after the verb (\"He lent me...\"), but Spanish puts them before the conjugated verb (\"Me prestó...\") — putting \"me\" after the verb here is one of the most frequent word-order errors for English speakers.",
+      compare: [ { word: "te", note: "Used instead when \"you\" (informal) are affected." },
+                 { word: "se", note: "Used instead for a third-person subject affecting themselves, or as the required form before lo/la/los/las." } ] },
+    "te": { note: "Object pronoun meaning \"you\" (informal). Common mistake: like all Spanish object pronouns, it goes before the conjugated verb, the reverse of English word order (\"I see you\" → \"Te veo,\" literally \"you I-see\").",
+      compare: [ { word: "me", note: "Used instead when the speaker themself is affected." },
+                 { word: "le", note: "Used instead for a third-person indirect object (\"to him/her\")." } ] },
+    "le": { note: "Indirect object pronoun meaning \"to him/her/you(formal).\" Common mistake: English uses the same word (\"him\") whether he's the direct object (\"I see him\") or the indirect object (\"I gave him money\"), so English speakers often reach for \"lo\" here by habit. Spanish keeps the two separate: \"lo\" for direct objects, \"le\" for indirect ones.",
+      compare: [ { word: "les", note: "Used instead when there's more than one receiver (\"to them\")." },
+                 { word: "se", note: "Used instead automatically whenever \"le\" would sit right before lo/la/los/las." } ] },
+    "les": { note: "Indirect object pronoun meaning \"to them/you all\" — plural receiver. Same English-speaker trap as \"le\": English's \"them\" doesn't distinguish direct from indirect, but Spanish requires \"les\" specifically for the receiver of an action, not the thing acted on.",
+      compare: [ { word: "le", note: "Used instead for a single receiver." },
+                 { word: "se", note: "Used instead automatically whenever \"les\" would sit right before lo/la/los/las." } ] },
+    "lo": { note: "Direct object pronoun for a masculine singular thing/person, or a neutral idea (\"it\"). Common mistake: English speakers often skip the pronoun entirely (just saying \"tengo\" for \"I have it\") because English can sometimes imply the object from context — Spanish almost always needs \"lo\" stated.",
+      compare: [ { word: "la", note: "Used instead for a feminine singular direct object." },
+                 { word: "los", note: "Used instead for a masculine plural direct object." } ] },
+    "la": { note: "Direct object pronoun for a feminine singular thing/person (\"it/her\"). Placed before a noun instead, it's simply the feminine \"the.\" Common mistake: English has no gender on \"it,\" so English speakers have to consciously track whether the noun being replaced is masculine or feminine — there's no shortcut, it has to be memorized with the noun.",
+      compare: [ { word: "lo", note: "Used instead for a masculine singular direct object." },
+                 { word: "las", note: "Used instead for a feminine plural direct object." } ] },
+    "los": { note: "Direct object pronoun for a masculine (or mixed) plural group (\"them\"). Placed before a noun instead, it's the masculine plural \"the.\" Common mistake: English \"them\" is gender-neutral, so English speakers forget Spanish forces a gender choice even for groups of things, not just people.",
+      compare: [ { word: "las", note: "Used instead for an all-feminine plural group." },
+                 { word: "lo", note: "Used instead for one single masculine thing." } ] },
+    "las": { note: "Direct object pronoun for a feminine plural group (\"them\"). Placed before a noun instead, it's the feminine plural \"the.\" Same trap as \"los\": English's genderless \"them\" hides a distinction Spanish always makes.",
+      compare: [ { word: "los", note: "Used instead for a masculine or mixed plural group." },
+                 { word: "la", note: "Used instead for one single feminine thing." } ] },
+    "se": { note: "Either a reflexive pronoun (the subject acting on themselves) or the required replacement for \"le/les\" right before lo/la/los/las. Common mistake: English speakers often try to say \"le lo\" by direct translation of \"to him it\" — Spanish never allows those two pronouns next to each other and swaps the first one to \"se\" instead, which feels unintuitive coming from English.",
+      compare: [ { word: "le", note: "The word \"se\" replaces this exact word whenever it would otherwise sit directly before a direct object pronoun." },
+                 { word: "me", note: "Used instead for a first-person reflexive action (\"myself\")." } ] },
+    "el": { note: "Masculine singular \"the\" — signals the noun that follows is masculine and singular. Common mistake: English's single, genderless \"the\" gives learners nothing to lean on here — Spanish gender mostly has to be memorized noun by noun, not guessed from meaning.",
+      compare: [ { word: "la", note: "Used instead before a feminine singular noun." },
+                 { word: "los", note: "Used instead before a masculine plural noun." } ] },
+    "la ": { note: "Feminine singular \"the.\"", compare: [] },
+    "los ": { note: "Masculine plural \"the.\"", compare: [] },
+    "un": { note: "Masculine singular \"a/an\" — introduces a nonspecific masculine singular noun. Same gender-agreement habit English speakers have to build, since \"a/an\" carries no gender in English.",
+      compare: [ { word: "una", note: "Used instead before a feminine singular noun." },
+                 { word: "unos", note: "Used instead before a masculine plural noun (\"some\")." } ] },
+    "una": { note: "Feminine singular \"a/an.\" Requires matching every adjective and article around the noun to feminine too — a whole agreement chain English doesn't have.",
+      compare: [ { word: "un", note: "Used instead before a masculine singular noun." },
+                 { word: "unas", note: "Used instead before a feminine plural noun (\"some\")." } ] },
+    "que": { note: "Connects a main clause to a dependent clause — often exactly where the subjunctive kicks in after expressions of wish, doubt, or emotion. Common mistake: English marks this kind of clause with normal-looking verbs (\"I hope that you ARE happy\"), so English speakers often don't realize Spanish requires a distinct subjunctive verb form right after \"que\" in these cases, since English doesn't mark this mood clearly.",
+      compare: [ { word: "si", note: "Used instead to mean \"if,\" setting up a condition rather than linking two clauses." },
+                 { word: "porque", note: "Used instead to give a reason (\"because\") rather than introduce a dependent clause." } ] },
+    "no": { note: "Negates the verb that follows. Common mistake: English grammar-school rules say \"don't use a double negative,\" but standard Spanish requires it — \"no veo a nadie\" (literally \"I don't see nobody\") is correct, and English speakers often wrongly drop the \"no\" to avoid what feels like a double negative.",
+      compare: [ { word: "nunca", note: "A stronger negation meaning \"never.\"" },
+                 { word: "tampoco", note: "Used instead to mean \"neither/not either,\" agreeing with a previous negative." } ] },
+    "a": { note: "A preposition with a few jobs: marking a person as a direct object (the \"personal a\"), introducing a destination, or marking an indirect-object phrase like \"a mi abuela.\" Common mistake: the personal \"a\" (as in \"Vi a mis amigos\") has no equivalent word in English at all, so English speakers routinely forget it before a specific person.",
+      compare: [ { word: "de", note: "Used instead to show possession, origin, or \"of.\"" },
+                 { word: "en", note: "Used instead to show static location \"in/on/at.\"" } ] },
+    "de": { note: "Preposition meaning \"of/from\" — shows possession, origin, or connects two nouns. Common mistake: English shows possession by re-ordering words (\"Juan's book\"), while Spanish always uses \"de\" plus normal word order (\"el libro de Juan\") — English speakers often try to invert the noun order instead.",
+      compare: [ { word: "a", note: "Used instead to mark a destination or indirect object." },
+                 { word: "con", note: "Used instead to mean \"with.\"" } ] },
+    "en": { note: "Preposition meaning \"in/on/at\" — marks location or time. Common mistake: English has three separate words (in/on/at) for ideas Spanish often folds into just \"en,\" so English speakers overthink which one to use instead of defaulting to \"en\" for static location.",
+      compare: [ { word: "a", note: "Used instead for direction/destination rather than a static location." },
+                 { word: "de", note: "Used instead to show origin (\"from\")." } ] },
+    "para": { note: "Preposition often meaning \"for/in order to\" — points toward purpose, destination, or a deadline. Common mistake: English speakers use \"for\" for almost everything, then default to \"para\" for all of it in Spanish, when many of those cases (cause, exchange, duration) actually need \"por\" instead.",
+      compare: [ { word: "por", note: "Used instead for cause, exchange, or \"through/by\" rather than purpose or deadline." },
+                 { word: "a", note: "Used instead simply to mark a destination without the sense of purpose." } ] },
+    "por": { note: "Preposition often meaning \"because of/through/by/in exchange for.\" Common mistake: since English's \"for\" covers both \"por\" and \"para,\" English speakers frequently swap the two — a classic tell is saying \"para\" when the sentence is really about a cause or reason, which needs \"por.\"",
+      compare: [ { word: "para", note: "Used instead for purpose, destination, or a deadline, not cause or exchange." },
+                 { word: "a", note: "Used instead simply to mark a destination." } ] },
+    "porque": { note: "\"Because\" — introduces a reason. Common mistake: don't confuse it with \"por qué\" (two words, with an accent), which means \"why?\" — English's single spelling of \"because/why\" word families doesn't map cleanly onto this split.",
+      compare: [ { word: "que", note: "Used instead just to link a main clause to a dependent one, without giving a reason." },
+                 { word: "si", note: "Used instead to mean \"if,\" not \"because.\"" } ] },
+    "si": { note: "\"If\" — sets up a condition. Common mistake: don't confuse it with \"sí\" (with an accent), meaning \"yes\" — easy to mix up since English doesn't use accents to separate word meanings this way.",
+      compare: [ { word: "que", note: "Used instead to link a main clause to a dependent one, not to set a condition." },
+                 { word: "cuando", note: "Used instead to mean \"when,\" a time condition rather than an if-condition." } ] },
+    "ayer": { note: "\"Yesterday\" — a finished-time marker that almost always calls for the preterite tense. Common mistake: English speakers often default to whichever past tense they learned first (usually the preterite-like form), without registering that Spanish uses \"ayer\" as a strong signal specifically for the preterite over the imperfect.",
+      compare: [ { word: "mañana", note: "\"Tomorrow\" — points to the future tense instead." },
+                 { word: "antes", note: "\"Before/in the past generally\" — points to the imperfect for ongoing or repeated past instead." } ] },
+    "mañana": { note: "\"Tomorrow\" — a future-time marker, cueing the future tense (or present tense used with future meaning). Common mistake: English speakers often reach for the grammatical future (\"will\") automatically, when natural spoken Spanish frequently just uses the present tense here instead, similar to English \"I'm leaving tomorrow.\"",
+      compare: [ { word: "ayer", note: "\"Yesterday\" — points to the preterite instead." },
+                 { word: "hoy", note: "\"Today\" — points to the present tense instead." } ] },
+    "hoy": { note: "\"Today\" — usually paired with the present tense.",
+      compare: [ { word: "ayer", note: "\"Yesterday\" — points to the preterite instead." },
+                 { word: "mañana", note: "\"Tomorrow\" — points to the future instead." } ] },
+    "cuando": { note: "\"When\" — often introduces the background action in a past narrative, which is why the imperfect frequently appears nearby. Common mistake: English uses one general past tense after \"when,\" so English speakers often pick just one Spanish past tense for both clauses, missing that Spanish distinguishes the interrupting action (preterite) from the ongoing background (imperfect).",
+      compare: [ { word: "mientras", note: "\"While\" — also frames a background action, often with the imperfect on both sides." },
+                 { word: "después", note: "\"After\" — signals sequence rather than a simultaneous background action." } ] },
+    "ya": { note: "\"Already\" — often signals an action completed before another point in time, common with the pluperfect or preterite. Common mistake: English speakers often skip words like \"ya\" since English relies more on tense alone to show completion — in Spanish, \"ya\" reinforces the sense of \"already done\" that the verb tense is also carrying.",
+      compare: [ { word: "todavía", note: "\"Still/yet\" — often pairs with negation to say something hasn't happened." },
+                 { word: "siempre", note: "\"Always\" — signals a habitual action, often paired with the imperfect." } ] },
+    "antes": { note: "\"Before/in the past, generally\" — a background-time cue that often calls for the imperfect.",
+      compare: [ { word: "ayer", note: "\"Yesterday\" — a single finished day, which points to the preterite instead." },
+                 { word: "después", note: "\"Afterward\" — signals what came next rather than a prior backdrop." } ] },
+    "sí": { note: "\"Yes\" — confirms the question that was just asked. Note the accent mark: without it, \"si\" means \"if\" instead — a distinction English spelling doesn't have.",
+      compare: [ { word: "no", note: "Used instead to give a negative answer." },
+                 { word: "claro", note: "\"Of course\" — a more emphatic way to agree." } ] },
+    "aquí": { note: "\"Here\" — marks the location of the object being discussed.",
+      compare: [ { word: "allí", note: "\"There\" — marks a location farther from the speaker." },
+                 { word: "ahora", note: "\"Now\" — marks time instead of place." } ] },
+};
 
-  const scoreEl = document.getElementById("score");
-  const streakEl = document.getElementById("streak");
-  const bestEl = document.getElementById("best");
-  const categoryEl = document.getElementById("category");
-  const promptEl = document.getElementById("prompt");
-  const promptSubEl = document.getElementById("promptSub");
-  const optionsEl = document.getElementById("options");
-  const feedbackEl = document.getElementById("feedback");
-  const nextBtn = document.getElementById("nextBtn");
-  const speakBtn = document.getElementById("speakBtn");
-  const progressEl = document.getElementById("progress");
+  const ITEMS = [
+    // ---------------- SER ----------------
+    { topic: "Ser · presente", sentence: "Yo ___ estudiante de medicina.", answer: "soy", options: ["soy", "eres", "es", "somos"],
+      translation: "I am a medical student.",
+      compare: [ { word: "eres", note: "The tú-form — used when talking about someone else's identity, not your own." },
+                 { word: "es", note: "The él/ella-form — used for a third person's identity." } ],
+      notes: { "__blank__": "\"Soy\" is the yo-form of ser in the present tense. Ser is used here because being a student is a lasting identity, not a temporary state. Common mistake: English has only one verb \"to be,\" so English speakers often can't tell ser and estar apart at first \u2014 as a rule of thumb, ser is for identity, and estar (below) is for temporary conditions.",
+        "estudiante": "The noun the sentence identifies the subject as — this is what ser is linking \"yo\" to.",
+        "medicina": "Names the field of study, giving detail to \"estudiante.\"" } },
+    { topic: "Ser · subjuntivo", sentence: "Espero que tú ___ feliz en tu nuevo trabajo.", answer: "seas", options: ["seas", "eres", "sea", "fueras"],
+      translation: "I hope you are happy in your new job.",
+      compare: [ { word: "eres", note: "The indicative tú-form — used for a plain fact, not a wish." },
+                 { word: "sea", note: "The subjunctive form for someone else (él/ella/usted), not \"tú.\"" } ],
+      notes: { "espero": "A verb of hope/wish. Wishing something onto someone else triggers the subjunctive mood in the clause that follows.",
+        "__blank__": "\"Seas\" is the tú-form of the present subjunctive of ser, required because \"espero que\" expresses a wish, not a fact. Common mistake: English doesn't change the verb form after \"I hope that...\" (\"I hope you ARE happy\" looks just like a normal statement), so English speakers often use the regular indicative \"eres\" here instead of switching to \"seas.\"",
+        "feliz": "The adjective describing the wished-for state — it doesn't change the mood itself, but is what's being wished.",
+        "nuevo": "\"New\" — describes the job; agrees in gender/number with \"trabajo.\"",
+        "trabajo": "The noun being described — masculine singular, matching \"tu\" and \"nuevo.\"" } },
+    { topic: "Ser · pretérito", sentence: "Ayer ___ un día muy difícil.", answer: "fue", options: ["fue", "era", "fuera", "es"],
+      translation: "Yesterday was a very difficult day.",
+      compare: [ { word: "era", note: "The imperfect — would describe an ongoing quality instead of narrating one finished day." },
+                 { word: "es", note: "The present — would describe the day as happening right now." } ],
+      notes: { "__blank__": "\"Fue\" is the preterite of ser, used because the day is being described as a completed whole, not an ongoing state.",
+        "muy": "Intensifies \"difícil\" — doesn't affect the verb tense itself.",
+        "difícil": "The adjective describing the day, linked to it by \"fue.\"" } },
+    { topic: "Ser · imperfecto", sentence: "De pequeña, mi hermana ___ muy tímida.", answer: "era", options: ["era", "fue", "es", "sea"],
+      translation: "As a little girl, my sister was very shy.",
+      compare: [ { word: "fue", note: "The preterite — would treat the shyness as a single finished event instead of an ongoing trait." },
+                 { word: "es", note: "The present — would describe her as shy right now, not in the past." } ],
+      notes: { "de": "Here part of \"de pequeña,\" a set phrase meaning \"as a little girl.\"",
+        "pequeña": "\"Little/young\" — together with \"de,\" sets up a background description in the past, a cue for the imperfect.",
+        "mi": "Possessive \"my,\" showing whose sister is being described.",
+        "hermana": "The subject of the sentence — feminine singular, matching \"tímida.\"",
+        "__blank__": "\"Era\" is the imperfect of ser, used for ongoing traits or states in the past rather than a single completed event.",
+        "tímida": "The adjective describing the sister — feminine to agree with \"hermana.\"" } },
+    { topic: "Ser · futuro", sentence: "Mañana ___ el cumpleaños de mi hermana.", answer: "será", options: ["será", "es", "fue", "sea"],
+      translation: "Tomorrow is my sister's birthday.",
+      compare: [ { word: "es", note: "The present — would say the birthday is happening today, in general." },
+                 { word: "fue", note: "The preterite — would place the birthday in the finished past." } ],
+      notes: { "__blank__": "\"Será\" is the future tense of ser (él/ella form), predicting a state that hasn't happened yet.",
+        "cumpleaños": "The subject being described — linked by \"será\" to \"mañana.\"",
+        "hermana": "The person whose birthday it is." } },
 
-  let order = [];
-  let idx = 0;
-  let score = 0;
-  let streak = 0;
-  let best = Number(localStorage.getItem("charlemos_best") || 0);
-  let current = null;
-  let answered = false;
+    // ---------------- ESTAR ----------------
+    { topic: "Estar · presente", sentence: "Ella ___ cansada después del viaje.", answer: "está", options: ["está", "es", "estaba", "esté"],
+      translation: "She is tired after the trip.",
+      compare: [ { word: "es", note: "Ser instead of estar — would wrongly suggest tiredness is a permanent trait rather than a temporary condition." },
+                 { word: "estaba", note: "The imperfect — would place her tiredness in the past instead of right now." } ],
+      notes: { "__blank__": "\"Está\" is the present tense of estar, chosen over ser because tiredness is a temporary condition, not a permanent trait. Common mistake: English speakers frequently default to ser out of habit (since English collapses ser/estar into one word, \"to be\"), producing the classic beginner error of treating a temporary condition like a permanent identity.",
+        "cansada": "The adjective describing her condition — feminine to agree with \"ella.\"",
+        "después": "\"After\" — shows the tiredness follows the trip in time.",
+        "viaje": "The trip that caused the tiredness." } },
+    { topic: "Estar · subjuntivo", sentence: "No creo que ellos ___ listos todavía.", answer: "estén", options: ["estén", "están", "estarán", "estaban"],
+      translation: "I don't think they're ready yet.",
+      compare: [ { word: "están", note: "The indicative — used for a plain fact, not doubt." },
+                 { word: "estaban", note: "The imperfect — would describe a past ongoing state instead of doubt about now." } ],
+      notes: { "no": "Negating \"creo\" (I believe) turns it into doubt, which is what actually triggers the subjunctive.",
+        "creo": "\"I think/believe\" — negated, it expresses doubt rather than certainty.",
+        "que": "Marks the start of the doubted clause.",
+        "__blank__": "\"Estén\" is the present subjunctive of estar, required because the speaker is expressing doubt rather than a fact. Common mistake: English marks doubt with words alone (\"I don't think they're ready\"), not a special verb form, so English speakers often leave the verb in its normal indicative shape instead of shifting to the subjunctive \"estén.\"",
+        "todavía": "\"Yet/still\" — often pairs with negative or doubtful statements." } },
+    { topic: "Estar · pretérito", sentence: "Nosotros ___ en la playa ayer.", answer: "estuvimos", options: ["estuvimos", "estamos", "estábamos", "estaremos"],
+      translation: "We were at the beach yesterday.",
+      compare: [ { word: "estábamos", note: "The imperfect — would describe an ongoing stay rather than a completed one-day visit." },
+                 { word: "estaremos", note: "The future — would place the beach trip ahead in time." } ],
+      notes: { "__blank__": "\"Estuvimos\" is the irregular preterite of estar (nosotros form) — it describes being somewhere for a completed stretch of time.",
+        "playa": "The location — combined with \"en,\" tells us where they were.",
+        "ayer": "Finished-time marker signaling the preterite." } },
+    { topic: "Estar · imperfecto", sentence: "Cuando llegamos, ella ya ___ dormida.", answer: "estaba", options: ["estaba", "estuvo", "está", "esté"],
+      translation: "When we arrived, she was already asleep.",
+      compare: [ { word: "estuvo", note: "The preterite — would treat her being asleep as a completed single event rather than an ongoing state." },
+                 { word: "está", note: "The present — would describe her as asleep right now, not at that past moment." } ],
+      notes: { "cuando": "\"When\" — introduces the interrupting action (arriving) against the ongoing background state.",
+        "llegamos": "\"We arrived\" — a single completed action that interrupts the ongoing state described by the blank.",
+        "ya": "\"Already\" reinforces that her being asleep was in progress before the arrival.",
+        "__blank__": "\"Estaba\" is the imperfect of estar, describing a state already underway when the other action happened.",
+        "dormida": "The state being described — feminine to agree with \"ella.\"" } },
+    { topic: "Estar · futuro", sentence: "El próximo mes, nosotros ___ en México.", answer: "estaremos", options: ["estaremos", "estamos", "estuvimos", "estemos"],
+      translation: "Next month we'll be in Mexico.",
+      compare: [ { word: "estamos", note: "The present — would say we are in Mexico right now." },
+                 { word: "estuvimos", note: "The preterite — would say we already were in Mexico." } ],
+      notes: { "próximo": "\"Next\" — together with \"mes,\" sets a future-time marker that cues the future tense.",
+        "mes": "\"Month\" — the unit of time being referenced.",
+        "__blank__": "\"Estaremos\" is the future tense of estar (nosotros form), used for a planned temporary location." } },
 
-  bestEl.textContent = best;
+    // ---------------- TENER ----------------
+    { topic: "Tener · presente", sentence: "Yo ___ dos hermanos mayores.", answer: "tengo", options: ["tengo", "tienes", "tuve", "tenga"],
+      translation: "I have two older siblings.",
+      compare: [ { word: "tienes", note: "The tú-form — used when talking about someone else's siblings." },
+                 { word: "tuve", note: "The preterite — would say I had siblings at some point, oddly implying I no longer do." } ],
+      notes: { "__blank__": "\"Tengo\" is the irregular yo-form of tener in the present — note the g that appears only in this form.",
+        "dos": "The number of siblings — doesn't affect the verb.",
+        "hermanos": "The noun being counted and possessed.",
+        "mayores": "\"Older\" — describes the siblings." } },
+    { topic: "Tener · subjuntivo", sentence: "Ojalá que ___ tiempo mañana.", answer: "tengas", options: ["tengas", "tienes", "tendrás", "tuvieras"],
+      translation: "I hope you have time tomorrow.",
+      compare: [ { word: "tienes", note: "The indicative — used for a plain statement, not a hope." },
+                 { word: "tendrás", note: "The future indicative — a confident prediction rather than a wish." } ],
+      notes: { "ojalá": "Expresses a wish (\"I hope/if only\") — always followed by the subjunctive in Spanish.",
+        "__blank__": "\"Tengas\" is the tú-form present subjunctive of tener, required after \"ojalá que.\" Common mistake: \"ojalá\" has no direct English equivalent (it comes from Arabic, roughly \"God willing\"), and English speakers often don't realize it always forces the subjunctive, unlike the closest English phrase \"I hope.\"",
+        "tiempo": "The thing being wished for — \"time.\"",
+        "mañana": "\"Tomorrow\" — the day the wish concerns." } },
+    { topic: "Tener · pretérito", sentence: "Ellos ___ un accidente el año pasado.", answer: "tuvieron", options: ["tuvieron", "tienen", "tenían", "tendrán"],
+      translation: "They had an accident last year.",
+      compare: [ { word: "tenían", note: "The imperfect — would describe an ongoing/repeated situation instead of one accident." },
+                 { word: "tendrán", note: "The future — would place the accident ahead in time." } ],
+      notes: { "__blank__": "\"Tuvieron\" is the irregular preterite of tener (ellos form), describing a one-time completed event.",
+        "accidente": "The event that happened to them.",
+        "año": "Part of \"el año pasado,\" the finished-time marker.",
+        "pasado": "\"Past/last\" — together with \"año,\" cues the preterite." } },
+    { topic: "Tener · imperfecto", sentence: "De niña, yo ___ un perro llamado Max.", answer: "tenía", options: ["tenía", "tuve", "tengo", "tenga"],
+      translation: "As a child, I had a dog named Max.",
+      compare: [ { word: "tuve", note: "The preterite — would frame getting the dog as a single completed moment rather than an ongoing childhood fact." },
+                 { word: "tengo", note: "The present — would say I have the dog now." } ],
+      notes: { "de": "Part of \"de niña,\" meaning \"as a child.\"",
+        "niña": "\"Girl/child\" — sets a background period in the past, a cue for the imperfect.",
+        "__blank__": "\"Tenía\" is the imperfect of tener, used for a possession that lasted over time in the past.",
+        "perro": "What was possessed.",
+        "llamado": "\"Named\" — introduces the dog's name.",
+        "max": "The dog's name." } },
+    { topic: "Tener · futuro", sentence: "El sábado nosotros ___ una fiesta grande.", answer: "tendremos", options: ["tendremos", "tenemos", "tuvimos", "tengamos"],
+      translation: "On Saturday we'll have a big party.",
+      compare: [ { word: "tenemos", note: "The present — would say the party is happening now/every Saturday in general." },
+                 { word: "tuvimos", note: "The preterite — would say the party already happened." } ],
+      notes: { "sábado": "Names a specific future day, cueing the future tense.",
+        "__blank__": "\"Tendremos\" is the irregular future stem (tendr-) plus the nosotros ending.",
+        "fiesta": "The event being held.",
+        "grande": "\"Big\" — describes the party." } },
 
-  function shuffle(arr) {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
+    // ---------------- HACER ----------------
+    { topic: "Hacer · presente", sentence: "¿Qué ___ tú los fines de semana?", answer: "haces", options: ["haces", "hiciste", "harás", "hagas"],
+      translation: "What do you do on weekends?",
+      compare: [ { word: "hiciste", note: "The preterite — would ask what you did on one specific past weekend." },
+                 { word: "harás", note: "The future — would ask what you will do on an upcoming weekend." } ],
+      notes: { "qué": "\"What\" — the question word being answered.",
+        "__blank__": "\"Haces\" is the tú-form of hacer in the present, used here for a general habit.",
+        "fines": "Part of \"los fines de semana,\" meaning \"weekends.\"",
+        "semana": "\"Week\" — combined with \"fines de,\" gives \"weekends,\" a repeated/habitual time expression fitting the present tense." } },
+    { topic: "Hacer · subjuntivo", sentence: "Es importante que ___ la tarea hoy.", answer: "hagas", options: ["hagas", "haces", "harás", "hicieras"],
+      translation: "It's important that you do the homework today.",
+      compare: [ { word: "haces", note: "The indicative — a plain statement of fact rather than a necessity." },
+                 { word: "hicieras", note: "The imperfect subjunctive — used for past or hypothetical situations, not a present obligation." } ],
+      notes: { "es": "Part of the impersonal expression \"es importante,\" which triggers the subjunctive in the clause that follows.",
+        "importante": "\"Important\" — the necessity being expressed.",
+        "__blank__": "\"Hagas\" is the tú-form present subjunctive of hacer (irregular stem hag-), required after \"es importante que.\" Common mistake: impersonal expressions like \"es importante que\" don't look like wish/doubt words in English, so this is one of the subjunctive triggers English speakers most often miss.",
+        "tarea": "The thing that needs doing.",
+        "hoy": "\"Today\" — the deadline for the action." } },
+    { topic: "Hacer · pretérito", sentence: "Ayer ___ la cena para toda la familia.", answer: "hice", options: ["hice", "hago", "hacía", "haré"],
+      translation: "Yesterday I made dinner for the whole family.",
+      compare: [ { word: "hago", note: "The present — would say I'm making dinner right now/in general." },
+                 { word: "hacía", note: "The imperfect — would describe an ongoing/repeated habit of cooking rather than one specific dinner." } ],
+      notes: { "ayer": "Finished-time marker, cueing the preterite.",
+        "__blank__": "\"Hice\" is the irregular yo-form preterite of hacer, describing one completed act of cooking.",
+        "cena": "What was made — dinner.",
+        "toda": "\"Whole/entire\" — emphasizes the family was all included.",
+        "familia": "Who the dinner was for." } },
+    { topic: "Hacer · imperfecto", sentence: "Cuando era joven, ___ mucho ejercicio.", answer: "hacía", options: ["hacía", "hice", "hago", "haga"],
+      translation: "When I was young, I used to exercise a lot.",
+      compare: [ { word: "hice", note: "The preterite — would treat exercising as one completed event rather than a habit." },
+                 { word: "hago", note: "The present — would describe a current habit, not a past one." } ],
+      notes: { "cuando": "\"When\" — here framing an extended period rather than a single interrupting moment.",
+        "era": "Imperfect of ser, describing the ongoing state of being young.",
+        "joven": "\"Young\" — the trait being described.",
+        "__blank__": "\"Hacía\" is the imperfect of hacer, used for a repeated/habitual action over that period (\"used to exercise\").",
+        "mucho": "\"A lot\" — describes the amount of exercise.",
+        "ejercicio": "The activity being done." } },
+    { topic: "Hacer · futuro", sentence: "Mañana ___ un viaje a la costa.", answer: "haremos", options: ["haremos", "hacemos", "hicimos", "hagamos"],
+      translation: "Tomorrow we'll take a trip to the coast.",
+      compare: [ { word: "hacemos", note: "The present — would say the trip is happening today/in general." },
+                 { word: "hicimos", note: "The preterite — would say the trip already happened." } ],
+      notes: { "mañana": "Future-time marker.",
+        "__blank__": "\"Haremos\" is the future tense of hacer (nosotros form), built on the irregular future stem har-.",
+        "viaje": "What will be taken — a trip.",
+        "costa": "Where the trip goes." } },
 
-  function pickChoices(correct) {
-    const pool = WORDS.filter(w => w.en !== correct.en);
-    const distractors = shuffle(pool).slice(0, 3).map(w => w.en);
-    return shuffle([correct.en, ...distractors]);
-  }
+    // ---------------- HABER ----------------
+    { topic: "Haber · pres. perfecto", sentence: "Yo ___ terminado el proyecto por fin.", answer: "he", options: ["he", "había", "haya", "habré"],
+      translation: "I have finally finished the project.",
+      compare: [ { word: "había", note: "The pluperfect auxiliary — would say I had finished it before some other past event." },
+                 { word: "habré", note: "The future perfect — would say I will have finished it by some future point." } ],
+      notes: { "__blank__": "\"He\" is the yo-form of haber used as an auxiliary, paired with the participle \"terminado\" to form the present perfect.",
+        "terminado": "The past participle — combined with a form of haber, it builds the present perfect (\"have finished\").",
+        "proyecto": "The thing finished.",
+        "fin": "Part of \"por fin,\" meaning \"finally.\"" } },
+    { topic: "Haber · subjuntivo", sentence: "Espero que ___ llegado bien a casa.", answer: "hayas", options: ["hayas", "has", "habías", "habrás"],
+      translation: "I hope you've arrived home okay.",
+      compare: [ { word: "has", note: "The indicative present perfect — a plain statement, not a hope." },
+                 { word: "habrás", note: "The future perfect — a confident prediction rather than a wish." } ],
+      notes: { "espero": "A wish expression, so the verb after it needs to be subjunctive — including compound tenses like this one.",
+        "que": "Introduces the wished-for clause.",
+        "__blank__": "\"Hayas\" is the tú-form present subjunctive of haber, used as the auxiliary for the present perfect subjunctive. Common mistake: English speakers often assume subjunctive rules only apply to simple tenses, and forget that compound tenses (built with haber) also need to switch to a subjunctive auxiliary after a trigger like \"espero que.\"",
+        "llegado": "Past participle of llegar — combined with \"hayas,\" means \"have arrived.\"",
+        "bien": "\"Well/okay\" — describes how the arrival went." } },
+    { topic: "Haber · pluscuamperfecto", sentence: "Cuando llegué a la fiesta, ella ya ___ salido.", answer: "había", options: ["había", "ha", "haya", "habrá"],
+      translation: "When I got to the party, she had already left.",
+      compare: [ { word: "ha", note: "The present perfect — would say she has left, up to now, rather than before another past event." },
+                 { word: "habrá", note: "The future perfect — would place her leaving in the future." } ],
+      notes: { "cuando": "\"When\" — sets one past action; the blank describes another action that happened even earlier.",
+        "llegué": "\"I arrived\" — the more recent of the two past actions.",
+        "ya": "\"Already\" reinforces that her leaving happened before the arrival.",
+        "__blank__": "\"Había\" is the imperfect of haber used as an auxiliary, forming the pluperfect (\"had left\") for an earlier past event.",
+        "salido": "Past participle of salir — combined with \"había,\" means \"had left.\"" } },
+    { topic: "Haber · futuro perfecto", sentence: "Para las ocho, ya ___ terminado la reunión.", answer: "habremos", options: ["habremos", "hemos", "habíamos", "hayamos"],
+      translation: "By eight, we'll have finished the meeting.",
+      compare: [ { word: "hemos", note: "The present perfect — would say the meeting is already finished as of now." },
+                 { word: "habíamos", note: "The pluperfect — would place the finishing before some other past moment." } ],
+      notes: { "para": "\"By\" — sets a future deadline.",
+        "ocho": "\"Eight\" — the deadline time.",
+        "ya": "\"Already\" — reinforces completion by the deadline.",
+        "__blank__": "\"Habremos\" is the future tense of haber (nosotros form), used as the auxiliary for the future perfect.",
+        "reunión": "What will be finished." } },
+    { topic: "Haber · impersonal", sentence: "___ mucha gente en la fiesta anoche.", answer: "Había", options: ["Había", "Hay", "Habrá", "Ha habido"],
+      translation: "There were a lot of people at the party last night.",
+      compare: [ { word: "Hay", note: "The present impersonal — would say there is a lot of people right now." },
+                 { word: "Habrá", note: "The future impersonal — would predict a lot of people at a future event." } ],
+      notes: { "__blank__": "\"Había\" is the impersonal imperfect of haber (\"there was/were\") — always singular no matter how many people, and used here to describe the scene.",
+        "mucha": "\"A lot of\" — feminine to agree with \"gente.\"",
+        "gente": "\"People\" — grammatically singular in Spanish, which is why \"mucha\" (not \"muchos\") is used.",
+        "anoche": "\"Last night\" places this in the past, so the impersonal \"hay\" needs a past form here." } },
 
-  function loadWord() {
-    answered = false;
-    feedbackEl.textContent = "";
-    feedbackEl.className = "feedback";
-    nextBtn.classList.remove("show");
+    // ---------------- DEJAR ----------------
+    { topic: "Dejar · presente", sentence: "Mi madre no me ___ salir de noche entre semana.", answer: "deja", options: ["deja", "dejó", "dejaba", "deje"],
+      translation: "My mom doesn't let me go out at night on weekdays.",
+      compare: [ { word: "dejó", note: "The preterite — would describe one specific occasion she didn't let you go out." },
+                 { word: "dejaba", note: "The imperfect — would describe a past, no-longer-true rule." } ],
+      notes: { "mi": "Possessive \"my.\"",
+        "madre": "The subject performing the action — third person singular, matching \"deja.\"",
+        "me": "Indirect object pronoun — I'm the one being (not) allowed to go out.",
+        "__blank__": "\"Deja\" is the present tense of dejar (\"to let/allow\"), describing her ongoing, general rule.",
+        "salir": "The infinitive action being permitted or not — \"to go out.\"",
+        "noche": "Part of \"de noche,\" meaning \"at night.\"",
+        "semana": "Part of \"entre semana,\" meaning \"on weekdays.\"" } },
+    { topic: "Dejar · subjuntivo", sentence: "Quiero que me ___ el libro que terminaste.", answer: "dejes", options: ["dejes", "dejas", "dejarás", "dejaste"],
+      translation: "I want you to lend me the book you finished.",
+      compare: [ { word: "dejas", note: "The indicative — a plain statement, not a request." },
+                 { word: "dejaste", note: "The preterite — would describe something you already lent, not something being requested." } ],
+      notes: { "quiero": "\"I want\" — wanting someone else to do something triggers the subjunctive.",
+        "que": "Introduces the wanted action.",
+        "me": "Indirect object pronoun — I'm the one receiving the book.",
+        "__blank__": "\"Dejes\" is the tú-form present subjunctive of dejar, required after \"quiero que.\" Common mistake: English uses an infinitive here (\"I want you TO lend me...\"), so English speakers often try to build a similar infinitive structure in Spanish (\"quiero que dejar\") instead of conjugating the subjunctive after \"que.\"",
+        "libro": "The thing being lent.",
+        "terminaste": "\"You finished\" — preterite, describing a completed reading in the past; this is a separate, already-established fact so it stays indicative." } },
+    { topic: "Dejar · pretérito", sentence: "Ella ___ su trabajo el mes pasado.", answer: "dejó", options: ["dejó", "deja", "dejaba", "dejará"],
+      translation: "She left her job last month.",
+      compare: [ { word: "deja", note: "The present — would say she's quitting her job right now/generally." },
+                 { word: "dejaba", note: "The imperfect — would describe a repeated or ongoing pattern instead of one event." } ],
+      notes: { "su": "Possessive \"her,\" referring to the job.",
+        "trabajo": "What was left — her job.",
+        "mes": "Part of \"el mes pasado,\" the finished-time marker.",
+        "pasado": "\"Last/past\" — cues the preterite.",
+        "__blank__": "\"Dejó\" is the preterite of dejar, describing one completed action of quitting." } },
+    { topic: "Dejar · imperfecto", sentence: "Antes, mis padres no me ___ ir solo al centro.", answer: "dejaban", options: ["dejaban", "dejaron", "dejan", "dejen"],
+      translation: "Before, my parents wouldn't let me go downtown alone.",
+      compare: [ { word: "dejaron", note: "The preterite — would treat it as one specific refusal rather than a standing rule." },
+                 { word: "dejan", note: "The present — would describe the rule as still true today." } ],
+      notes: { "antes": "\"Before/in the past\" — signals a repeated past rule, calling for the imperfect.",
+        "mis": "Possessive \"my,\" plural to match \"padres.\"",
+        "padres": "The subject — \"parents,\" plural, matching \"dejaban.\"",
+        "me": "Indirect object pronoun — I'm the one who wasn't allowed to go.",
+        "__blank__": "\"Dejaban\" is the imperfect of dejar (ellos form), used for a standing/repeated rule in the past.",
+        "solo": "\"Alone\" — describes how the trip would have been made.",
+        "centro": "Where the trip would have gone — downtown." } },
+    { topic: "Dejar · futuro", sentence: "___ de fumar el próximo año, lo prometo.", answer: "Dejaré", options: ["Dejaré", "Dejo", "Dejé", "Deje"],
+      translation: "I'll quit smoking next year, I promise.",
+      compare: [ { word: "Dejo", note: "The present — would say I'm quitting right now/generally." },
+                 { word: "Dejé", note: "The preterite — would say I already quit." } ],
+      notes: { "__blank__": "\"Dejaré\" is the future tense of dejar (yo form); \"dejar de + infinitive\" means \"to quit doing something.\"",
+        "fumar": "The habit being quit — smoking.",
+        "próximo": "\"Next\" — part of the future-time marker.",
+        "año": "\"Year\" — the future-time marker.",
+        "lo": "Direct object pronoun referring back to the whole idea/promise just stated.",
+        "prometo": "\"I promise\" — present tense, a simple statement about right now." } },
 
-    if (idx >= order.length) {
-      order = shuffle(WORDS);
-      idx = 0;
-    }
+    // ---------------- PODER ----------------
+    { topic: "Poder · presente", sentence: "Yo no ___ ir a la fiesta esta noche.", answer: "puedo", options: ["puedo", "pude", "podré", "pueda"],
+      translation: "I can't go to the party tonight.",
+      compare: [ { word: "pude", note: "The preterite — would say I couldn't (and tried and failed) at some point in the past." },
+                 { word: "podré", note: "The future — would place the inability in the future." } ],
+      notes: { "__blank__": "\"Puedo\" is the yo-form of poder in the present — note the o→ue stem change.",
+        "ir": "The infinitive action being made possible or not — \"to go.\"",
+        "fiesta": "Where the going would be to.",
+        "noche": "Part of \"esta noche,\" meaning \"tonight.\"" } },
+    { topic: "Poder · subjuntivo", sentence: "No creo que ___ venir hoy.", answer: "pueda", options: ["pueda", "puede", "podrá", "pudiera"],
+      translation: "I don't think he can come today.",
+      compare: [ { word: "puede", note: "The indicative — a plain statement, not a doubt." },
+                 { word: "pudiera", note: "The imperfect subjunctive — used for softer, more hypothetical doubt, often about the past." } ],
+      notes: { "no": "Negating \"creo\" turns belief into doubt, which triggers the subjunctive.",
+        "creo": "\"I think/believe,\" negated to express doubt.",
+        "que": "Introduces the doubted clause.",
+        "__blank__": "\"Pueda\" is the él-form present subjunctive of poder, keeping the o→ue stem change. Common mistake: English speakers often remember the stem change (puede) but forget it also has to carry over into the subjunctive ending, producing the plain indicative \"puede\" instead of \"pueda.\"",
+        "venir": "The infinitive action in question — \"to come.\"",
+        "hoy": "\"Today\" — when the coming would happen." } },
+    { topic: "Poder · pretérito", sentence: "Ayer no ___ dormir bien por el ruido.", answer: "pude", options: ["pude", "puedo", "podía", "podré"],
+      translation: "Yesterday I couldn't sleep well because of the noise.",
+      compare: [ { word: "podía", note: "The imperfect — would describe a general past ability rather than one specific failed attempt." },
+                 { word: "puedo", note: "The present — would say I can't right now." } ],
+      notes: { "ayer": "Finished-time marker, cueing the preterite.",
+        "__blank__": "\"Pude\" is the irregular preterite of poder (yo form) — in the preterite, \"no pude\" often means \"I tried and failed to.\"",
+        "dormir": "The infinitive action — \"to sleep.\"",
+        "ruido": "The cause of the problem — \"noise.\"" } },
+    { topic: "Poder · imperfecto", sentence: "De niño, ___ correr muy rápido.", answer: "podía", options: ["podía", "pude", "puedo", "pueda"],
+      translation: "As a kid, I could run very fast.",
+      compare: [ { word: "pude", note: "The preterite — would describe one specific instance rather than a general childhood ability." },
+                 { word: "puedo", note: "The present — would describe an ability I have now." } ],
+      notes: { "de": "Part of \"de niño,\" meaning \"as a child.\"",
+        "niño": "Sets the background period in the past — cue for the imperfect.",
+        "__blank__": "\"Podía\" is the imperfect of poder, describing a general ability over time rather than one event.",
+        "correr": "The infinitive action — \"to run.\"",
+        "rápido": "\"Fast\" — describes how the running was done." } },
+    { topic: "Poder · futuro", sentence: "Mañana ___ terminar el proyecto juntos.", answer: "podremos", options: ["podremos", "podemos", "pudimos", "podamos"],
+      translation: "Tomorrow we'll be able to finish the project together.",
+      compare: [ { word: "podemos", note: "The present — would say we're able to finish it now." },
+                 { word: "pudimos", note: "The preterite — would say we already managed to finish it." } ],
+      notes: { "mañana": "Future-time marker.",
+        "__blank__": "\"Podremos\" is the future tense of poder (nosotros form), built on the irregular stem podr-.",
+        "terminar": "The infinitive action made possible — \"to finish.\"",
+        "proyecto": "What will be finished.",
+        "juntos": "\"Together\" — describes how the action will happen, not the verb tense itself." } },
 
-    current = order[idx];
-    categoryEl.textContent = current.cat;
-    promptEl.textContent = current.es;
-    promptSubEl.textContent = "What does this mean in English?";
-    progressEl.textContent = `Word ${idx + 1} of ${WORDS.length} · looping`;
+    // ---------------- PARECER ----------------
+    { topic: "Parecer · presente", sentence: "Este plan me ___ excelente.", answer: "parece", options: ["parece", "pareció", "parecía", "parezca"],
+      translation: "This plan seems excellent to me.",
+      compare: [ { word: "pareció", note: "The preterite — would give a one-time verdict about the plan rather than an ongoing impression." },
+                 { word: "parecía", note: "The imperfect — would describe how the plan used to seem." } ],
+      notes: { "este": "\"This\" — points to the plan being discussed.",
+        "plan": "The subject doing the \"seeming\" — third person singular, matching \"parece.\"",
+        "me": "Indirect object pronoun — I'm the one it seems excellent to (parecer works like gustar).",
+        "__blank__": "\"Parece\" is the present tense of parecer (\"to seem\"), agreeing with \"este plan,\" the grammatical subject.",
+        "excelente": "The quality it seems to have." } },
+    { topic: "Parecer · subjuntivo", sentence: "No pienso que les ___ buena idea.", answer: "parezca", options: ["parezca", "parece", "parecerá", "pareciera"],
+      translation: "I don't think it will seem like a good idea to them.",
+      compare: [ { word: "parece", note: "The indicative — a plain statement, not a doubted opinion." },
+                 { word: "parecerá", note: "The future indicative — a confident prediction rather than a doubt." } ],
+      notes: { "no": "Negating \"pienso\" turns opinion into doubt, triggering the subjunctive.",
+        "pienso": "\"I think,\" negated to express doubt about an opinion.",
+        "que": "Introduces the doubted clause.",
+        "les": "Indirect object pronoun — \"to them,\" the people it may or may not seem like a good idea to.",
+        "__blank__": "\"Parezca\" is the present subjunctive of parecer (irregular stem parezc-), required after \"no pienso que.\" Common mistake: negated opinion verbs (\"no pienso/no creo que...\") are an easy subjunctive trigger to miss, since in English negating \"I think\" still doesn't change the verb that follows.",
+        "buena": "\"Good\" — feminine to agree with \"idea.\"",
+        "idea": "What it may or may not seem to be." } },
+    { topic: "Parecer · pretérito", sentence: "La película nos ___ aburrida.", answer: "pareció", options: ["pareció", "parece", "parecía", "parecerá"],
+      translation: "The movie seemed boring to us.",
+      compare: [ { word: "parece", note: "The present — would say the movie seems boring in general/now." },
+                 { word: "parecía", note: "The imperfect — would describe an ongoing impression rather than a one-time verdict." } ],
+      notes: { "película": "The subject doing the \"seeming.\"",
+        "nos": "Indirect object pronoun — \"to us,\" the ones it seemed boring to.",
+        "__blank__": "\"Pareció\" is the preterite of parecer, giving a one-time reaction/verdict about a specific movie.",
+        "aburrida": "The quality it seemed to have — feminine to agree with \"película.\"" } },
+    { topic: "Parecer · imperfecto", sentence: "De lejos, la casa ___ mucho más pequeña.", answer: "parecía", options: ["parecía", "pareció", "parece", "parezca"],
+      translation: "From a distance, the house looked much smaller.",
+      compare: [ { word: "pareció", note: "The preterite — would give a single, definite verdict rather than an ongoing visual impression." },
+                 { word: "parece", note: "The present — would describe how the house looks right now." } ],
+      notes: { "de": "Part of \"de lejos,\" meaning \"from a distance.\"",
+        "lejos": "\"Far\" — describes an ongoing viewing condition, a cue for the imperfect.",
+        "casa": "The subject doing the \"seeming.\"",
+        "__blank__": "\"Parecía\" is the imperfect of parecer, used for an ongoing visual impression rather than a single moment.",
+        "mucho": "Intensifies \"más pequeña.\"",
+        "más": "\"More,\" part of the comparison \"much smaller.\"",
+        "pequeña": "The quality perceived — feminine to agree with \"casa.\"" } },
+    { topic: "Parecer · futuro", sentence: "Sin duda, te ___ interesante este libro.", answer: "parecerá", options: ["parecerá", "parece", "pareció", "parezca"],
+      translation: "This book will surely seem interesting to you.",
+      compare: [ { word: "parece", note: "The present — would say the book seems interesting right now, in general." },
+                 { word: "pareció", note: "The preterite — would say it already seemed interesting at some point." } ],
+      notes: { "sin": "Part of \"sin duda,\" meaning \"without a doubt.\"",
+        "duda": "\"Doubt\" — \"sin duda\" signals a confident prediction, matching the future tense.",
+        "te": "Indirect object pronoun — \"to you,\" the person it will seem interesting to.",
+        "__blank__": "\"Parecerá\" is the future tense of parecer, agreeing with \"este libro,\" the grammatical subject.",
+        "interesante": "The quality it will seem to have.",
+        "libro": "The subject doing the \"seeming.\"" } },
 
-    const choices = pickChoices(current);
-    optionsEl.innerHTML = "";
-    choices.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "tile";
-      btn.type = "button";
-      btn.textContent = choice;
-      btn.addEventListener("click", () => handleAnswer(btn, choice));
-      optionsEl.appendChild(btn);
-    });
-  }
+    // ---------------- DIRECT OBJECT PRONOUNS ----------------
+    { topic: "Pronombres · objeto directo", sentence: "¿Tienes el libro? Sí, ___ tengo aquí.", answer: "lo", options: ["lo", "la", "los", "las"],
+      translation: "Do you have the book? Yes, I have it here.",
+      compare: [ { word: "la", note: "Would be used instead if the noun were feminine, like \"la revista.\"" },
+                 { word: "los", note: "Would be used instead if there were multiple masculine things, like \"los libros.\"" } ],
+      notes: { "tienes": "\"Do you have\" — present tense, asking about a current possession.",
+        "el": "Masculine singular \"the,\" showing \"libro\" is masculine and singular — which is exactly why \"lo\" (not \"la\") is correct.",
+        "libro": "The direct object being replaced — masculine singular, which determines the pronoun choice.",
+        "__blank__": "\"Lo\" is the direct object pronoun standing in for \"el libro\" — masculine and singular to match. Common mistake: English objects come after the verb (\"I have it\"), but Spanish object pronouns come before the conjugated verb (\"Lo tengo\") \u2014 putting \"lo\" after \"tengo\" is a frequent word-order slip.",
+        "tengo": "\"I have\" — the verb the pronoun attaches its meaning to." } },
+    { topic: "Pronombres · objeto directo", sentence: "¿Compraste la fruta? Sí, ___ compré esta mañana.", answer: "la", options: ["lo", "la", "los", "las"],
+      translation: "Did you buy the fruit? Yes, I bought it this morning.",
+      compare: [ { word: "lo", note: "Used instead for a masculine singular direct object, like \"el pan.\"" },
+                 { word: "las", note: "Used instead for multiple feminine things, like \"las frutas.\"" } ],
+      notes: { "compraste": "\"Did you buy\" — preterite, a completed purchase.",
+        "fruta": "The direct object being replaced — feminine singular, which determines the pronoun.",
+        "__blank__": "\"La\" is the direct object pronoun standing in for \"la fruta\" — feminine and singular to match. Common mistake: beyond the word-order shift (pronoun before the verb), English speakers also have to actively choose the gender here, since English \"it\" carries none.",
+        "esta": "\"This,\" feminine to agree with \"mañana.\"",
+        "mañana": "Here it means \"morning\" (not \"tomorrow\") — context tells the difference." } },
+    { topic: "Pronombres · objeto directo", sentence: "¿Viste a mis amigos? Sí, ___ vi ayer en el centro.", answer: "los", options: ["lo", "la", "los", "las"],
+      translation: "Did you see my friends? Yes, I saw them yesterday downtown.",
+      compare: [ { word: "las", note: "Would be used instead if the whole group were female." },
+                 { word: "lo", note: "Would be used instead for a single masculine person/thing." } ],
+      notes: { "viste": "\"Did you see\" — preterite.",
+        "a": "The \"personal a,\" required before a direct object that's a specific person.",
+        "amigos": "The direct object being replaced — masculine plural, which determines the pronoun.",
+        "__blank__": "\"Los\" is the direct object pronoun standing in for \"mis amigos\" — masculine and plural to match. Common mistake: English \"them\" is gender-neutral, so English speakers often forget that a group of people/things in Spanish still needs a gender-marked pronoun.",
+        "centro": "Where the seeing took place." } },
+    { topic: "Pronombres · objeto directo", sentence: "¿Necesitas las llaves? Sí, ___ necesito ahora mismo.", answer: "las", options: ["lo", "la", "los", "las"],
+      translation: "Do you need the keys? Yes, I need them right now.",
+      compare: [ { word: "los", note: "Would be used instead for a masculine or mixed-gender plural group." },
+                 { word: "la", note: "Would be used instead for one single feminine item." } ],
+      notes: { "necesitas": "\"Do you need\" — present tense.",
+        "llaves": "The direct object being replaced — feminine plural, which determines the pronoun.",
+        "__blank__": "\"Las\" is the direct object pronoun standing in for \"las llaves\" — feminine and plural to match. Common mistake: again, English \"them\" hides the gender distinction that Spanish always requires.",
+        "ahora": "Part of \"ahora mismo,\" meaning \"right now.\"" } },
+    { topic: "Pronombres · objeto directo", sentence: "No sé la respuesta, pero ___ voy a buscar.", answer: "la", options: ["lo", "la", "los", "las"],
+      translation: "I don't know the answer, but I'm going to look for it.",
+      compare: [ { word: "lo", note: "Used instead for a masculine singular direct object, like \"el resultado.\"" },
+                 { word: "las", note: "Used instead for multiple feminine things, like \"las respuestas.\"" } ],
+      notes: { "sé": "\"I know\" — present tense of saber.",
+        "respuesta": "The direct object being replaced later in the sentence — feminine singular.",
+        "pero": "\"But\" — contrasts not knowing with going to find out.",
+        "__blank__": "\"La\" stands in for \"la respuesta,\" placed before the conjugated verb \"voy\" even though the infinitive \"buscar\" follows. Common mistake: with a verb + infinitive combo, English speakers often want to attach the pronoun to the infinitive (\"voy a buscar la\") \u2014 Spanish actually allows that too as \"voy a buscarla,\" but placing it before the conjugated verb, as here, is the more common default." } },
 
-  function handleAnswer(btn, choice) {
-    if (answered) return;
-    answered = true;
-    const isCorrect = choice === current.en;
+    // ---------------- INDIRECT OBJECT PRONOUNS ----------------
+    { topic: "Pronombres · objeto indirecto", sentence: "___ escribo una carta a mi abuela cada domingo.", answer: "Le", options: ["Le", "Les", "Lo", "La"],
+      translation: "I write a letter to my grandmother every Sunday.",
+      compare: [ { word: "Les", note: "Used instead when there's more than one recipient." },
+                 { word: "Lo", note: "A direct object pronoun — wrong category; would wrongly treat the receiver as the thing being acted on." } ],
+      notes: { "escribo": "\"I write\" — present tense.",
+        "carta": "The direct object — the thing being written.",
+        "a": "Marks the indirect-object phrase that follows.",
+        "abuela": "Clarifies who the indirect object pronoun refers to — this phrase is why \"le\" (not \"les\") is correct.",
+        "__blank__": "\"Le\" is the indirect object pronoun for \"a mi abuela\" — singular, referring to the receiver of the letter, not the letter itself. Common mistake: Spanish often states the indirect object pronoun (\"le\") AND the clarifying phrase (\"a mi abuela\") together in the same sentence \u2014 this feels redundant to English speakers (English would just say \"to my grandmother\" once), but it's required, not optional, in Spanish.",
+        "domingo": "\"Sunday\" — part of \"cada domingo,\" the repeated time expression." } },
+    { topic: "Pronombres · objeto indirecto", sentence: "___ dimos un regalo a los niños en Navidad.", answer: "Les", options: ["Le", "Les", "Lo", "La"],
+      translation: "We gave a gift to the kids at Christmas.",
+      compare: [ { word: "Le", note: "Used instead for a single recipient." },
+                 { word: "La", note: "A direct object pronoun — wrong category for marking who receives something." } ],
+      notes: { "dimos": "\"We gave\" — preterite of dar.",
+        "regalo": "The direct object — the gift itself.",
+        "niños": "Clarifies the indirect object — plural, which is why \"les\" is needed instead of \"le.\"",
+        "__blank__": "\"Les\" is the indirect object pronoun for \"a los niños\" — plural, referring to who received the gift. Common mistake: same redundancy pattern as \"le\" \u2014 Spanish doubles up the pronoun and the \"a + noun\" phrase, which reads as repetitive to an English speaker but is standard, correct Spanish.",
+        "navidad": "When the giving happened." } },
+    { topic: "Pronombres · objeto indirecto", sentence: "Mi amigo ___ prestó dinero a mí la semana pasada.", answer: "me", options: ["me", "te", "le", "se"],
+      translation: "My friend lent me money last week.",
+      compare: [ { word: "te", note: "Used instead if \"you\" received the money." },
+                 { word: "le", note: "Used instead for a third person (\"him/her\") receiving it." } ],
+      notes: { "amigo": "The subject doing the lending.",
+        "prestó": "\"Lent\" — preterite of prestar.",
+        "dinero": "The direct object — what was lent.",
+        "mí": "Clarifying phrase (\"a mí\") confirming the indirect object pronoun refers to the speaker.",
+        "__blank__": "\"Me\" is the first-person indirect object pronoun — I'm the one who received the money. Common mistake: English marks this with word order alone (\"lent ME money\" vs. \"lent money to me\"), while Spanish always marks it with a dedicated pronoun placed before the verb, regardless of word order elsewhere in the sentence.",
+        "pasada": "\"Last\" — part of the finished-time marker \"la semana pasada.\"" } },
+    { topic: "Pronombres · objeto indirecto", sentence: "¿___ gusta el café a ti por la mañana?", answer: "Te", options: ["Me", "Te", "Le", "Se"],
+      translation: "Do you like coffee in the morning?",
+      compare: [ { word: "Me", note: "Used instead if the speaker were asking about themselves." },
+                 { word: "Le", note: "Used instead for a third person, not \"you.\"" } ],
+      notes: { "gusta": "Verbs like \"gustar\" put the thing liked as the subject and the person as an indirect object — literally \"coffee is pleasing to you.\"",
+        "café": "The grammatical subject of \"gusta\" — the thing doing the pleasing.",
+        "ti": "Clarifies that the indirect object pronoun refers to \"you.\"",
+        "__blank__": "\"Te\" is the second-person indirect object pronoun, matching \"a ti.\" Common mistake: verbs like \"gustar\" flip the sentence structure English speakers expect \u2014 the thing liked is the subject and the person is the indirect object, so \"you like coffee\" becomes, literally, \"coffee is pleasing TO you.\"" } },
 
-    [...optionsEl.children].forEach(tile => {
-      tile.disabled = true;
-      if (tile.textContent === current.en) tile.classList.add("correct");
-    });
+    // ---------------- SE replacing le/les before lo/la ----------------
+    { topic: "Pronombres · se + lo/la", sentence: "Le di el libro a Juan. → ___ lo di ayer.", answer: "Se", options: ["Le", "Les", "Se", "Me"],
+      translation: "I gave Juan the book. → I gave it to him yesterday.",
+      compare: [ { word: "Le", note: "The normal indirect pronoun — but Spanish forbids \"le lo\" together, forcing the switch to \"se.\"" },
+                 { word: "Les", note: "Would only apply with multiple recipients — and would still become \"se\" before \"lo.\"" } ],
+      notes: { "di": "\"I gave\" — preterite of dar, in both the original and rewritten sentence.",
+        "lo": "Direct object pronoun for \"el libro\" — stays the same; only the indirect pronoun changes.",
+        "__blank__": "Spanish never allows \"le lo\" together — \"le\" (or \"les\") automatically becomes \"se\" whenever it's followed by lo/la/los/las. Common mistake: this rule has no English parallel at all (\"I gave it to him\" just stacks words normally), so English speakers very often write the ungrammatical \"le lo di\" instead of the required \"se lo di.\"",
+        "ayer": "Finished-time marker, matching the preterite \"di.\"" } },
+    { topic: "Pronombres · se + lo/la", sentence: "¿El regalo? ___ lo di a ella en su cumpleaños.", answer: "Se", options: ["Le", "Les", "Se", "Te"],
+      translation: "The gift? I gave it to her on her birthday.",
+      compare: [ { word: "Le", note: "Would be the expected form, but it's blocked here because \"lo\" follows immediately." },
+                 { word: "Te", note: "Used instead if the gift were given to \"you.\"" } ],
+      notes: { "regalo": "The item referred to by \"lo.\"",
+        "lo": "Direct object pronoun for \"el regalo.\"",
+        "ella": "Clarifies who \"se\" refers to, since \"se\" alone is ambiguous.",
+        "__blank__": "\"Se\" replaces what would otherwise be \"le\" here, because it's directly followed by the direct object pronoun \"lo.\" Common mistake: because this \"se\" looks identical to reflexive \"se,\" English speakers sometimes misread the sentence as reflexive (\"she gave it to herself\") instead of recognizing it as the swapped indirect object pronoun.",
+        "cumpleaños": "The occasion for the gift." } },
 
-    if (isCorrect) {
-      btn.classList.add("correct");
-      score += 10;
-      streak += 1;
-      feedbackEl.textContent = "¡Correcto! Nicely done.";
-      feedbackEl.classList.add("ok");
-    } else {
-      btn.classList.add("wrong");
-      streak = 0;
-      feedbackEl.textContent = `Not quite — "${current.es}" means "${current.en}".`;
-      feedbackEl.classList.add("no");
-    }
+    // ---------------- REFLEXIVE ----------------
+    { topic: "Pronombres · reflexivo", sentence: "Ella ___ levanta temprano todos los días.", answer: "se", options: ["le", "se", "lo", "la"],
+      translation: "She gets (herself) up early every day.",
+      compare: [ { word: "le", note: "An indirect object pronoun — wrong category; this action is reflexive, not something done for someone else." },
+                 { word: "lo", note: "A direct object pronoun — wrong category for a reflexive action." } ],
+      notes: { "ella": "Third-person subject, matching the reflexive pronoun \"se.\"",
+        "__blank__": "\"Se\" is the third-person reflexive pronoun — the subject is doing the action of getting up to herself. Common mistake: English rarely marks routines like this as reflexive (\"she gets up,\" not \"she gets herself up\"), so English speakers frequently forget to include \"se\" at all on everyday routine verbs.",
+        "temprano": "\"Early\" — describes when she gets up.",
+        "todos": "\"Every,\" part of the repeated-time phrase.",
+        "días": "\"Days\" — completes \"todos los días,\" a habitual time cue matching the present tense." } },
+    { topic: "Pronombres · reflexivo", sentence: "Ellos ___ visten rápido por la mañana.", answer: "se", options: ["le", "se", "los", "las"],
+      translation: "They get (themselves) dressed quickly in the morning.",
+      compare: [ { word: "los", note: "A direct object pronoun — would wrongly suggest they're dressing someone else, not themselves." },
+                 { word: "le", note: "An indirect object pronoun — wrong category here." } ],
+      notes: { "ellos": "Third-person plural subject, still paired with the same reflexive pronoun \"se\" (it doesn't change for plural).",
+        "__blank__": "\"Se\" is the reflexive pronoun for third-person subjects, singular or plural. Common mistake: same gap as with \"levantarse\" \u2014 English doesn't treat \"getting dressed\" as reflexive, so the pronoun is easy to drop by habit.",
+        "rápido": "\"Quickly\" — describes how they dress.",
+        "mañana": "Here it means \"morning,\" the time of the routine." } },
+    { topic: "Pronombres · reflexivo", sentence: "Yo ___ ducho antes de salir de casa.", answer: "me", options: ["me", "te", "se", "le"],
+      translation: "I shower (myself) before leaving the house.",
+      compare: [ { word: "te", note: "Used instead if \"you\" were showering yourself." },
+                 { word: "se", note: "Used instead for a third-person subject showering themselves." } ],
+      notes: { "yo": "First-person subject, matching the reflexive pronoun \"me.\"",
+        "__blank__": "\"Me\" is the first-person reflexive pronoun — the subject showers themselves. Common mistake: English says \"I shower,\" full stop \u2014 no reflexive pronoun needed \u2014 so English speakers often produce the grammatically incomplete \"Yo ducho\" instead of \"Me ducho.\"",
+        "antes": "\"Before,\" setting the order of events.",
+        "salir": "The action that follows — leaving.",
+        "casa": "Where they leave from." } },
+    { topic: "Pronombres · reflexivo", sentence: "¿A qué hora ___ acuestas tú normalmente?", answer: "te", options: ["me", "te", "se", "le"],
+      translation: "What time do you usually go to bed?",
+      compare: [ { word: "me", note: "Used instead if the speaker were the one asking about themselves." },
+                 { word: "se", note: "Used instead for a third-person subject going to bed." } ],
+      notes: { "hora": "\"Time/hour\" — what's being asked about.",
+        "__blank__": "\"Te\" is the second-person reflexive pronoun — you put yourself to bed. Common mistake: English \"go to bed\" has no reflexive pronoun at all, so this is one of the most commonly dropped pronouns for English speakers learning everyday routine verbs.",
+        "tú": "Second-person subject, matching the reflexive pronoun \"te.\"",
+        "normalmente": "\"Usually\" — signals a habitual action, fitting the present tense." } },
+  ];
 
-    if (score > best) {
-      best = score;
-      localStorage.setItem("charlemos_best", String(best));
-    }
+  
+  const scoreEl = document.getElementById("score");
+  const streakEl = document.getElementById("streak");
+  const bestEl = document.getElementById("best");
+  const categoryEl = document.getElementById("category");
+  const promptEl = document.getElementById("prompt");
+  const promptSubEl = document.getElementById("promptSub");
+  const optionsEl = document.getElementById("options");
+  const feedbackEl = document.getElementById("feedback");
+  const nextBtn = document.getElementById("nextBtn");
+  const speakBtn = document.getElementById("speakBtn");
+  const progressEl = document.getElementById("progress");
+  const filtersEl = document.getElementById("filters");
+  const answerWrapEl = document.getElementById("answerWrap");
+  const answerBubbleEl = document.getElementById("answerBubble");
+  const explainCardEl = document.getElementById("explainCard");
 
-    scoreEl.textContent = score;
-    streakEl.textContent = streak;
-    bestEl.textContent = best;
-    nextBtn.classList.add("show");
-  }
+  const GROUPS = ["Todos", ...Array.from(new Set(ITEMS.map(i => i.topic.split(" · ")[0])))];
+  let activeGroup = "Todos";
 
-  function speakCurrent() {
-    if (!current) return;
-    if (!("speechSynthesis" in window)) return;
-    const utter = new SpeechSynthesisUtterance(current.es);
-    utter.lang = "es-ES";
-    utter.rate = 0.9;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
-  }
+  let pool = [];
+  let order = [];
+  let idx = 0;
+  let score = 0;
+  let streak = 0;
+  let best = Number(localStorage.getItem("charlemos_grammar_best") || 0);
+  let current = null;
+  let answered = false;
 
-  nextBtn.addEventListener("click", () => { idx += 1; loadWord(); });
-  speakBtn.addEventListener("click", speakCurrent);
+  bestEl.textContent = best;
 
-  order = shuffle(WORDS);
-  loadWord();
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function normalizeWord(w) {
+    return w.toLowerCase().replace(/^[¿¡"'(\u00bf\u00a1]+|[?!.,;:"')]+$/g, "");
+  }
+
+  function renderFilters() {
+    filtersEl.innerHTML = "";
+    GROUPS.forEach(g => {
+      const btn = document.createElement("button");
+      btn.className = "filter-btn" + (g === activeGroup ? " active" : "");
+      btn.type = "button";
+      btn.textContent = g;
+      btn.addEventListener("click", () => {
+        activeGroup = g;
+        renderFilters();
+        resetPool();
+        loadItem();
+      });
+      filtersEl.appendChild(btn);
+    });
+  }
+
+  function resetPool() {
+    pool = activeGroup === "Todos" ? ITEMS : ITEMS.filter(i => i.topic.startsWith(activeGroup));
+    order = shuffle(pool);
+    idx = 0;
+  }
+
+  function loadItem() {
+    answered = false;
+    feedbackEl.innerHTML = "";
+    feedbackEl.className = "feedback";
+    nextBtn.classList.remove("show");
+    answerWrapEl.classList.remove("show");
+    answerBubbleEl.innerHTML = "";
+    explainCardEl.classList.remove("show");
+    explainCardEl.innerHTML = "";
+
+    if (idx >= order.length) {
+      order = shuffle(pool);
+      idx = 0;
+    }
+
+    current = order[idx];
+    categoryEl.textContent = current.topic;
+
+    const parts = current.sentence.split("___");
+    promptEl.innerHTML = parts[0] + '<span class="blank-static">___</span>' + (parts[1] || "");
+    promptSubEl.textContent = "Choose the word that correctly completes the sentence.";
+    progressEl.textContent = `Question ${idx + 1} of ${order.length} · ${activeGroup}`;
+
+    const choices = shuffle(current.options);
+    optionsEl.innerHTML = "";
+    choices.forEach(choice => {
+      const btn = document.createElement("button");
+      btn.className = "tile";
+      btn.type = "button";
+      btn.textContent = choice;
+      btn.addEventListener("click", () => handleAnswer(btn, choice));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function renderExplainCard(label, note, compareList) {
+    let html = '<div class="lead"><b>' + label + '</b> — ' + note + '</div>';
+    if (compareList && compareList.length) {
+      html += '<div class="compare-title">Compare with</div><ul>';
+      compareList.forEach(c => {
+        html += '<li><b>' + c.word + '</b> — ' + c.note + '</li>';
+      });
+      html += '</ul>';
+    }
+    explainCardEl.innerHTML = html;
+    explainCardEl.classList.add("show");
+  }
+
+  function onChunkClick(el, rawWord, isAnswerChunk) {
+    answerBubbleEl.querySelectorAll(".chunk.selected").forEach(c => c.classList.remove("selected"));
+    el.classList.add("selected");
+
+    const cleanLabel = rawWord.replace(/[¿¡?!.,;:"'()]/g, "");
+    const key = normalizeWord(rawWord);
+
+    if (isAnswerChunk) {
+      const note = current.notes["__blank__"] || "This is the target word for this exercise.";
+      renderExplainCard(cleanLabel, note, current.compare);
+      return;
+    }
+
+    let note = current.notes[key];
+    let compareList = null;
+
+    if (!note && GENERAL_NOTES[key]) {
+      note = GENERAL_NOTES[key].note;
+      compareList = GENERAL_NOTES[key].compare;
+    }
+    if (!note) {
+      note = "This word carries the sentence's meaning but isn't the specific grammar focus of this exercise.";
+    }
+
+    renderExplainCard(cleanLabel, note, compareList);
+  }
+
+  function buildAnswerBubble() {
+    answerBubbleEl.innerHTML = "";
+    const parts = current.sentence.split("___");
+    const beforeWords = parts[0].trim().split(/\s+/).filter(Boolean);
+    const afterWords = (parts[1] || "").trim().split(/\s+/).filter(Boolean);
+
+    beforeWords.forEach(w => {
+      const chip = document.createElement("span");
+      chip.className = "chunk";
+      chip.textContent = w;
+      chip.addEventListener("click", () => onChunkClick(chip, w, false));
+      answerBubbleEl.appendChild(chip);
+    });
+
+    const answerChip = document.createElement("span");
+    answerChip.className = "chunk is-answer";
+    answerChip.textContent = current.answer;
+    answerChip.addEventListener("click", () => onChunkClick(answerChip, current.answer, true));
+    answerBubbleEl.appendChild(answerChip);
+
+    afterWords.forEach(w => {
+      const chip = document.createElement("span");
+      chip.className = "chunk";
+      chip.textContent = w;
+      chip.addEventListener("click", () => onChunkClick(chip, w, false));
+      answerBubbleEl.appendChild(chip);
+    });
+  }
+
+  function handleAnswer(btn, choice) {
+    if (answered) return;
+    answered = true;
+    const isCorrect = choice === current.answer;
+
+    [...optionsEl.children].forEach(tile => {
+      tile.disabled = true;
+      if (tile.textContent === current.answer) tile.classList.add("correct");
+    });
+
+    if (isCorrect) {
+      btn.classList.add("correct");
+      score += 10;
+      streak += 1;
+      feedbackEl.innerHTML = "¡Correcto!" + '<span class="translation">' + current.translation + '</span>';
+      feedbackEl.classList.add("ok");
+    } else {
+      btn.classList.add("wrong");
+      streak = 0;
+      feedbackEl.innerHTML = `Not quite — the answer is <strong>${current.answer}</strong>.` + '<span class="translation">' + current.translation + '</span>';
+      feedbackEl.classList.add("no");
+    }
+
+    if (score > best) {
+      best = score;
+      localStorage.setItem("charlemos_grammar_best", String(best));
+    }
+
+    scoreEl.textContent = score;
+    streakEl.textContent = streak;
+    bestEl.textContent = best;
+
+    buildAnswerBubble();
+    answerWrapEl.classList.add("show");
+    nextBtn.classList.add("show");
+  }
+
+  function speakCurrent() {
+    if (!current) return;
+    if (!("speechSynthesis" in window)) return;
+    const fullSentence = current.sentence.replace("___", current.answer);
+    const utter = new SpeechSynthesisUtterance(fullSentence);
+    utter.lang = "es-ES";
+    utter.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  }
+
+  nextBtn.addEventListener("click", () => { idx += 1; loadItem(); });
+  speakBtn.addEventListener("click", speakCurrent);
+
+  renderFilters();
+  resetPool();
+  loadItem();
 </script>
 
 </body>
